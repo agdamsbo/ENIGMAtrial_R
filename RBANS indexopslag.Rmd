@@ -50,8 +50,13 @@ return(tbls)
 
 ## Creating a list of imported lists
 ```{r}
-index_tables<-list_tables(c("/Users/andreas/Desktop/Indekstabller/2039/2039.xlsx","/Users/andreas/Desktop/Indekstabller/2039/2039.xlsx"),sheets=5)
-index_tables<-append(index_tables,list_tables("/Users/andreas/Desktop/Indekstabller/Samlet indeks/hele_skala.xlsx",sheets=1))
+index_tables<-list_tables(c("/Users/andreas/Documents/Læge/Forskning/PhD/ENIGMA/RBANS/RBANS_index_tables/2039.xlsx",
+                            "/Users/andreas/Documents/Læge/Forskning/PhD/ENIGMA/RBANS/RBANS_index_tables/4049.xlsx",
+                            "/Users/andreas/Documents/Læge/Forskning/PhD/ENIGMA/RBANS/RBANS_index_tables/5059.xlsx",
+                            "/Users/andreas/Documents/Læge/Forskning/PhD/ENIGMA/RBANS/RBANS_index_tables/6069.xlsx",
+                            "/Users/andreas/Documents/Læge/Forskning/PhD/ENIGMA/RBANS/RBANS_index_tables/7079.xlsx",
+                            "/Users/andreas/Documents/Læge/Forskning/PhD/ENIGMA/RBANS/RBANS_index_tables/8089.xlsx"),sheets=5)
+index_tables<-append(index_tables,list_tables("/Users/andreas/Documents/Læge/Forskning/PhD/ENIGMA/RBANS/RBANS_index_tables/scale_total.xlsx",sheets=1))
 ```
 
 # Calculating the index scores
