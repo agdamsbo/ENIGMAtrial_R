@@ -18,8 +18,9 @@ library(readxl)
 ## Writing funtion
 Function imports tables
 ```{r}
-list_tables<-function(table_paths,sheets){
+list_tables<-function(table_paths,sheets=2,include_all=TRUE){
   # Sheets denotes the number of sheets to import. At the moment only the amount can be specified, not a range or specific sheets. Its on the list!
+  # This might be shortened inspired by this thread: https://stackoverflow.com/questions/9564489/read-all-files-in-a-folder-and-apply-a-function-to-each-data-frame
   require(readxl)
   
 paths<-table_paths
@@ -31,33 +32,41 @@ for(i in 1:length(paths)){
   table_name<-paste0("index_",unlist(strsplit(rev(unlist(strsplit(paths[i], "[/]")))[1], "[.]"))[1])
   table_names<-c(table_names,table_name)
   index_domain<-list()
-  for(x in 1:sheets) {
+  
+  if (include_all==TRUE){
+    t_shts<-length(excel_sheets(path))
+    for(x in 1:t_shts) {
+      shts<-1:t_shts
+      index_domain[[excel_sheets(path)[x]]] <- data.frame(read_excel(path=path, sheet=shts[x]))
+    }
+  }
+  
+  if (include_all==FALSE){
+    for(x in 1:sheets) {
       shts<-1:sheets
       index_domain[[excel_sheets(path)[x]]] <- data.frame(read_excel(path=path, sheet=shts[x]))
-      # The import function guesses the data type. If clear definition is needed, this can be used:
-      # ,col_types = c("numeric","numeric","text","text","text","text")
-      # In R version >4 stringAsfactor is FALSE as default.
-      # The "read_excel" also works with both .xls and .xlsx. The first is much faster though!
-      
-      }
+    }
+    }
   tbls<-append(tbls,list(index_domain))
 }
 names(tbls)<-table_names
 
 return(tbls)
+
+# The read_excel function guesses the data type. If clear definition is needed, this can be added:
+      # ,col_types = c("numeric","numeric","text","text","text","text")
+      # In R version >4 stringAsfactor is FALSE as default.
+      # The "read_excel" also works with both .xls and .xlsx. The first is much faster though!
 }
 ```
 
 ## Creating a list of imported lists
 ```{r}
-index_tables<-list_tables(c("/Users/andreas/Documents/Læge/Forskning/PhD/ENIGMA/RBANS/RBANS_index_tables/2039.xlsx",
-                            "/Users/andreas/Documents/Læge/Forskning/PhD/ENIGMA/RBANS/RBANS_index_tables/4049.xlsx",
-                            "/Users/andreas/Documents/Læge/Forskning/PhD/ENIGMA/RBANS/RBANS_index_tables/5059.xlsx",
-                            "/Users/andreas/Documents/Læge/Forskning/PhD/ENIGMA/RBANS/RBANS_index_tables/6069.xlsx",
-                            "/Users/andreas/Documents/Læge/Forskning/PhD/ENIGMA/RBANS/RBANS_index_tables/7079.xlsx",
-                            "/Users/andreas/Documents/Læge/Forskning/PhD/ENIGMA/RBANS/RBANS_index_tables/8089.xlsx"),sheets=5)
-index_tables<-append(index_tables,list_tables("/Users/andreas/Documents/Læge/Forskning/PhD/ENIGMA/RBANS/RBANS_index_tables/scale_total.xlsx",sheets=1))
+tbl_folder<-"/Users/andreas/Documents/Læge/Forskning/PhD/ENIGMA/RBANS/RBANS_index_tables"
+tbl_docs<- list.files(tbl_folder, pattern="*.xlsx", full.names=TRUE)
+index_tables<-list_tables(tbl_docs)
 ```
+
 
 # Calculating the index scores
 
@@ -65,6 +74,7 @@ index_tables<-append(index_tables,list_tables("/Users/andreas/Documents/Læge/Fo
 
 ```{r}
 var_names=c("a","b","c","d","e")
+
 parts=10
 
 dta<-data.frame(id=1:parts,age=as.numeric(sample(18:39,10)),matrix(sample(20:40,replace=TRUE), ncol = length(var_names), nrow = parts,dimnames=list(NULL,var_names)),version="a")
@@ -72,7 +82,7 @@ dta<-data.frame(id=1:parts,age=as.numeric(sample(18:39,10)),matrix(sample(20:40,
 
 ## Categorising patients according to index table
 ```{r}
-ndx_nms<-c("index_2039","index_4049","index_5059","index_6069","index_7079","index_8089")
+ndx_nms<-names(index_tables)[1:length(index_tables)-1]
 # should be changed to this: names(index_tables)
 
 dta$index_c<-ifelse(dta$age>17&dta$age<40,ndx_nms[1],
@@ -86,29 +96,43 @@ dta$index_c<-ifelse(dta$age>17&dta$age<40,ndx_nms[1],
 
 ## Formatting scale_total
 ```{r}
-## Function to extend written intervals in cells to "long" format by repeating associated variables. Used to extend index tables.
-
-interval_extention<-function(dtfrm){
-  dta<-dtfrm
-df<-data.frame(rbind(1:ncol(dta)))[0,]
-cnms<-colnames(dta)
-colnames(df)<-cnms
-
-for (t in 1:nrow(dta)){
-  nd<-as.numeric(unlist(strsplit(dta[1][t,], "[-]")))
-  one<-c(nd[1]:nd[2])
-  dt<-df
-  for (r in 1:length(one)){
-    dtt<-cbind(one[r],dta[-1][t,])
-    colnames(dtt)<-cnms
-    dt<-rbind(dt,dtt)
+interval_extention<-function(x,coln=1,df=TRUE){
+  # Function to extend written intervals in cells to "long" format by repeating associated variables.
+  # x denotes the dataframe or vector to extend. coln denotes the desired column to extend the dataframe from. Default is 1. Only works with intervals seperated by "-".
+  # Use case: extension of index tables, where several raw scores equals to the same indexscore.
+  
+  if (df==TRUE&class(x)!="data.frame"|class(x)=="data.frame"&ncol(x)==1){stop("check that input is truly data frame with at least two rows or set df=FALSE")}
+  if (df==TRUE){
+  dta<-cbind(x[coln],x[-coln])
+  
+  df<-data.frame(rbind(1:ncol(dta)))[0,]
+  cnms<-colnames(dta)
+  colnames(df)<-cnms
+  
+  for (i in 1:nrow(dta)){
+    n<-as.numeric(unlist(strsplit(dta[i,1], "[-]")))
+    suppressWarnings(dt<-data.frame(n[1]:n[2],dta[i,2:ncol(dta)]))
+    # Unsure why this function results in a warning. Deal with it!
+    colnames(dt)<-cnms
+    df<-rbind(df,dt)
+    }
+  return(df)
   }
-  dt<-data.frame(c(nd[1]:nd[2]),dta[2][t,],dta[3][t,],dta[4][t,],dta[5][t,])
-  colnames(dt)<-cnms
-  df<-rbind(df,dt)
-}
-return(df)
-}
+ 
+  if (df==FALSE){
+    o<-c()
+    for (i in 1:nrow(dta)){
+     n<-as.numeric(unlist(strsplit(x[i], "[-]")))
+     o<-c(o,n[1]:n[2])
+    }
+    return(o)
+  }
+  }
+
+## Example:
+test<-data.frame(int=c("1-3","4-9","10-15"),score=1:3,diff=4:6)
+interval_extention(test)
+interval_extention(test[1:2],df=T)
 ```
 
 
