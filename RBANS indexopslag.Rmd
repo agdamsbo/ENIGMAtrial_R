@@ -77,7 +77,7 @@ var_names=c("a","b","c","d","e")
 
 parts=10
 
-dta<-data.frame(id=1:parts,age=as.numeric(sample(18:39,10)),matrix(sample(20:40,replace=TRUE), ncol = length(var_names), nrow = parts,dimnames=list(NULL,var_names)),version="a")
+dta<-data.frame(id=1:parts,age=as.numeric(sample(18:110,10)),matrix(sample(20:40,replace=TRUE), ncol = length(var_names), nrow = parts,dimnames=list(NULL,var_names)),version="a")
 ```
 
 ## Categorising patients according to index table
@@ -96,13 +96,17 @@ dta$index_c<-ifelse(dta$age>17&dta$age<40,ndx_nms[1],
 
 ## Formatting scale_total
 ```{r}
-interval_extention<-function(x,coln=1,df=TRUE){
+interval_extention<-function(x,coln=1){
   # Function to extend written intervals in cells to "long" format by repeating associated variables.
   # x denotes the dataframe or vector to extend. coln denotes the desired column to extend the dataframe from. Default is 1. Only works with intervals seperated by "-".
   # Use case: extension of index tables, where several raw scores equals to the same indexscore.
   
-  if (df==TRUE&class(x)!="data.frame"|class(x)=="data.frame"&ncol(x)==1){stop("check that input is truly data frame with at least two rows or set df=FALSE")}
-  if (df==TRUE){
+  if (is.data.frame(x)&length(x)==1){
+    stop("Check that input is correctly formatted as vector or that data frame has at least two columns")}
+  
+  if (!is.data.frame(x)&!is.vector(x)){stop("Check input format. Should be vector or data.frame")}
+  
+  if (is.data.frame(x)){
   dta<-cbind(x[coln],x[-coln])
   
   df<-data.frame(rbind(1:ncol(dta)))[0,]
@@ -119,7 +123,7 @@ interval_extention<-function(x,coln=1,df=TRUE){
   return(df)
   }
  
-  if (df==FALSE){
+  if (is.vector(x)){
     o<-c()
     for (i in 1:nrow(dta)){
      n<-as.numeric(unlist(strsplit(x[i], "[-]")))
@@ -132,17 +136,19 @@ interval_extention<-function(x,coln=1,df=TRUE){
 ## Example:
 # test<-data.frame(int=c("1-3","4-9","10-15"),score=1:3,diff=4:6)
 # interval_extention(test)
-# interval_extention(test[1:2],df=T)
+# interval_extention(test[,1])
 ```
 
 
 ```{r}
-index_tables$index_hele_skala$scale_total<-interval_extention(index_tables$index_hele_skala$scale_total)
+index_tables$index_scale_total$scale_total<-interval_extention(index_tables$index_scale_total$scale_total)
 ```
 
 
 
 ## Defining function to calculate index scores
+
+DET VIRKER VIST IKKE HELT!
 ```{r}
 # index_from_raw<-function(dta,table_list){
 df<-data.frame(matrix(1:7,ncol=7,nrow = nrow(dta),byrow = T))
@@ -161,26 +167,14 @@ for (i in 1:nrow(dta)){
   ## should be dependent on variable
   
   # A
-  sht=1
-  df$a_i[i]<-lst[[1]][[sht]]$indexscore[lst[[1]][[sht]]$total_rawscore==dt[i,clnms[sht]]&lst[[1]][[sht]]$version==version]
-  
-  # B
-  sht=2
-  df$b_i[i]<-lst[[1]][[sht]]$indexscore[lst[[1]][[sht]]$total_rawscore==dt[i,clnms[sht]]&lst[[1]][[sht]]$version==version]
-  
-  # C
-  sht=3
-  df$c_i[i]<-lst[[1]][[sht]]$indexscore[lst[[1]][[sht]]$total_rawscore==dt[i,clnms[sht]]&lst[[1]][[sht]]$version==version]
-  
-  # D
-  sht=4
-  df$d_i[i]<-lst[[1]][[sht]]$indexscore[lst[[1]][[sht]]$total_rawscore==dt[i,clnms[sht]]&lst[[1]][[sht]]$version==version]
-  
-  # E
-  sht=5
-  df$e_i[i]<-lst[[1]][[sht]]$indexscore[lst[[1]][[sht]]$total_rawscore==dt[i,clnms[sht]]&lst[[1]][[sht]]$version==version]
-  
+  ndx<-c()
+  for (s in s:length(lst[[1]])){
+    is<-lst[[1]][[s]]$indexscore[lst[[1]][[s]]$total_rawscore==dt[i,clnms[s]]&lst[[1]][[s]]$version==version]
+    ndx<-c(ndx,is)
+  }
+ 
   # Total
+  df[i,1:5]<-ndx
   df$total[i]<-sum(df[i,1:5])
   
   ## Total index lookup
