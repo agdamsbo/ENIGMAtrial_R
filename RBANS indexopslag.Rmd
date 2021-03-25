@@ -80,20 +80,6 @@ parts=10
 dta<-data.frame(id=1:parts,age=as.numeric(sample(18:110,10)),matrix(sample(20:40,replace=TRUE), ncol = length(var_names), nrow = parts,dimnames=list(NULL,var_names)),version="a")
 ```
 
-## Categorising patients according to index table
-```{r}
-ndx_nms<-names(index_tables)[1:length(index_tables)-1]
-# should be changed to this: names(index_tables)
-
-dta$index_c<-ifelse(dta$age>17&dta$age<40,ndx_nms[1],
-                           ifelse(dta$age>39&dta$age<50,ndx_nms[2],
-                                  ifelse(dta$age>49&dta$age<60,ndx_nms[3],
-                                         ifelse(dta$age>59&dta$age<70,ndx_nms[4],
-                                                ifelse(dta$age>69&dta$age<80,ndx_nms[5],
-                                                       ifelse(dta$age>79,ndx_nms[6],NA))))))
-
-```
-
 ## Formatting scale_total
 ```{r}
 interval_extention<-function(x,coln=1){
@@ -148,41 +134,64 @@ index_tables$index_scale_total$scale_total<-interval_extention(index_tables$inde
 
 ## Defining function to calculate index scores
 
-DET VIRKER VIST IKKE HELT!
 ```{r}
-# index_from_raw<-function(dta,table_list){
-df<-data.frame(matrix(1:7,ncol=7,nrow = nrow(dta),byrow = T))
-  colnames(df)<-c("a_i","b_i","c_i","d_i","e_i","total","total_i")
-  # df<-df[0,]
+index_from_raw<-function(dta,table_list=index_tables,version="version",age="age",raw_columns=c("a","b","c","d","e")){
+  table_list=index_tables
+  version="version"
+  age="age"
+  raw_columns=c("a","b","c","d","e")
+  
+  ## Categorizing age to age interval of index lists
+  ndx_nms<-names(table_list)[1:length(table_list)-1]
+  
+  ## This is the only non-generalised part. Please be inspired and solve it your own way! :)
+  ## Intervals are 20-39, 40-49, 50-59, 60-69, 70-79, 80-89.
+  index_age<-ifelse(dta[[age]]>=18&dta[[age]]<=39,ndx_nms[1],
+                           ifelse(dta[[age]]>=40&dta[[age]]<=49,ndx_nms[2],
+                                  ifelse(dta[[age]]>=50&dta[[age]]<=59,ndx_nms[3],
+                                         ifelse(dta[[age]]>=60&dta[[age]]<=69,ndx_nms[4],
+                                                ifelse(dta[[age]]>=70&dta[[age]]<=79,ndx_nms[5],
+                                                       ifelse(dta[[age]]>=80,ndx_nms[6],NA))))))
+  
+  df<-data.frame(matrix(1:7,ncol=7,nrow = nrow(dta),byrow = T))
+cinms<-names(table_list[[1]])
+  colnames(df)<-c(cinms,"total_r","total_i")
   dt<-dta
   
-  clnms<-c("a","b","c","d","e")
 for (i in 1:nrow(dta)){
-  # i=2
+  # i=1
   
   ## Selecting tables based on age
-  lst<-index_tables[dt$index_c[i]]
+  lst<-table_list[[index_age[i]]]
   
-  version<-"a"
-  ## should be dependent on variable
+  
+  v<-dta[i,version]
+  ## test version. Standard colname is set as "version"
   
   # A
   ndx<-c()
-  for (s in s:length(lst[[1]])){
-    is<-lst[[1]][[s]]$indexscore[lst[[1]][[s]]$total_rawscore==dt[i,clnms[s]]&lst[[1]][[s]]$version==version]
-    ndx<-c(ndx,is)
-  }
+    for (s in 1:length(lst)){
+      # s=1
+      is<-lst[[s]]$indexscore[lst[[s]]$total_rawscore==dt[i,raw_columns[s]]&lst[[s]]$version==v]
+      ndx<-c(ndx,is)
+      }
  
   # Total
   df[i,1:5]<-ndx
-  df$total[i]<-sum(df[i,1:5])
+  df$total_r[i]<-sum(df[i,1:5])
   
   ## Total index lookup
   df_scale<-index_tables[[length(index_tables)]][[1]]
-  df$total_i[i]<-df_scale[2][df_scale[1]==df$total[i]]
+  df$total_i[i]<-df_scale[2][df_scale[1]==df$total_r[i]]
 }
-#   return(df)
-# }
+  return(df)
+}
+```
+
+
+## Calculating indexscores
+```{r}
+index_from_raw(dta)
 ```
 
 
