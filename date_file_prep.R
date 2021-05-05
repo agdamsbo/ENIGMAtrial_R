@@ -3,6 +3,7 @@ date_file_prep<-function(folder,include_all=FALSE,cut_date=-5,num_c=2,ev_names=c
   # cut_date defines the date to cut, if any. Negative values defines number of days before provided date from filename
   library(tidyr)
   library(dplyr)
+  library(lubridate)
   if (num_c!=length(ev_names)){stop("Length of ev_names has to be the same as the value of num_c")}
   
   source("watch_folder_csv.R")
