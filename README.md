@@ -1,2 +1,2 @@
 # ENIGMA
- Coding work of the ENIGMA trial
+ Documenting coding work in the ENIGMA trial. This includes everything from preparation to final analyses.
