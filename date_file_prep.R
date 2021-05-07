@@ -1,4 +1,4 @@
-date_file_prep<-function(folder,include_all=FALSE,cut_date=-5,num_c=2,ev_names=c("3mdr","12mdr"),col_spec="_book"){
+date_file_prep<-function(folder,include_all=FALSE,cut_date=-5,num_c=2,ev_names=c("3mdr","12mdr"),date_col="_book",room_col="_room",other_col="_other"){
   # Depends on file formatted as REDCap export files with date of export in filename
   # cut_date defines the date to cut, if any. Negative values defines number of days before provided date from filename
   library(tidyr)
@@ -8,15 +8,19 @@ date_file_prep<-function(folder,include_all=FALSE,cut_date=-5,num_c=2,ev_names=c
   
   source("watch_folder_csv.R")
   
+  #folder<-"/Users/andreas/REDCap_conversion/calendar"
+  
   wfc<-watch_folder_csv(folder = folder)
   # The watch_folder_csv.R outputs a list with 1) a dataframe and 2) the original full filename
   
   d<-wfc[[1]]
-  d<-data.frame(d,room="j109")
-  d<-data.frame(id=d$record_id,room=select(d,contains("room")),select(d,contains(col_spec)))
-  # Room variable should contain "room" in name
+
+  d<-data.frame(id=d$record_id,room=select(d,contains(room_col)),select(d,contains(date_col)),select(d,contains(other_col)))
   
-  dl <- tidyr::pivot_longer(data=d, cols=contains(col_spec))
+  dl <- tidyr::pivot_longer(data=d, cols=contains(date_col))
+  
+  dl$incl_room3<-ifelse(dl$incl_room3==1,"J109-139",ifelse(dl$incl_room3==2,"J109-141",ifelse(dl$incl_room3==3,dl$incl_other3,NA)))
+  dl<-dl[,-3]
   
   nms<-levels(factor(dl$name))
   for (i in 1:nrow(dl)){
@@ -34,6 +38,7 @@ date_file_prep<-function(folder,include_all=FALSE,cut_date=-5,num_c=2,ev_names=c
   if (include_all==TRUE){
     dl<-dl[!is.na(dl$value),]
   }
+  colnames(dl)<-c("id","room","name","start")
   return(dl)
   # Wow, this is crude! But it works!
 }
