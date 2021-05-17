@@ -6,9 +6,7 @@ date_file_prep<-function(folder,include_all=FALSE,cut_date=-5,num_c=2,ev_names=c
   library(lubridate)
   if (num_c!=length(ev_names)){stop("Length of ev_names has to be the same as the value of num_c")}
   
-  source("watch_folder_csv.R")
-  
-  #folder<-"/Users/andreas/REDCap_conversion/calendar"
+  source("src/watch_folder_csv.R")
   
   wfc<-watch_folder_csv(folder = folder)
   # The watch_folder_csv.R outputs a list with 1) a dataframe and 2) the original full filename
