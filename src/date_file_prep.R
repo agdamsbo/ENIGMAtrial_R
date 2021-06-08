@@ -9,14 +9,14 @@ date_file_prep<-function(folder,include_all=FALSE,cut_date=-5,num_c=2,ev_names=c
   source("src/watch_folder_csv.R")
   
   ## Trouble shooting ##
-  folder="/Users/andreas/REDCap_conversion/calendar"
-  include_all=FALSE
-  cut_date=-5
-  num_c=2
-  ev_names=c("3mdr","12mdr")
-  date_col="_book"
-  room_col="_room"
-  other_col="_other"
+  # folder="/Users/andreas/REDCap_conversion/calendar"
+  # include_all=FALSE
+  # cut_date=-5
+  # num_c=2
+  # ev_names=c("3mdr","12mdr")
+  # date_col="_book"
+  # room_col="_room"
+  # other_col="_other"
   ## END ##
   
   wfc<-watch_folder_csv(folder = folder)
