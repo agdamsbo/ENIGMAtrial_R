@@ -1,12 +1,12 @@
-date_file_prep<-function(dta,include_all=FALSE,cut_date=-5,num_c=2,ev_names=c("3mdr","12mdr"),date_col="_book",room_col="_room",other_col="_other"){
+date_api_export_prep<-function(dta,include_all=FALSE,cut_date=-5,num_c=2,ev_names=c("3mdr","12mdr"),date_col="_book",room_col="_room",other_col="_other"){
   ## Troubleshooting ##
-  # include_all=FALSE
-  # cut_date=-5
-  # num_c=2
-  # ev_names=c("3mdr","12mdr")
-  # date_col="_book"
-  # room_col="_room"
-  # other_col="_other"
+  include_all=FALSE
+  cut_date=-5
+  num_c=2
+  ev_names=c("3mdr","12mdr")
+  date_col="_book"
+  room_col="_room"
+  other_col="_other"
   ## END ##
   
   # Depends on file formatted as REDCap export files with date of export in filename
@@ -34,10 +34,12 @@ date_file_prep<-function(dta,include_all=FALSE,cut_date=-5,num_c=2,ev_names=c("3
   dl<-cd[c(1,2,(length(d)+1):length(cd))]
   colnames(dl)<-c("id","name","start","room")
   
-  nms<-levels(factor(dl$name))
+  dl<-dl[dl$name=="inclusion_arm_1"|dl$name=="3_months_arm_1",]
+
+  ## Binary solution - non-universal, fast solution
+  nms<-rev(levels(factor(dl$name)))
   for (i in 1:nrow(dl)){
-    for (j in 1:length(nms))
-      dl$name[i]<-ifelse(dl$name[i]==nms[j],rev(ev_names)[j],dl$name[i])  
+    dl$name[i]<-ifelse(dl$name[i]==nms[1],ev_names[1],ev_names[2])  
   }
   
   if (include_all==FALSE){

@@ -4,7 +4,7 @@ source("src/date_api_export.R")
 
 # Formatting
 source("src/date_api_export_prep.R")
-df<-date_file_prep(dta=d,include_all=FALSE,cut_date=-5,num_c=2,date_col="_book",room_col = "_room")
+df<-date_api_export_prep(dta=d,include_all=FALSE,cut_date=-5,num_c=2,date_col="_book",room_col = "_room")
 
 # Conversion
 library(calendar)
@@ -13,6 +13,6 @@ ic_write(convert_ical(start=df$start,id=df$id,name=df$name,room=df$room)[[2]], f
 
 # Commit and push GIT
 library(git2r)
-commit(all=TRUE, message="calendar update")
+git2r::commit(all=TRUE, message="calendar update")
 
 system("/usr/bin/git push origin HEAD:refs/heads/main")
