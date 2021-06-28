@@ -13,6 +13,6 @@ ic_write(convert_ical(start=df$start,id=df$id,name=df$name,room=df$room)[[2]], f
 
 # Commit and push GIT
 library(git2r)
-git2r::commit(all=TRUE, message="calendar update")
+git2r::commit(all=TRUE, message=paste("calendar update",now()))
 
 system("/usr/bin/git push origin HEAD:refs/heads/main")
