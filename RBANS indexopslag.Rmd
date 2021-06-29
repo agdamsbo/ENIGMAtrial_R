@@ -62,7 +62,7 @@ return(tbls)
 
 ## Creating a list of imported lists
 ```{r}
-tbl_folder<-"/Users/andreas/Documents/Læge/Forskning/PhD/ENIGMA/RBANS/RBANS_index_tables"
+tbl_folder<-"index"
 tbl_docs<- list.files(tbl_folder, pattern="*.xlsx", full.names=TRUE)
 index_tables<-list_tables(tbl_docs)
 ```
