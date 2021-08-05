@@ -8,6 +8,8 @@ source("src/date_api_export_prep.R")
 dt<-d[is.na(d$eos1),]
 
 df<-date_api_export_prep(dta=dt,include_all=FALSE,cut_date=-30,num_c=2,date_col="_book",room_col = "_room")
+## Includes only one appointment for each ID. problem?
+
 
 # Conversion
 library(calendar)
