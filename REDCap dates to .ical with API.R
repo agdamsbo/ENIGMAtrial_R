@@ -4,7 +4,10 @@ source("src/date_api_export.R")
 
 # Formatting
 source("src/date_api_export_prep.R")
-df<-date_api_export_prep(dta=d,include_all=FALSE,cut_date=-5,num_c=2,date_col="_book",room_col = "_room")
+## Excluding patients with booking, but with EOS filled due to early end of study (ie date of EOS not blank)
+dt<-d[is.na(d$eos1),]
+
+df<-date_api_export_prep(dta=dt,include_all=FALSE,cut_date=-5,num_c=2,date_col="_book",room_col = "_room")
 
 # Conversion
 library(calendar)

@@ -51,5 +51,5 @@ date_api_export_prep<-function(dta,include_all=FALSE,cut_date=-5,num_c=2,ev_name
     dl<-dl[!is.na(dl$start),]
   }
   return(dl)
-  # Wow, this is crude! But it works!
+  # Wow, this is crude! But it works! Hurra!
 }
