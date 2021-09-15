@@ -1,0 +1,73 @@
+library("reshape2")
+library("ggplot2")
+library("gridExtra")
+
+# Melting df as long format
+df_long <- melt(df, id = "id")
+
+# Set x-axis names
+domain_names<-c("immediate","visuospatial","verbal","attention","delayed","total")
+
+# Define specific dataframes
+df_index <- df_long %>%
+  filter(grepl('index',variable)) %>%
+  mutate(value=as.numeric(value)) %>%
+  mutate(variable=factor(variable,labels = domain_names))
+
+df_X95pct <- df_long %>%
+  filter(grepl('X95pct',variable))
+
+low<-c()
+hgh<-c()
+for (i in 1:nrow(df_X95pct)){
+  low<-c(low,unlist(strsplit(df_X95pct$value[i],"[-]"))[1])
+  hgh<-c(hgh,unlist(strsplit(df_X95pct$value[i],"[-]"))[2])
+}
+df_index<-data.frame(df_index,low=as.numeric(low),high=as.numeric(hgh))
+
+df_percentile <- df_long %>%
+  filter(grepl('percentile',variable)) %>%
+  # mutate(value=as.numeric(value)) %>%
+  mutate(variable=factor(variable,labels = domain_names))
+
+# Correcting odd 
+df_percentile$value[df_percentile$value %in% c("> 99.9",">99.9")]<-99.95
+df_percentile$value[df_percentile$value %in% c("< 0.1","<0.1")]<-0.05
+df_percentile$value[df_percentile$value %in% c("0,1")]<-0.1
+
+# Plotting index scores
+index_plot<-ggplot(data=df_index, aes(x=variable, y=value, color=factor(id), group=factor(id))) + 
+  geom_point() +
+  # geom_errorbar(width=0.05,aes(ymin = low,
+  #                   ymax = high)) + 
+  geom_path() +
+  expand_limits(y=c(40,160)) +
+  scale_y_continuous(breaks=seq(40,160,by=10)) +
+  ylab("Index Score") + 
+  # geom_hline(yintercept=100) + # Expected average
+  labs(
+    colour = "ID",
+  ) +
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank()
+        )
+
+# Plotting percentiles
+percentile_plot<-ggplot(data=df_percentile, aes(x=variable, y=as.numeric(value), fill=factor(id)))+
+  geom_col(position = "dodge") +
+  expand_limits(y=c(0,100)) +
+  scale_y_continuous(breaks=seq(0,100,by=10)) +
+  xlab("Cognitive domains") +
+  ylab("Percentile") + 
+  # geom_hline(yintercept=50) + # Expected average
+  labs(
+    fill = "ID",
+  )
+
+# index_plot                                 # Draw ggplot2 plot
+# percentile_plot
+
+# Clean-up
+source("src/remove_all_but.R")
+remove_all_but(d,df,index_plot,percentile_plot)
