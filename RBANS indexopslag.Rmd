@@ -15,7 +15,7 @@ library(readxl)
 
 # Importing index tables
 
-## Writing funtion
+## Writing function
 Function imports tables
 ```{r}
 list_tables<-function(table_paths,sheets=2,include_all=TRUE){
@@ -70,15 +70,6 @@ index_tables<-list_tables(tbl_docs)
 
 # Calculating the index scores
 
-## Creating a test dataset
-
-```{r}
-var_names=c("a","b","c","d","e")
-
-parts=10
-
-dta<-data.frame(id=1:parts,age=as.numeric(sample(18:110,10)),matrix(sample(20:40,replace=TRUE), ncol = length(var_names), nrow = parts,dimnames=list(NULL,var_names)),version="a")
-```
 
 ## Formatting scale_total
 ```{r}
@@ -186,6 +177,17 @@ for (i in 1:nrow(dta)){
 }
   return(df)
 }
+```
+
+
+## Creating a test dataset
+
+```{r}
+var_names=c("a","b","c","d","e")
+
+parts=10
+
+dta<-data.frame(id=1:parts,age=as.numeric(sample(18:110,10)),matrix(sample(20:40,replace=TRUE), ncol = length(var_names), nrow = parts,dimnames=list(NULL,var_names)),version="a")
 ```
 
 

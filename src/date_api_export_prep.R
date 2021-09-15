@@ -1,12 +1,12 @@
 date_api_export_prep<-function(dta,include_all=FALSE,cut_date=-5,num_c=2,ev_names=c("3mdr","12mdr"),date_col="_book",room_col="_room",other_col="_other"){
   ## Troubleshooting ##
-  include_all=FALSE
-  cut_date=-5
-  num_c=2
-  ev_names=c("3mdr","12mdr")
-  date_col="_book"
-  room_col="_room"
-  other_col="_other"
+  # include_all=FALSE
+  # cut_date=-5
+  # num_c=2
+  # ev_names=c("3mdr","12mdr")
+  # date_col="_book"
+  # room_col="_room"
+  # other_col="_other"
   ## END ##
   
   # Depends on file formatted as REDCap export files with date of export in filename
