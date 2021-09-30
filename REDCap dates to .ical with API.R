@@ -9,7 +9,7 @@ df<-date_api_export_prep(dta=d,include_all=FALSE,cut_date=-5,num_c=2,date_col="_
 ## Includes only one appointment for each ID. Problem?
 
 ## Excluding patients with booking, but with EOS filled due to early end of study (ie date of EOS not blank)
-df<-df[df$id!=d$record_id[!is.na(d$eos1)],]
+df <- df[!(df$id %in% d$record_id[!is.na(d$eos1)]),]
 
 # Conversion
 library(calendar)
