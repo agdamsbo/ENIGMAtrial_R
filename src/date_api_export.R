@@ -25,3 +25,6 @@ d <- redcap_read(
   )$data
   
 
+# Clean-up
+source("src/remove_all_but.R")
+remove_all_but(d)

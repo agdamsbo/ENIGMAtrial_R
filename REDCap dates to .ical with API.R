@@ -1,6 +1,7 @@
 
 # REDCap data export/import script
 source("src/date_api_export.R")
+## Drops environment but data.frame
 
 # Formatting
 source("src/date_api_export_prep.R")
