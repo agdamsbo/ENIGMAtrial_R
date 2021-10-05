@@ -22,6 +22,3 @@ df<-index_from_raw(dta = d[,1:8],version = d$urbans_version,age=d$age,raw_column
 # Clean-up
 source("src/remove_all_but.R")
 remove_all_but(d,df)
-
-
-# - Create new combined df

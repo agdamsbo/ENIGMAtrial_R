@@ -1,7 +1,7 @@
 # RBANS Index Lookup and visualisation
 
 events = "3_months_arm_1"
-id   = "1,2,3,4,8,11,15"
+id   = "13,14"
 
 suppressWarnings(source("src/rbans_index_prep.R"))
 
