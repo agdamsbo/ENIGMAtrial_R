@@ -1,4 +1,3 @@
-source("/Users/au301842/ENIGMA_REDCap_token.R")
 library(REDCapR)
 library(readr)
 
@@ -18,8 +17,8 @@ col_types <- readr::cols(
 )
 
 d <- redcap_read(
-    redcap_uri   = uri,
-    token        = token,
+    redcap_uri   = "https://redcap.au.dk/api/",
+    token        = names(suppressWarnings(read.csv("/Users/au301842/enigma_redcap_token.csv",colClasses = "character"))),
     fields       = fields,
     col_types    = col_types
   )$data
