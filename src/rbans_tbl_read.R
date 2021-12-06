@@ -8,5 +8,6 @@ source("src/interval_extension.R")
 
 index_tables$index_scale_total$scale_total<-interval_extension(index_tables$index_scale_total$scale_total)
 
-
+# library(writexl)
+# Is it possible to export to single file to only require this workflow once?
 # Each element in list should be exported to seperate excel workbook, not to require this function each time.

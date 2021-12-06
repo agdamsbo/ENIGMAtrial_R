@@ -1,3 +1,5 @@
+# No use anymore!!
+
 enigma_age_calc<-function(id){
   ## id is ID-numbers seperated by ","
   

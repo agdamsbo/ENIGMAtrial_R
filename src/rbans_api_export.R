@@ -1,5 +1,6 @@
+## Not in use - see redcap_api_export.R for universal function
+
 rbans_api_export<-function(id,fields,events){
-source("/Users/au301842/ENIGMA_REDCap_token.R")
 library(REDCapR)
 library(readr)
 library(dplyr)
@@ -23,9 +24,9 @@ col_types <- readr::cols(
 )
 
 d <- redcap_read(
-    redcap_uri   = uri,
+    redcap_uri   = "https://redcap.au.dk/api/",
     records_collapsed = id,
-    token        = token,
+    token        = names(suppressWarnings(read.csv("/Users/au301842/enigma_redcap_token.csv",colClasses = "character"))),
     fields       = fields,
     col_types    = col_types
   )$data

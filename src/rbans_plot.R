@@ -45,13 +45,10 @@ index_plot<-ggplot(data=df_index, aes(x=variable, y=value, color=factor(id), gro
   scale_y_continuous(breaks=seq(40,160,by=10)) +
   ylab("Index Score") + 
   # geom_hline(yintercept=100) + # Expected average
-  labs(
-    colour = "ID",
-  ) +
+  labs(colour = "ID") +
   theme(axis.title.x=element_blank(),
         axis.text.x=element_blank(),
-        axis.ticks.x=element_blank()
-        )
+        axis.ticks.x=element_blank())
 
 # Plotting percentiles
 percentile_plot<-ggplot(data=df_percentile, aes(x=variable, y=as.numeric(value), fill=factor(id)))+
@@ -61,9 +58,7 @@ percentile_plot<-ggplot(data=df_percentile, aes(x=variable, y=as.numeric(value),
   xlab("Cognitive domains") +
   ylab("Percentile") + 
   # geom_hline(yintercept=50) + # Expected average
-  labs(
-    fill = "ID",
-  )
+  labs(fill = "ID")
 
 # index_plot                                 # Draw ggplot2 plot
 # percentile_plot
