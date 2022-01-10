@@ -25,15 +25,21 @@ for (i in 1:nrow(df_X95pct)){
 }
 df_index<-data.frame(df_index,low=as.numeric(low),high=as.numeric(hgh))
 
+# Correcting odd percentile formatting
+# Wonder if this can be done a little more elegantly??
+sel1<-grepl("percentile", df_long$variable)
+# [i,"value"]
+df_long[sel1,"value"]<-ifelse(df_long[sel1,"value"] %in% c("> 99.9",">99.9"),"99.95",
+                              ifelse(df_long[sel1,"value"] %in% c("< 0.1","<0.1"), "0.05", 
+                                     ifelse(df_long[sel1,"value"]%in% c("0,1"),"0.1",
+                                            df_long[sel1,"value"])))
+
+# Percentile dataframe
 df_percentile <- df_long %>%
   filter(grepl('percentile',variable)) %>%
   # mutate(value=as.numeric(value)) %>%
   mutate(variable=factor(variable,labels = domain_names))
 
-# Correcting odd 
-df_percentile$value[df_percentile$value %in% c("> 99.9",">99.9")]<-99.95
-df_percentile$value[df_percentile$value %in% c("< 0.1","<0.1")]<-0.05
-df_percentile$value[df_percentile$value %in% c("0,1")]<-0.1
 
 # Plotting index scores
 index_plot<-ggplot(data=df_index, aes(x=variable, y=value, color=factor(id), group=factor(id))) + 

@@ -18,7 +18,6 @@ d<-full_join(redcap_api_export(id=id,fld_lst = field_list)[[-length(field_list)]
 # Conversion
 source("src/index_from_raw.R")
 
-#### NOT WORKING!!! ####
 df<-index_from_raw(dta = d[,c(1,3:7)],version = d$urbans_version,age=d$age,raw_columns=names(d[,3:7]))
 
 # Clean-up

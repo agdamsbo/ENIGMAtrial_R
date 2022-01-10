@@ -10,13 +10,13 @@ field_list<-list(inc,
 names(field_list)<-c("inclusion_arm_1",
                      "3_months_arm_1")
 
-id   = "20,21"
+id   = "23,24,27"
 
 suppressWarnings(source("src/rbans_index_prep.R"))
 
 # - NAs are just thrown out.
 
-## Now includes all relevant data. Maybe include event in df?
+## Now includes all relevant data. Maybe include event in df? This would enable the analysis of change in score. Requires different plotting.
 
 source("src/rbans_plot.R")
 
