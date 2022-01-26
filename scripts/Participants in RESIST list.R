@@ -9,7 +9,7 @@ source("src/redcap_api_export.R")
 # RESIST participants
 library(tidyverse)
 
-after_id<-10940 # Oldest RESIST ID to include in export
+after_id<-10959 # Oldest RESIST ID to include in export
 
 d <- redcap_api_export(fld_lst=field_list,reduced=TRUE) %>% 
   filter(.,!is.na(resist_id) &     # Only include patients with recorded RESIST ID
