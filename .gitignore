@@ -38,6 +38,7 @@ rsconnect/
 
 # RBANS index table files
 index/*.xlsx
+index/*.csv
 
 # API-files
 *keyfile.R

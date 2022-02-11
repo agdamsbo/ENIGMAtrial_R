@@ -1,17 +1,17 @@
-index_from_raw<-function(dta,table_list=index_tables,version,age,raw_columns){
+index_from_raw<-function(dta,table=index,version,age,raw_columns){
   library(dplyr)
   
   # dta<-d
-  # table_list=index_tables
+  # table=index
   # version=d$urbans_version
   # age=d$age
-  # raw_columns=names(d[,4:8])
-  
+  # raw_columns=names(select(d,ends_with("_rs")))
+  # 
   version<-case_when(version == "1" ~ "a",
                      version == "2" ~ "b")
   
   ## Categorizing age to age interval of index lists
-  ndx_nms<-names(table_list)[1:length(table_list)-1]
+  ndx_nms<-unique(unlist(sapply(strsplit(unique(table$grp),"[_]"),"[[",2)))[1:6]
   
   ## This is the only non-generalised part. Please be inspired and solve it your own way! :)
   ## Intervals are 20-39, 40-49, 50-59, 60-69, 70-79, 80-89.
@@ -25,16 +25,17 @@ index_from_raw<-function(dta,table_list=index_tables,version,age,raw_columns){
                                                 ifelse(age>=80,ndx_nms[6],NA))))))
   
   # Names of the different domains
-  cinms<-names(table_list[[1]])
+  cinms<-unlist(sapply(strsplit(unique(table$grp)[1:5],"[_]"),"[[",3))
+    ## c("immediate","visuospatial","verbal","attention","delayed")
   
   # Creating relevant colnames for index, CI and percentile
   abc<-paste0("rbans_",c(letters[1:length(cinms)],"ttl"))
   col_names_index<-paste0(abc,"_index",c(paste0("_",cinms),""))
-  col_names_X95pct<-paste0(abc,"_X95pct")
+  col_names_95pct<-paste0(abc,"_95pct")
   col_names_percentile<-paste0(abc,"_percentile")
   
   # Creating DF to populate with extracted data from table look-up
-  col_names_all<-c("id",col_names_index,col_names_X95pct,col_names_percentile)
+  col_names_all<-c("id",col_names_index,col_names_95pct,col_names_percentile)
   df<-data.frame(matrix(1:length(col_names_all),ncol=length(col_names_all),nrow = nrow(dta),byrow = T))
   df[,1]<-dta$record_id
   colnames(df)<-col_names_all
@@ -47,7 +48,12 @@ index_from_raw<-function(dta,table_list=index_tables,version,age,raw_columns){
     # i=1
     
     ## Selecting tables based on index age classification (all ages included from 18 and above, also above 89)
-    lst<-table_list[[index_age[i]]]
+    lst<-list()
+    for (j in 1:5){
+      lst[[length(lst)+1]]<-index %>% filter(grepl(cinms[j],grp)) %>% filter(grepl(index_age[i],grp))
+    }
+    
+    names(lst)<-cinms
     
     ## Selecting correct test version
     v<-version[i]
@@ -56,26 +62,28 @@ index_from_raw<-function(dta,table_list=index_tables,version,age,raw_columns){
     ndx<-c()
     X95<-c()
     per<-c()
+    
+    ## Populating variables
     for (s in 1:length(lst)){
-      # s=1
       # Index score
+      # s=1
+      flt<-lst[[s]]%>%filter(raw==dt[i,raw_columns[s]])%>%filter(ver==v)
       
-      flt<-filter(lst[[s]],total_rawscore==dt[i,raw_columns[s]]&version==v)
-      
-      ndx<-c(ndx,flt$indexscore)
+      ndx<-c(ndx,flt$index)
       # 95 % CI
-      X95<-c(X95,flt$X95_pct)
+      X95<-c(X95,flt$pct95)
       # Percentile
-      per<-c(per,flt$percentile)
+      per<-c(per,flt$perc)
     }
     
     ## Total index score from index sum
-    ttl_scale<-index_tables[[length(index_tables)]][[1]]
+    ttl_scale<-index %>% filter(grepl("total_",grp))
+    
     ndx_sum<-sum(ndx)
-    flt_ttl<-filter(ttl_scale,total_index_scores==ndx_sum)
-    ndx<-c(ndx,flt_ttl$indexscore)
-    X95<-c(X95,flt_ttl$X95_pct)
-    per<-c(per,flt_ttl$percentile)
+    flt_ttl<-filter(ttl_scale,raw==ndx_sum)
+    ndx<-c(ndx,flt_ttl$index)
+    X95<-c(X95,flt_ttl$pct95)
+    per<-c(per,flt_ttl$perc)
     
     df[i,2:ncol(df)]<-c(ndx,X95,per)
   }
