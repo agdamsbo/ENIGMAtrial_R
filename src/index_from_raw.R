@@ -71,7 +71,7 @@ index_from_raw<-function(dta,indx=index,version,age,raw_columns){
     }
     
     ## Total index score from index sum
-    ttl_scale<-index %>% filter(grepl("total_",grp))
+    ttl_scale<-indx %>% filter(grepl("total_",grp))
     
     ndx_sum<-sum(ndx)
     flt_ttl<-filter(ttl_scale,raw==ndx_sum)
