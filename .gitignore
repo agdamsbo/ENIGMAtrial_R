@@ -42,3 +42,6 @@ index/*.csv
 
 # API-files
 *keyfile.R
+
+# Files folder
+files/
