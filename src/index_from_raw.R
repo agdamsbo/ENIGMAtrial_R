@@ -1,4 +1,4 @@
-index_from_raw<-function(dta,table=index,version,age,raw_columns){
+index_from_raw<-function(dta,indx=index,version,age,raw_columns){
   library(dplyr)
   
   version<-case_when(version == "1" ~ "a",
@@ -44,7 +44,7 @@ index_from_raw<-function(dta,table=index,version,age,raw_columns){
     ## Selecting tables based on index age classification (all ages included from 18 and above, also above 89)
     lst<-list()
     for (j in 1:5){
-      lst[[length(lst)+1]]<-index %>% filter(grepl(cinms[j],grp)) %>% filter(grepl(index_age[i],grp))
+      lst[[length(lst)+1]]<-indx %>% filter(grepl(cinms[j],grp)) %>% filter(grepl(index_age[i],grp))
     }
     
     names(lst)<-cinms
