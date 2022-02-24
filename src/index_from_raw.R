@@ -1,11 +1,11 @@
-index_from_raw<-function(dta,indx=index,version,age,raw_columns){
+index_from_raw<-function(ds,indx,version,age,raw_columns){
   library(dplyr)
   
   version<-case_when(version == "1" ~ "a",
                      version == "2" ~ "b")
   
   ## Categorizing age to age interval of index lists
-  ndx_nms<-unique(unlist(sapply(strsplit(unique(table$grp),"[_]"),"[[",2)))[1:6]
+  ndx_nms<-unique(unlist(sapply(strsplit(unique(indx$grp),"[_]"),"[[",2)))[1:6]
   
   ## This is the only non-generalised part. Please be inspired and solve it your own way! :)
   ## Intervals are 20-39, 40-49, 50-59, 60-69, 70-79, 80-89.
@@ -19,7 +19,7 @@ index_from_raw<-function(dta,indx=index,version,age,raw_columns){
                                                 ifelse(age>=80,ndx_nms[6],NA))))))
   
   # Names of the different domains
-  cinms<-unlist(sapply(strsplit(unique(table$grp)[1:5],"[_]"),"[[",3))
+  cinms<-unlist(sapply(strsplit(unique(indx$grp)[1:5],"[_]"),"[[",3))
     ## c("immediate","visuospatial","verbal","attention","delayed")
   
   # Creating relevant colnames for index, CI and percentile
@@ -30,15 +30,15 @@ index_from_raw<-function(dta,indx=index,version,age,raw_columns){
   
   # Creating DF to populate with extracted data from table look-up
   col_names_all<-c("id",col_names_index,col_names_95pct,col_names_percentile)
-  df<-data.frame(matrix(1:length(col_names_all),ncol=length(col_names_all),nrow = nrow(dta),byrow = T))
-  df[,1]<-dta$record_id
+  df<-data.frame(matrix(1:length(col_names_all),ncol=length(col_names_all),nrow = nrow(ds),byrow = T))
+  df[,1]<-ds$record_id
   colnames(df)<-col_names_all
   
-  dt<-dta
+  dt<-ds
   
   ## Create one function for when data provided is a list and when it is a data.frame. Currently works with data.frame
   
-  for (i in 1:nrow(dta)){
+  for (i in 1:nrow(ds)){
     # i=1
     
     ## Selecting tables based on index age classification (all ages included from 18 and above, also above 89)
