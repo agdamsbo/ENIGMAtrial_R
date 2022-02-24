@@ -1,12 +1,6 @@
 index_from_raw<-function(dta,table=index,version,age,raw_columns){
   library(dplyr)
   
-  # dta<-d
-  # table=index
-  # version=d$urbans_version
-  # age=d$age
-  # raw_columns=names(select(d,ends_with("_rs")))
-  # 
   version<-case_when(version == "1" ~ "a",
                      version == "2" ~ "b")
   
@@ -29,10 +23,10 @@ index_from_raw<-function(dta,table=index,version,age,raw_columns){
     ## c("immediate","visuospatial","verbal","attention","delayed")
   
   # Creating relevant colnames for index, CI and percentile
-  abc<-paste0("rbans_",c(letters[1:length(cinms)],"ttl"))
-  col_names_index<-paste0(abc,"_index",c(paste0("_",cinms),""))
-  col_names_95pct<-paste0(abc,"_95pct")
-  col_names_percentile<-paste0(abc,"_percentile")
+  abc<-paste0("test_",c(letters[1:length(cinms)],"i"))
+  col_names_index<-paste0(abc,"_is",c(paste0("_",cinms),"_total"))
+  col_names_95pct<-paste0(abc,"_ci")
+  col_names_percentile<-paste0(abc,"_per")
   
   # Creating DF to populate with extracted data from table look-up
   col_names_all<-c("id",col_names_index,col_names_95pct,col_names_percentile)

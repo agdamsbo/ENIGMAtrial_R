@@ -18,14 +18,15 @@ require(lubridate)
 ### - incl_ratio
 ### - incl_data_mod
 
-source("src/redcap_data_upload.R")
-# source("")
+source("src/redcap_upload_inclusion.R")
+# source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap_upload_inclusion.R")
 
 
 ## 3 months data modification
 ### Modifies 3 months RBANS data
 
-# source("src/redcap_rbans3_upload.R")
+# source("src/redcap_upload_rbans3.R")
+# source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap_upload_rbans3.R)
 
 ## 12 months data modification
 ### Modifies 12 months RBANS data and generates basic RBANS conclusion
