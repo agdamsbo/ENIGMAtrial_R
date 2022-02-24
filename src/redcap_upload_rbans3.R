@@ -19,7 +19,8 @@ dta <- redcap_read(
   forms        = "rbans",
   fields       = "record_id"
 )$data  %>% 
-  filter(rbans_perf==1)
+  filter(rbans_perf==1)  ## Only handling performed tests
+  
 
 ## Handling only 3 months by script also for 12 months handling
 
@@ -27,7 +28,7 @@ source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap
 
 ## Write
 
-stts<-redcap_write(ds=df,
+stts<-redcap_write(ds=df%>%mutate(visit_data_mod="yes"), ## Last minute flag to indicate modification performed
                    redcap_uri   = uri,
                    token        = token)
 

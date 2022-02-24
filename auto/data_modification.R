@@ -25,7 +25,7 @@ source("src/redcap_upload_inclusion.R")
 ## 3 months data modification
 ### Modifies 3 months RBANS data
 
-# source("src/redcap_upload_rbans3.R")
+source("src/redcap_upload_rbans3.R")
 # source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap_upload_rbans3.R)
 
 ## 12 months data modification
