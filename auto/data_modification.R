@@ -18,19 +18,24 @@ require(lubridate)
 ### - incl_ratio
 ### - incl_data_mod
 
-source("src/redcap_upload_inclusion.R")
-# source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap_upload_inclusion.R")
+# source("src/redcap_upload_inclusion.R")
+source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap_upload_inclusion.R")
 
 
 ## 3 months data modification
 ### Modifies 3 months RBANS data
 
-source("src/redcap_upload_rbans3.R")
-# source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap_upload_rbans3.R)
+# source("src/redcap_upload_rbans3.R")
+source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap_upload_rbans3.R")
 
 ## 12 months data modification
 ### Modifies 12 months RBANS data and generates basic RBANS conclusion
 
+# source("src/redcap_upload_rbans12.R")
+source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap_upload_rbans12.R")
+
+### Still missing
+### - Automated conclusions in separate instrument
 
 ## Cleans environment
 source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/remove_all_but.R")
