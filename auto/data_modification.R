@@ -30,3 +30,8 @@ source("src/redcap_upload_rbans3.R")
 
 ## 12 months data modification
 ### Modifies 12 months RBANS data and generates basic RBANS conclusion
+
+
+## Cleans environment
+source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/remove_all_but.R")
+remove_all_but()
