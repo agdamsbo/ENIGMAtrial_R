@@ -38,5 +38,4 @@ source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap
 ### - Automated conclusions in separate instrument
 
 ## Cleans environment
-source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/remove_all_but.R")
-remove_all_but()
+rm(list=ls(pos=1))
