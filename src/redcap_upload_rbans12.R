@@ -6,7 +6,8 @@ records_mod <- redcap_read_oneshot(
   events       = "12_months_arm_1",
   fields       = c("record_id","eos_data_mod","rbans_perf") ## Only selecting relevant variables
 )$data %>%
-  filter(is.na(eos_data_mod)&rbans_perf==1) %>% ## Only write to patients not already filled
+  filter(is.na(eos_data_mod)) %>% ## Only write to patients not already filled
+  filter(rbans_perf==1) %>% ## The two filters are kept seperated for troubleshooting
   select(record_id) ## Keeping record_id to select for download
 
 if (length(records_mod[[1]])>0){
