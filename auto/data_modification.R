@@ -31,8 +31,8 @@ source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap
 ## 12 months data modification
 ### Modifies 12 months RBANS data and generates basic RBANS conclusion
 
-# source("src/redcap_upload_rbans12.R")
-source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap_upload_rbans12.R")
+source("src/redcap_upload_rbans12.R")
+# source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap_upload_rbans12.R")
 
 ### Still missing
 ### - Automated conclusions in separate instrument
