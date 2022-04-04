@@ -22,3 +22,4 @@ enigma_git_push("calendar update")
 
 # Clean environment
 rm(list=ls(pos=1))
+
