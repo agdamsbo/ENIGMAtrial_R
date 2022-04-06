@@ -5,6 +5,7 @@
 # Session Data files
 .RData
 .DS_Store
+*.DS_Store
 
 # Example code in package build process
 *-Ex.R
@@ -45,3 +46,4 @@ index/*.csv
 
 # Files folder
 files/
+
