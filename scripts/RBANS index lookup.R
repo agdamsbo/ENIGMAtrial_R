@@ -4,26 +4,25 @@
 
 
 ## =============================================================================
-## Settings
+## Function
 ## =============================================================================
 
-id         = 40
+library(dplyr)
 
-event      = "3_months_arm_1"
+## Merge with "redcap_api_export.R" function??
+source("src/redcap_api_export_short.R")
 
 ## =============================================================================
 ## Data export
 ## =============================================================================
 
-## Use "redcap_api_export.R" function instead??
-
-source("src/redcap_api_export_short.R")
-
-df <- df %>%
+df<-redcap_api_export_short(id= 40,
+                            instruments= "rbans",
+                            event= "3_months_arm_1") %>%
   select(c("record_id",ends_with(c("_is","_lo","_up","_per")))) %>%
   na.omit()
 
-## Now includes all relevant data. Maybe include event in df? This would enable the analysis of change in score. Requires different plotting
+## Next step: Plot change over time.
 
 ## =============================================================================
 ## Plots
