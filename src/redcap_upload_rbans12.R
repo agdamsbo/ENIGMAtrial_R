@@ -15,7 +15,7 @@ records_mod <- redcap_read_oneshot(
 
 # IDs with performed RBANS, and not yet modified
 ids<-setdiff(records_mod$record_id[!is.na(records_mod$rbans_perf==1)], #IDs with 12 months RBANS performed
-             na.omit(records_mod$record_id[records_mod$eos_data_mod=="no"])) #IDs with data modified already
+             na.omit(records_mod$record_id[records_mod$eos_data_mod=="yes"])) #IDs with data modified already
 
 ## =============================================================================
 ## Step 2: Doing table look-ups for RBANS incl upload
