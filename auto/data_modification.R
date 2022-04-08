@@ -27,6 +27,10 @@ require(lubridate)
 # source("src/redcap_upload_inclusion.R")
 source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap_upload_inclusion.R")
 
+source("src/remove_all_but.R")
+remove_all_but(token,uri)
+
+
 ## =============================================================================
 ## 3 months data modification
 ## =============================================================================
@@ -35,6 +39,7 @@ source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap
 
 # source("src/redcap_upload_rbans3.R")
 source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap_upload_rbans3.R")
+remove_all_but(token,uri)
 
 ## =============================================================================
 ## 12 months data modification
