@@ -9,24 +9,28 @@ records_mod <- redcap_read_oneshot(
   token        = token,
   fields       = c("record_id","eos_data_mod","rbans_perf") ## Only selecting relevant variables
 )$data %>%
-  filter(is.na(eos_data_mod)) %>% ## Only write to patients not already filled
-  filter(rbans_perf==1&redcap_event_name=="12_months_arm_1") %>% ## The two filters are kept seperated for troubleshooting
-  select(record_id) ## Keeping record_id to select for download
+  # filter(is.na(eos_data_mod)) %>% ## Only write to patients not already filled
+  filter(redcap_event_name %in% c("12_months_arm_1","end_of_study_arm_1")) #%>% ## The two filters are kept separated for troubleshooting
+  # select(record_id) ## Keeping record_id to select for download
+
+# IDs with performed RBANS, and not yet modified
+ids<-setdiff(records_mod$record_id[!is.na(records_mod$rbans_perf==1)], #IDs with 12 months RBANS performed
+             na.omit(records_mod$record_id[records_mod$eos_data_mod=="no"])) #IDs with data modified already
 
 ## =============================================================================
 ## Step 2: Doing table look-ups for RBANS incl upload
 ## =============================================================================
 
-# Everything is wrapped within an "if" loop for 
+# Everything is wrapped within an "if" loop to only run if records are available 
 
-if (length(records_mod[[1]])>0){
+if (length(ids)>0){
 ### Data export
 dta <- redcap_read(
   redcap_uri   = uri,
   token        = token,
   events       = "12_months_arm_1",
   raw_or_label = "raw",
-  records      = records_mod[[1]],
+  records      = ids,
   forms        = c("rbans","rbans_konklusion","mrs"),
   fields       = "record_id"
 )$data
@@ -43,10 +47,10 @@ df<-df%>%full_join(.,data.frame(record_id=.$record_id,
                by=c("record_id","redcap_event_name"))
 
 ## Write
+
 stts<-redcap_write(ds=df,
                    redcap_uri   = uri,
                    token        = token)
-
 
 ## =============================================================================
 ## Step 3: Conclusions data
@@ -66,7 +70,7 @@ rb3<-redcap_read(
   token        = token,
   events       = "3_months_arm_1",
   raw_or_label = "raw",
-  records      = records_mod[[1]],
+  records      = ids,
   forms        = c("rbans","mrs"),
   fields       = c("record_id")
 )$data%>%
@@ -78,7 +82,7 @@ rb0<-redcap_read(
   token        = token,
   events       = "inclusion_arm_1",
   raw_or_label = "raw",
-  records      = records_mod[[1]],
+  records      = ids,
   forms        = c("mrs","iqcode"),
   fields       = c("record_id")
 )$data%>%
@@ -92,7 +96,7 @@ doms<-c("immediate","visuospatial","verbal","attention","delayed","total")
 txts<-c()
 
 # Texts for each ID
-for (i in records_mod[[1]]) {
+for (i in ids) {
   rb0_s<-rb0[rb0$record_id==i]
   rb3_s<-rb3[rb3$record_id==i]
   rb12_s<-rb12[rb12$record_id==i]
@@ -105,20 +109,18 @@ txt_iqcode<-paste("At inclusion, IQCODE score was:",
                   rb0_s$iq_score,
                   "(48 is normal, higher indicates decline)")
 
-txt_md3<-paste0("3 months RBANS index scores were ", 
-               paste(select(rb3_s,ends_with("_is")),collapse = ", "), 
-               ", for the domains respectively: ", 
-               paste(doms,collapse = ", "),
-               "; with percentiles: ",
-               paste(select(rb3_s,ends_with("_per")),collapse = ", ")
+txt_md3<-paste0("3 months RBANS index scores (percentile) for the domains were ", 
+               paste(doms, 
+                     paste0(select(rb3_s,ends_with("_is"))," (",
+                            select(rb3_s,ends_with("_per")),")"),
+                     sep = ": ",collapse=", ")
                )
 
-txt_md12<-paste0("12 months RBANS index scores were ", 
-                paste(select(rb12_s,ends_with("_is")),collapse = ", "), 
-                ", for the domains respectively: ", 
-                paste(doms,collapse = ", "),
-                "; with percentiles: ",
-                paste(select(rb12_s,ends_with("_per")),collapse = ", ")
+txt_md12<-paste0("12 months RBANS index scores (percentile) for the domains were ", 
+                 paste(doms, 
+                       paste0(select(rb12_s,ends_with("_is"))," (",
+                              select(rb12_s,ends_with("_per")),")"),
+                       sep = ": ",collapse=", ")
                 )
 
 if (rb12_s$mrs_score>=2 & rb12_s$rbans_i_is<=70) {
@@ -136,7 +138,7 @@ txts<-c(txts,
 }
 
 # Creating upload data frame
-ds<-data.frame(record_id=records_mod[[1]],
+dc<-data.frame(record_id=ids,
                rbans_conc_text=txts,
                redcap_event_name="12_months_arm_1")
 
@@ -144,8 +146,8 @@ ds<-data.frame(record_id=records_mod[[1]],
 ## Step 5: Conclusions upload
 ## =============================================================================
 
-stts<-redcap_write(ds=ds,
+stts<-redcap_write(ds=dc,
                    redcap_uri   = uri,
                    token        = token)
-
 } 
+
