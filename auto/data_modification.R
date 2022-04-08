@@ -3,13 +3,19 @@
 token=names(suppressWarnings(read.csv("/Users/au301842/enigma_redcap_token.csv",colClasses = "character")))
 uri="https://redcap.au.dk/api/"
 
-### Libraries
+## =============================================================================
+## Libraries
+## =============================================================================
+
 require(REDCapR)
 require(dplyr)
 require(daDoctoR)
 require(lubridate)
 
+## =============================================================================
 ## Inclusion data upload (mostly)
+## =============================================================================
+
 ### Modifies the following
 ### - kon
 ### - dob
@@ -21,21 +27,26 @@ require(lubridate)
 # source("src/redcap_upload_inclusion.R")
 source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap_upload_inclusion.R")
 
-
+## =============================================================================
 ## 3 months data modification
+## =============================================================================
+
 ### Modifies 3 months RBANS data
 
 # source("src/redcap_upload_rbans3.R")
 source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap_upload_rbans3.R")
 
+## =============================================================================
 ## 12 months data modification
+## =============================================================================
+
 ### Modifies 12 months RBANS data and generates basic RBANS conclusion
 
 # source("src/redcap_upload_rbans12.R")
-# source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap_upload_rbans12.R")
+source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap_upload_rbans12.R")
 
-### Still missing
-### - Automated conclusions in separate instrument
-
+## =============================================================================
 ## Cleans environment
+## =============================================================================
+
 rm(list=ls(pos=1))
