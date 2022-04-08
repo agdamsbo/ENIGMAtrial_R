@@ -27,8 +27,10 @@ require(lubridate)
 # source("src/redcap_upload_inclusion.R")
 source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap_upload_inclusion.R")
 
-source("src/remove_all_but.R")
-remove_all_but(token,uri)
+
+# Clean up function
+source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/remove_all_but.R")
+remove_all_but(token,uri,remove_all_but)
 
 
 ## =============================================================================
@@ -37,9 +39,8 @@ remove_all_but(token,uri)
 
 ### Modifies 3 months RBANS data
 
-# source("src/redcap_upload_rbans3.R")
 source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap_upload_rbans3.R")
-remove_all_but(token,uri)
+remove_all_but(token,uri,remove_all_but)
 
 ## =============================================================================
 ## 12 months data modification
@@ -47,7 +48,6 @@ remove_all_but(token,uri)
 
 ### Modifies 12 months RBANS data and generates basic RBANS conclusion
 
-# source("src/redcap_upload_rbans12.R")
 source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap_upload_rbans12.R")
 
 ## =============================================================================
