@@ -9,7 +9,6 @@ uri="https://redcap.au.dk/api/"
 
 require(REDCapR)
 require(dplyr)
-require(daDoctoR)
 require(lubridate)
 
 ## =============================================================================
