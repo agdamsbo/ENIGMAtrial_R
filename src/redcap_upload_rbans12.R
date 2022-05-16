@@ -9,9 +9,10 @@ records_mod <- redcap_read_oneshot(
   token        = token,
   fields       = c("record_id","eos_data_mod","rbans_perf") ## Only selecting relevant variables
 )$data %>%
-  # filter(is.na(eos_data_mod)) %>% ## Only write to patients not already filled
-  filter(redcap_event_name %in% c("12_months_arm_1","end_of_study_arm_1")) #%>% ## The two filters are kept separated for troubleshooting
-  # select(record_id) ## Keeping record_id to select for download
+  filter(redcap_event_name %in% c("12_months_arm_1","end_of_study_arm_1"))
+
+# For trouble shooting
+# records_mod$eos_data_mod<-NA
 
 # IDs with performed RBANS, and not yet modified
 ids<-setdiff(records_mod$record_id[!is.na(records_mod$rbans_perf==1)], #IDs with 12 months RBANS performed
@@ -97,9 +98,9 @@ txts<-c()
 
 # Texts for each ID
 for (i in ids) {
-  rb0_s<-rb0[rb0$record_id==i]
-  rb3_s<-rb3[rb3$record_id==i]
-  rb12_s<-rb12[rb12$record_id==i]
+  rb0_s<-rb0[rb0$record_id==i,]
+  rb3_s<-rb3[rb3$record_id==i,]
+  rb12_s<-rb12[rb12$record_id==i,]
   
 txt_mrs<-paste(c("Prestroke","One month","End of Study"),"mRS:",
                c(rb0_s$mrs_score,rb3_s$mrs_score,rb12_s$mrs_score),
