@@ -11,6 +11,8 @@ records_mod <- redcap_read_oneshot(
   filter(is.na(incl_data_mod)) %>% ## Only write to patients not already filled
   select(c(record_id)) ## Keeping record_id to select for download
 
+
+if (nrow(records_mod)>0){
 project_start<-as.Date("2021-04-13")
 
 ## Imports one specific function for dob extraction from CPR
@@ -41,5 +43,5 @@ for (i in unique(dta$record_id)){
 stts<-redcap_write(ds=dta,
                      redcap_uri   = uri,
                      token        = token)
-
+}
 
