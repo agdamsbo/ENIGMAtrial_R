@@ -8,7 +8,7 @@ records_mod <- redcap_read_oneshot(
   events       = "inclusion_arm_1",
   fields       = c("record_id","incl_data_mod") ## Only selecting relevant variables
 )$data %>%
-  filter(is.na(incl_data_mod)) %>% ## Only write to patients not already filled
+  # filter(is.na(incl_data_mod)) %>% ## Only write to patients not already filled ## commented out, to allow for rbans_age calculation at 12 months, even after 3 months calculations performed.
   select(c(record_id)) ## Keeping record_id to select for download
 
 
