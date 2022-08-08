@@ -26,7 +26,7 @@ dta <- redcap_read(
   records      = records_mod[[1]],
   fields        = c("record_id","redcap_event_name","cpr","incl_date","incl_since_start","incl_ratio","incl_data_mod","rbans_age","rbans_date") ## Only selecting relevant variables (fields)
 )$data %>%
-  mutate(kon=factor(ifelse(as.integer(substr(cpr, start = 10, stop = 10)) %%2 == 0,  # Sex determination
+  mutate(kon=factor(ifelse(as.integer(substr(cpr, start = 11, stop = 11)) %%2 == 0,  # Sex determination
                            "female", "male")),
          dob=as.Date(ifelse(redcap_event_name=="inclusion_arm_1",dob_extract_cpr(cpr),NA),origin="1970-01-01"), # Date of birth
          age=trunc(time_length(difftime(incl_date,dob),"years")), # Age at inclusion

@@ -21,7 +21,7 @@ source("src/redcap_api_export_short.R")
 ## Data export
 ## =============================================================================
 
-df<-redcap_api_export_short(id= 40,
+df<-redcap_api_export_short(id= c(40:50),
                             instruments= "rbans",
                             event= "3_months_arm_1") %>%
   select(c("record_id",ends_with(c("_is","_lo","_up","_per")))) %>%
