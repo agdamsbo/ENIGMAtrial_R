@@ -5,12 +5,22 @@ records_mod <- redcap_read_oneshot(
   token        = token,
   events       = "3_months_arm_1",
   fields       = c("record_id","visit_data_mod","rbans_perf") ## Only selecting relevant variables
-)$data %>%
-  filter(is.na(visit_data_mod)) %>% ## Only write to patients not already filled
-  filter(rbans_perf==1) %>% ## The two filters are kept seperated for troubleshooting
-  select(record_id) ## Keeping record_id to select for download
+)$data
 
-if (length(records_mod[[1]])>0){
+if (all_ids_3==FALSE){
+  # IDs with performed RBANS, and not yet modified
+  ids<-setdiff(records_mod$record_id[!is.na(records_mod$rbans_perf==1)], #IDs with 12 months RBANS performed
+               na.omit(records_mod$record_id[records_mod$visit_data_mod=="yes"]) #IDs with data modified already
+  ) 
+}
+
+if (all_ids_3==TRUE){
+  ## Set all IDs for reupload
+  ids<-records_mod$record_id[!is.na(records_mod$rbans_perf==1)]
+}
+
+
+if (length(ids)>0){
 ### Data export
 dta <- redcap_read(
   redcap_uri   = uri,

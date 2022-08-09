@@ -14,9 +14,17 @@ records_mod <- redcap_read_oneshot(
 # For trouble shooting
 # records_mod$eos_data_mod<-NA
 
-# IDs with performed RBANS, and not yet modified
-ids<-setdiff(records_mod$record_id[!is.na(records_mod$rbans_perf==1)], #IDs with 12 months RBANS performed
-             na.omit(records_mod$record_id[records_mod$eos_data_mod=="yes"])) #IDs with data modified already
+if (all_ids_12==FALSE){
+  # IDs with performed RBANS, and not yet modified
+  ids<-setdiff(records_mod$record_id[!is.na(records_mod$rbans_perf==1)], #IDs with 12 months RBANS performed
+               na.omit(records_mod$record_id[records_mod$eos_data_mod=="yes"]) #IDs with data modified already
+  ) 
+}
+
+if (all_ids_12==TRUE){
+## Set all IDs for reupload
+ids<-records_mod$record_id[!is.na(records_mod$rbans_perf==1)]
+}
 
 ## =============================================================================
 ## Step 2: Doing table look-ups for RBANS incl upload
