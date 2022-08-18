@@ -121,16 +121,16 @@ index_from_raw<-function(ds,indx,version,age,raw_columns,mani=FALSE){
       cnms<-c(cnms,paste0(paste(stp,collapse = "_"),"_",c("lo","up")))
     }
     
-    # df<-merge(df,loups %>%
-    #             'colnames<-'(c("record_id",cnms)) %>%
-    #             mutate(record_id=as.numeric(record_id))) 
+    df<-merge(df,loups %>%
+                'colnames<-'(c("record_id",cnms)) %>%
+                mutate(record_id=as.numeric(record_id)))
     
     ## Type conversion
     
-    # df<- df %>% 
-    #   mutate(across(.cols=all_of(colnames(select(df,c("record_id",
-    #                                                   ends_with(c("_is","_per","_lo","_up")))))), ## Selecting variables to include, keeping "_ci" and event_name out.
-    #                 ~as.numeric(.))) ## Converting types
+    df<- df %>%
+      mutate(across(.cols=all_of(colnames(select(df,c("record_id",
+                                                      ends_with(c("_is","_per","_lo","_up")))))), ## Selecting variables to include, keeping "_ci" and event_name out.
+                    ~as.numeric(.))) ## Converting types
   }
   
   return(df)
