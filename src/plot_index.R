@@ -1,5 +1,6 @@
 ## Revision under way.
 ## CIs still pending.
+plot_index <- function(ds){
 
 library(ggplot2)
 library(dplyr)
@@ -62,15 +63,15 @@ index_plot<-ggplot(data=df_index, aes(x=name, y=value, color=factor(record_id), 
         axis.ticks.x=element_blank())
 
 # Plotting percentiles
-percentile_plot<-ggplot(data=df_percentile, aes(x=name, y=value, fill=factor(record_id)))+
-  geom_col(position = "dodge") +
-  expand_limits(y=c(0,100)) +
-  scale_y_continuous(breaks=seq(0,100,by=10)) +
-  xlab("Cognitive domains") +
-  ylab("Percentile") + 
-  # geom_hline(yintercept=50) + # Expected average
-  labs(fill = "ID")
+# percentile_plot<-ggplot(data=df_percentile, aes(x=name, y=value, fill=factor(record_id)))+
+#   geom_col(position = "dodge") +
+#   expand_limits(y=c(0,100)) +
+#   scale_y_continuous(breaks=seq(0,100,by=10)) +
+#   xlab("Cognitive domains") +
+#   ylab("Percentile") + 
+#   # geom_hline(yintercept=50) + # Expected average
+#   labs(fill = "ID")
 
-# Clean-up
-source("src/remove_all_but.R")
-remove_all_but(d,df,index_plot,percentile_plot)
+return(index_plot)
+}
+
