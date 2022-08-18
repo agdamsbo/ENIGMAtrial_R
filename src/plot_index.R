@@ -8,17 +8,14 @@ plot_index <- function(ds,id="record_id",sub_plot="_is",dom_names=c("immediate",
 library(ggplot2)
 library(dplyr)
 library(tidyr)
-
-  colnames(ds[id])<-"record_id"
-  
-# Set x-axis names
-
-
-df_plot<-df|>
-  pivot_longer(cols=-record_id)|>
+ 
+df_plot<-ds|>
+  pivot_longer(cols=-id)|>
   subset(grepl(sub_plot,name))|>
   mutate(value=as.numeric(value),
          name=factor(name,labels = dom_names))
+
+colnames(df_plot)[1]<-"record_id"
 
 if (sub_plot=="_is"){
   index_plot<-df_plot|>
@@ -45,6 +42,6 @@ if (sub_plot=="_per"){
     labs(fill = "ID")
 }
 
-return(plot(index_plot))
+return(index_plot)
 }
 
