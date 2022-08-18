@@ -16,8 +16,10 @@
 setwd("/Users/au301842/ENIGMAtrial_R/apps/Index app")
 shiny::runApp()
 
-
-source("app/app_deploy.R")
-
+source("/Users/au301842/ENIGMAtrial_R/apps/app_deploy.R")
 
 setwd("/Users/au301842/ENIGMAtrial_R")
+
+
+## 18aug2022 Its alive!!
+## https://cognitiveindex.shinyapps.io/index_app/

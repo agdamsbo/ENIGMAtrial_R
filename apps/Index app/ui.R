@@ -1,8 +1,6 @@
 library(shiny)
 library(ggplot2)
 
-source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/index_from_raw.R")
-
 ui <- fluidPage(
   
   # Application title
@@ -27,13 +25,13 @@ ui <- fluidPage(
                    value=35),
       numericInput(inputId = "rs2",
                    label = "Visuospatial functions",
-                   value=20),
+                   value=35),
       numericInput(inputId = "rs3",
                    label = "Verbal functions",
                    value=30),
       numericInput(inputId = "rs4",
                    label = "Attention",
-                   value=20),
+                   value=35),
       numericInput(inputId = "rs5",
                    label = "Delayed memory",
                    value=40)
@@ -57,28 +55,9 @@ ui <- fluidPage(
 
              h3("Percentiles"),
 
-             plotOutput("ndx.plt")
+             plotOutput("per.plt")
     )
     
-    ))
-        #,
-        
-        # tabPanel("Calculations",
-        #          
-        #          h3(textOutput("chi", container = span)),
-        #          htmlOutput("chi.val", container = span),
-        #          
-        #          h3(textOutput("p", container = span)),
-        #          htmlOutput("p.val", container = span),
-        #          
-        #          value=2),
-        # 
-        # 
-        # 
-        # tabPanel("Plots",
-        #          h3(textOutput("geno.pie.ttl", container = span)),
-        #          plotOutput("geno.pie.plt"),
-        #          
-        #          value=3),
-        # selected= 2, type = "tabs")
+    )
+    )
 )

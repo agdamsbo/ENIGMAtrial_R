@@ -1,5 +1,9 @@
 server <- function(input, output, session) {
   library(dplyr)
+  library(ggplot2)
+  library(tidyr)
+  source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/plot_index.R")
+  source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/index_from_raw.R")
 
   dat<-reactive({
     data.frame(record_id="1",
@@ -13,7 +17,7 @@ server <- function(input, output, session) {
   })
 
   
-  index_p <- function() ({ index_from_raw(ds=dat(),
+  index_p <- reactive({ index_from_raw(ds=dat(),
                                           indx=read.csv("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/data/index.csv"),
                                           version = input$ver,
                                           age = input$age,
@@ -30,13 +34,13 @@ server <- function(input, output, session) {
       select(contains("_per"))
   })
   
+  
   output$ndx.plt<-renderPlot({
-    source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/plot_index.csv")
-    plot_index(dat())
+
+    plot_index(index_p(),sub_plot = "_is")
   })
 
   output$per.plt<-renderPlot({
-    source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/plot_percentile.csv")
-    plot_percentile(dat())
+    plot_index(index_p(),sub_plot = "_per")
   })
 }
