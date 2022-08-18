@@ -21,7 +21,7 @@ source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap
 ## Data export
 ## =============================================================================
 
-df<-redcap_api_export_short(id= c(40:60),
+df<-redcap_api_export_short(id= c(40:50),
                             instruments= "rbans",
                             event= "3_months_arm_1") %>%
   select(c("record_id",ends_with(c("_is","_lo","_up","_per")))) %>%
@@ -34,8 +34,9 @@ df<-redcap_api_export_short(id= c(40:60),
 ## =============================================================================
 
 source("src/plot_index.R")
-source("src/plot_percentile.R")
 
-plot_index(df)/plot_percentile(df) ## Patchwork syntax
+
+library(patchwork)
+plot_index(df)/plot_index(df,sub_plot = "_per") ## Patchwork syntax
 
 
