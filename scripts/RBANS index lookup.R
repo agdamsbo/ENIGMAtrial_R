@@ -6,7 +6,7 @@
 # RBANS data modification
 ## =============================================================================
 
-source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/scripts/Data modification.R")
+source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/scripts/Modification.R")
 
 ## =============================================================================
 ## Function
@@ -33,7 +33,9 @@ df<-redcap_api_export_short(id= c(40),
 ## Plots
 ## =============================================================================
 
-source("src/rbans_plot.R")
+source("src/index_plot.R")
+
+plots<-index_plot(df)
 
 index_plot/percentile_plot ## Patchwork syntax
 
