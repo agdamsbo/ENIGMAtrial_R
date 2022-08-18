@@ -6,7 +6,7 @@
 # RBANS data modification
 ## =============================================================================
 
-source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/auto/data_modification.R")
+source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/scripts/Data modification.R")
 
 ## =============================================================================
 ## Function
@@ -15,13 +15,13 @@ source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/auto/data_
 library(dplyr)
 
 ## Merge with "redcap_api_export.R" function??
-source("src/redcap_api_export_short.R")
+source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap_api_export_short.R")
 
 ## =============================================================================
 ## Data export
 ## =============================================================================
 
-df<-redcap_api_export_short(id= c(40:50),
+df<-redcap_api_export_short(id= c(40),
                             instruments= "rbans",
                             event= "3_months_arm_1") %>%
   select(c("record_id",ends_with(c("_is","_lo","_up","_per")))) %>%
