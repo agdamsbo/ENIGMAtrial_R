@@ -27,7 +27,7 @@ dta <- redcap_read(
   token        = token,
   events       = "3_months_arm_1",
   raw_or_label = "raw",
-  records      = records_mod[[1]],
+  records      = ids,
   forms        = "rbans",
   fields       = "record_id"
 )$data
