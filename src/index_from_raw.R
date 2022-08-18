@@ -1,4 +1,4 @@
-index_from_raw<-function(ds,indx,version,age,raw_columns){
+index_from_raw<-function(ds,indx,version,age,raw_columns,mani=FALSE){
   
   # Troubleshooting
   # ds = select(dta,c("record_id",ends_with("_rs")))
@@ -91,7 +91,47 @@ index_from_raw<-function(ds,indx,version,age,raw_columns){
     df[i,2:ncol(df)]<-c(ndx,X95,per)
   }
   
-  # Percentiles and CIs are missing.
+  if (mani==TRUE){
+    sel1<-colnames(select(df,ends_with("_per")))
+    for (i in sel1){
+      df[,i]<-if_else(df[,i]=="> 99.9","99.95",
+                      if_else(df[,i] =="< 0.1", "0.05",
+                              df[,i]))
+      ## Using the dplyr::if_else for a more stringent vectorisation
+    }
+    
+    ## Spliting CIs in lower and upper
+    loups<-c()
+    for (i in 1:nrow(df)){
+      # i=34
+      cis<-c()
+      for (j in colnames(select(df,ends_with("_ci")))){
+        # j="rbans_a_ci"
+        cis<-c(cis,unlist(strsplit(df[i,j],split="[-]")))
+      }
+      loups<-c(loups,c(df$record_id[i],cis))
+    }
+    loups<-data.frame(matrix(loups,ncol = 13,byrow = TRUE))
+    
+    ### Naming and merging
+    cnms<-c()
+    for (k in colnames(select(df,ends_with("_ci")))){
+      # j="rbans_a_ci"
+      stp<-unlist(strsplit(k,split="[_]"))[-3]
+      cnms<-c(cnms,paste0(paste(stp,collapse = "_"),"_",c("lo","up")))
+    }
+    
+    # df<-merge(df,loups %>%
+    #             'colnames<-'(c("record_id",cnms)) %>%
+    #             mutate(record_id=as.numeric(record_id))) 
+    
+    ## Type conversion
+    
+    # df<- df %>% 
+    #   mutate(across(.cols=all_of(colnames(select(df,c("record_id",
+    #                                                   ends_with(c("_is","_per","_lo","_up")))))), ## Selecting variables to include, keeping "_ci" and event_name out.
+    #                 ~as.numeric(.))) ## Converting types
+  }
   
   return(df)
 }
