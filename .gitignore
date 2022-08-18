@@ -47,3 +47,4 @@ index/*.csv
 # Files folder
 files/
 
+.DS_Store
