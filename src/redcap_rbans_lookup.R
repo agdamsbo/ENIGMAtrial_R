@@ -10,7 +10,8 @@ df<-cbind(index_from_raw(ds = select(dta,c("record_id",ends_with("_rs"))),
                          indx=read.csv("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/data/index.csv"),
                          version = dta$urbans_version,
                          age=dta$rbans_age,
-                         raw_columns=names(select(dta,ends_with("_rs")))),redcap_event_name=dta$redcap_event_name) %>%
+                         raw_columns=names(select(dta,ends_with("_rs")))),
+          redcap_event_name=dta$redcap_event_name) %>%
   'colnames<-'(c("record_id",colnames(cbind(select(dta,ends_with("_is")),select(dta,ends_with("_ci")),select(dta,ends_with("_per")))),"redcap_event_name"))
 
 sel1<-colnames(select(df,ends_with("_per")))

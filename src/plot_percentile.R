@@ -72,6 +72,6 @@ percentile_plot<-ggplot(data=df_percentile, aes(x=name, y=value, fill=factor(rec
   # geom_hline(yintercept=50) + # Expected average
   labs(fill = "ID")
 
-return(percentile_plot)
+return(plot(percentile_plot))
 }
 

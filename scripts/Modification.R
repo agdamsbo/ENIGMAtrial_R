@@ -38,7 +38,7 @@ remove_all_but(token,uri,remove_all_but)
 
 ### Modifies 3 months RBANS data
 
-all_ids_3=TRUE
+all_ids_3=FALSE
 
 source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap_upload_rbans3.R")
 remove_all_but(token,uri,remove_all_but)
@@ -49,7 +49,7 @@ remove_all_but(token,uri,remove_all_but)
 
 ### Modifies 12 months RBANS data and generates basic RBANS conclusion
 
-all_ids_12=TRUE
+all_ids_12=FALSE
 
 source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap_upload_rbans12.R")
 

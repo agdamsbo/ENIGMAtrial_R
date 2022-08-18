@@ -1,4 +1,13 @@
 index_from_raw<-function(ds,indx,version,age,raw_columns){
+  
+  # Troubleshooting
+  # ds = select(dta,c("record_id",ends_with("_rs")))
+  # indx=read.csv("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/data/index.csv")
+  # version = dta$urbans_version
+  # age=dta$rbans_age
+  # raw_columns=names(select(dta,ends_with("_rs")))
+  
+  
   library(dplyr)
   
   version<-case_when(version == "1" ~ "a",

@@ -5,7 +5,6 @@ plot_index <- function(ds){
 library(ggplot2)
 library(dplyr)
 library(tidyr)
-library(patchwork)
 
 # Melting df as long format
 df_long <- df %>% pivot_longer(cols=-record_id)
@@ -19,26 +18,6 @@ df_index <- df_long %>%
   mutate(value=as.numeric(value),
          name=factor(name,labels = domain_names)) 
 
-
-# df_X95pct <- df_long %>%
-#   filter(grepl('X95pct',variable))
-# 
-# low<-c()
-# hgh<-c()
-# for (i in 1:nrow(df_X95pct)){
-#   low<-c(low,unlist(strsplit(df_X95pct$value[i],"[-]"))[1])
-#   hgh<-c(hgh,unlist(strsplit(df_X95pct$value[i],"[-]"))[2])
-# }
-# df_index<-data.frame(df_index,low=as.numeric(low),high=as.numeric(hgh))
-
-# Correcting odd percentile formatting
-# Wonder if this can be done a little more elegantly??
-# sel1<-grepl("percentile", df_long$variable)
-# # [i,"value"]
-# df_long[sel1,"value"]<-ifelse(df_long[sel1,"value"] %in% c("> 99.9",">99.9"),"99.95",
-#                               ifelse(df_long[sel1,"value"] %in% c("< 0.1","<0.1"), "0.05", 
-#                                      ifelse(df_long[sel1,"value"]%in% c("0,1"),"0.1",
-#                                             df_long[sel1,"value"])))
 
 # Percentile dataframe
 df_percentile <- df_long %>%
@@ -72,6 +51,6 @@ index_plot<-ggplot(data=df_index, aes(x=name, y=value, color=factor(record_id), 
 #   # geom_hline(yintercept=50) + # Expected average
 #   labs(fill = "ID")
 
-return(index_plot)
+return(plot(index_plot))
 }
 
