@@ -26,6 +26,7 @@ df<-redcap_api_export_short(id= c(40:50),
                             event= "3_months_arm_1") %>%
   select(c("record_id",ends_with(c("_is","_lo","_up","_per")))) %>%
   na.omit()
+    
 
 ## Next step: Plot change over time.
 

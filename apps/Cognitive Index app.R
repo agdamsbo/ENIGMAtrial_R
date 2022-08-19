@@ -20,6 +20,11 @@ source("/Users/au301842/ENIGMAtrial_R/apps/app_deploy.R")
 
 setwd("/Users/au301842/ENIGMAtrial_R")
 
+## Poor mans changelog
 
 ## 18aug2022 Its alive!!
 ## https://cognitiveindex.shinyapps.io/index_app/
+
+## 19aug2022
+## Now live with a choice between single entry or file upload, and download option for results in both cases.
+## Still missing is a better labelling, however this works for now.
