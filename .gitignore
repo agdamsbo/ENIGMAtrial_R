@@ -46,3 +46,5 @@ index/*.csv
 
 # Files folder
 files/
+
+output/
