@@ -110,7 +110,7 @@ for (i in ids) {
   rb3_s<-rb3[rb3$record_id==i,]
   rb12_s<-rb12[rb12$record_id==i,]
   
-txt_mrs<-paste(c("Prestroke","One month","End of Study"),"mRS:",
+txt_mrs<-paste(c("Prestroke","3 months","End of Study"),"mRS:",
                c(rb0_s$mrs_score,rb3_s$mrs_score,rb12_s$mrs_score),
                collapse = ", ")
 
