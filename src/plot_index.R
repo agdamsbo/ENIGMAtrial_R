@@ -1,4 +1,4 @@
-plot_index <- function(ds,id="record_id",sub_plot="_is",dom_names=c("immediate","visuospatial","verbal","attention","delayed","total")){
+plot_index <- function(ds,id="record_id",sub_plot="_is",scores=c("_is","_lo","_up","_per"),dom_names=c("immediate","visuospatial","verbal","attention","delayed","total"),facet.by=NULL){
 
   # id colname  of id column
   # ds data frame
@@ -9,17 +9,26 @@ library(ggplot2)
 library(dplyr)
 library(tidyr)
  
-df_plot<-ds|>
-  pivot_longer(cols=-id)|>
-  subset(grepl(sub_plot,name))|>
-  mutate(value=as.numeric(value),
-         name=factor(name,labels = dom_names))
+  df_plot<-ds|>
+    select(c(id,
+             facet.by,
+             ends_with(scores)))|>
+    pivot_longer(cols=-c(id,facet.by))|>
+    subset(grepl(sub_plot,name))|>
+    mutate(value=as.numeric(value),
+           name=factor(name,labels = dom_names))
+  
+  if (!is.null(facet.by)){
+    colnames(df_plot)<-c("id","facet","name","value")
+  } else {
+    colnames(df_plot)<-c("id","name","value")
+  }
 
-colnames(df_plot)[1]<-"record_id"
+
 
 if (sub_plot=="_is"){
   index_plot<-df_plot|>
-    ggplot(aes(x=name, y=value, color=factor(record_id), group=factor(record_id))) + 
+    ggplot(aes(x=name, y=value, color=factor(id), group=factor(id))) + 
   geom_point() +
   geom_path() +
   expand_limits(y=c(40,160)) +
@@ -32,7 +41,7 @@ if (sub_plot=="_is"){
 
 if (sub_plot=="_per"){
   index_plot<-df_plot|>
-    ggplot(aes(x=name, y=value, fill=factor(record_id)))+
+    ggplot(aes(x=name, y=value, fill=factor(id)))+
     geom_col(position = "dodge") +
     expand_limits(y=c(0,100)) +
     scale_y_continuous(breaks=seq(0,100,by=10)) +
@@ -42,6 +51,11 @@ if (sub_plot=="_per"){
     labs(fill = "ID")
 }
 
-return(index_plot)
+if (!is.null(facet.by)){
+  index_plot + facet_grid(cols=vars(facet))
+} else {
+  index_plot
+}
+
 }
 
