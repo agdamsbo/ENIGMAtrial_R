@@ -21,7 +21,7 @@ source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap
 ## Data export
 ## =============================================================================
 
-df<-redcap_api_export_short(id= c(35),
+df<-redcap_api_export_short(id= c(25:35),
                             instruments= "rbans",
                             event= c("3_months_arm_1","12_months_arm_1")) %>%
   select(c("record_id",
@@ -49,4 +49,7 @@ plot_index(df)/plot_index(df,sub_plot = "_per") ## Patchwork syntax
 
 # Time plot compared with own
 plot_index(df,id="redcap_event_name",facet.by = "record_id")
+
+# Time plot compared with 3 vs 12
+plot_index(df,id="record_id",facet.by = "redcap_event_name")
 
