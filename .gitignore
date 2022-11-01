@@ -39,7 +39,7 @@ rsconnect/
 
 # RBANS index table files
 index/*.xlsx
-index/*.csv
+#index/*.csv
 
 # API-files
 *keyfile.R
@@ -48,3 +48,4 @@ index/*.csv
 files/
 
 output/
+backup.csv

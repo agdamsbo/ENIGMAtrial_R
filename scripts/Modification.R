@@ -26,7 +26,6 @@ require(lubridate)
 # source("src/redcap_upload_inclusion.R")
 source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap_upload_inclusion.R")
 
-
 # Clean up function
 source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/remove_all_but.R")
 remove_all_but(token,uri,remove_all_but)
