@@ -39,4 +39,4 @@ for (i in names(index_tables)){
 
 ds <- do.call(rbind,append(do.call(rbind,index_tables[1:6]),index_tables[[7]]))
 
-# write.csv(ds,"/Users/au301842/ENIGMAtrial_R/index/index.csv",row.names = F)
+write.csv(ds,"/Users/au301842/ENIGMAtrial_R/index/index.csv",row.names = F)
