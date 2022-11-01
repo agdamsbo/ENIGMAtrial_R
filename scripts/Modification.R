@@ -48,7 +48,7 @@ remove_all_but(token,uri,remove_all_but)
 
 ### Modifies 12 months RBANS data and generates basic RBANS conclusion
 
-all_ids_12=FALSE
+all_ids_12=TRUE
 
 source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap_upload_rbans12.R")
 
