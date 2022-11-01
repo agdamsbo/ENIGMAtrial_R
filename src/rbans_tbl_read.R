@@ -28,8 +28,6 @@ index_tables[[tot.tbl]][[1]]<-data.frame(interval_extension(index_tables[[tot.tb
 ## Here follow an export of a collected csv index file
 
 cln<-c("grp","raw", "index", "pct90", "pct95", "perc", "ver")
-ds<-data.frame(matrix(ncol=length(cln)))
-colnames(ds)<-cln
 
 for (i in names(index_tables)){
   # i=names(index_tables)[7]
@@ -39,6 +37,6 @@ for (i in names(index_tables)){
   }
 }
 
-ds <- do.call(rbind,do.call(rbind,index_tables))
+ds <- do.call(rbind,append(do.call(rbind,index_tables[1:6]),index_tables[[7]]))
 
-write.csv(ds,"/Users/au301842/ENIGMAtrial_R/index/index.csv",row.names = F)
+# write.csv(ds,"/Users/au301842/ENIGMAtrial_R/index/index.csv",row.names = F)
