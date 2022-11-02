@@ -29,14 +29,20 @@ index_tables[[tot.tbl]][[1]]<-data.frame(interval_extension(index_tables[[tot.tb
 
 cln<-c("grp","raw", "index", "pct90", "pct95", "perc", "ver")
 
+ds_l<-list()
+
 for (i in names(index_tables)){
   # i=names(index_tables)[7]
   for (j in names("[["(index_tables,i))){ ## Sub-subsetting
     index_tables[[i]][[j]]<-data.frame(grp=paste0(i,"_",j),index_tables[[i]][[j]]) ## Including new variables for later subsetting
     colnames(index_tables[[i]][[j]])<-cln ## Defining new colnames.
   }
+  ds_l[[i]] <- do.call(rbind,index_tables[[i]])
 }
 
-ds <- do.call(rbind,append(do.call(rbind,index_tables[1:6]),index_tables[[7]]))
+ds <- do.call(rbind,ds_l)
 
 write.csv(ds,"/Users/au301842/ENIGMAtrial_R/index/index.csv",row.names = F)
+
+# For upload
+write.csv(ds,"/Users/au301842/ENIGMAtrial_R/data/index.csv",row.names = F)
