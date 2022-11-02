@@ -1,5 +1,6 @@
 index_from_raw<-function(ds,indx,version,age,raw_columns,mani=FALSE){
-  
+  # mani flag to correct percentile denotion for plotting
+
   # Troubleshooting
   # ds = select(dta,c("record_id",ends_with("_rs")))
   # indx=read.csv("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/data/index.csv")
@@ -27,9 +28,20 @@ index_from_raw<-function(ds,indx,version,age,raw_columns,mani=FALSE){
                                          ifelse(age>=70&age<=79,ndx_nms[5],
                                                 ifelse(age>=80,ndx_nms[6],NA))))))
   
-  # Names of the different domains
-  cinms<-unlist(sapply(strsplit(unique(indx$grp)[1:5],"[_]"),"[[",3))
-    ## c("immediate","visuospatial","verbal","attention","delayed")
+  # Names of the different cognitive domains assigned
+
+  ## Unique group names from index least
+  grps <- unique(indx$grp) 
+
+  ## getting only domain names, and excluding the last, total, table, and splitting to list of vectors
+  grps_split <- strsplit(grps[-length(grps)],"[_]")
+  
+  ## Getting the last element from each split vector, ulisting and only keeping unique names
+  cinms <- unique(unlist(lapply(grps_split,function(i){ 
+    i[[length(i)]]
+  })))
+  
+  ## c("immediate","visuospatial","verbal","attention","delayed")
   
   # Creating relevant colnames for index, CI and percentile
   abc<-paste0("test_",c(letters[1:length(cinms)],"i"))
@@ -47,13 +59,13 @@ index_from_raw<-function(ds,indx,version,age,raw_columns,mani=FALSE){
   
   ## Create one function for when data provided is a list and when it is a data.frame. Currently works with data.frame
   
-  for (i in 1:nrow(ds)){
+  for (i in seq_len(nrow(ds))){
     # i=1
     
     ## Selecting tables based on index age classification (all ages included from 18 and above, also above 89)
     lst<-list()
-    for (j in 1:5){
-      lst[[length(lst)+1]]<-indx %>% filter(grepl(cinms[j],grp)) %>% filter(grepl(index_age[i],grp))
+    for (j in seq_along(cinms)){
+      lst[[j]]<-indx %>% filter(grepl(cinms[j],grp)) %>% filter(grepl(index_age[i],grp))
     }
     
     names(lst)<-cinms
@@ -67,26 +79,27 @@ index_from_raw<-function(ds,indx,version,age,raw_columns,mani=FALSE){
     per<-c()
     
     ## Populating variables
-    for (s in 1:length(lst)){
+    for (s in seq_along(lst)){
       # Index score
       # s=1
       flt<-lst[[s]]%>%filter(raw==dt[i,raw_columns[s]])%>%filter(ver==v)
       
-      ndx<-c(ndx,flt$index)
+      ndx[s]<-flt$index
       # 95 % CI
-      X95<-c(X95,flt$pct95)
+      X95[s]<-flt$pct95
       # Percentile
-      per<-c(per,flt$perc)
+      per[s]<-flt$perc
     }
     
     ## Total index score from index sum
     ttl_scale<-indx %>% filter(grepl("total_",grp))
     
-    ndx_sum<-sum(ndx)
-    flt_ttl<-filter(ttl_scale,raw==ndx_sum)
-    ndx<-c(ndx,flt_ttl$index)
-    X95<-c(X95,flt_ttl$pct95)
-    per<-c(per,flt_ttl$perc)
+    ndx_sum <- sum(ndx)
+    flt_ttl <- filter(ttl_scale,raw==ndx_sum)
+    
+    ndx[length(ndx)+1] <- flt_ttl$index
+    X95[length(X95)+1] <- flt_ttl$pct95
+    per[length(per)+1] <- flt_ttl$perc
     
     df[i,2:ncol(df)]<-c(ndx,X95,per)
   }
@@ -94,13 +107,15 @@ index_from_raw<-function(ds,indx,version,age,raw_columns,mani=FALSE){
   if (mani==TRUE){
     sel1<-colnames(select(df,ends_with("_per")))
     for (i in sel1){
-      df[,i]<-if_else(df[,i]=="> 99.9","99.95",
+      df[,i]<-dplyr::if_else(df[,i]=="> 99.9","99.95",
                       if_else(df[,i] =="< 0.1", "0.05",
                               df[,i]))
       ## Using the dplyr::if_else for a more stringent vectorisation
     }
+    df
 
+  } else {
+    df
   }
   
-  return(df)
 }
