@@ -105,10 +105,10 @@ doms<-c("immediate","visuospatial","verbal","attention","delayed","total")
 txts<-c()
 
 # Texts for each ID
-for (i in ids) {
-  rb0_s<-rb0[rb0$record_id==i,]
-  rb3_s<-rb3[rb3$record_id==i,]
-  rb12_s<-rb12[rb12$record_id==i,]
+for (i in seq_along(ids)) {
+  rb0_s<-rb0[i,]
+  rb3_s<-rb3[i,]
+  rb12_s<-rb12[i,]
   
 txt_mrs<-paste(c("Prestroke","3 months","End of Study"),"mRS:",
                c(rb0_s$mrs_score,rb3_s$mrs_score,rb12_s$mrs_score),
@@ -139,11 +139,10 @@ if (rb12_s$mrs_score>=2 & rb12_s$rbans_i_is<=70) {
 
 txt_note<-"NOTE: Index score at 70-85 is 'forringet', and <70 is 'reduceret'"
 
-txts<-c(txts,
-        paste0(paste(txt_mrs,txt_iqcode,txt_md3,txt_md12,txt_demens,txt_note,
+txts[i]<-paste0(paste(txt_mrs,txt_iqcode,txt_md3,txt_md12,txt_demens,txt_note,
         sep=".\n"),
         "."
-        ))
+        )
 }
 
 # Creating upload data frame
