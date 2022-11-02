@@ -16,8 +16,8 @@ df<-cbind(index_from_raw(ds = select(dta,c("record_id",ends_with("_rs"))),
 
 sel1<-colnames(select(df,ends_with("_per")))
 for (i in sel1){
-  df[,i]<-if_else(df[,i]=="> 99.9","99.95",
-                 if_else(df[,i] =="< 0.1", "0.05",
+  df[,i]<-if_else(df[,i] %in% c("> 99.9"),"99.95",
+                 if_else(df[,i] %in% c("< 0.1", "<0.1", "< 0,1", "<0,1"), "0.05",
                                   df[,i]))
   ## Using the dplyr::if_else for a more stringent vectorisation
 }

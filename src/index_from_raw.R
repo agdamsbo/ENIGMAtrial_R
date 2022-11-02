@@ -41,6 +41,7 @@ index_from_raw<-function(ds,indx,version,age,raw_columns,mani=FALSE){
     i[[length(i)]]
   })))
   
+  ## Relies on these domain labels being in the right order. Problem for future me..
   ## c("immediate","visuospatial","verbal","attention","delayed")
   
   # Creating relevant colnames for index, CI and percentile
@@ -107,9 +108,9 @@ index_from_raw<-function(ds,indx,version,age,raw_columns,mani=FALSE){
   if (mani==TRUE){
     sel1<-colnames(select(df,ends_with("_per")))
     for (i in sel1){
-      df[,i]<-dplyr::if_else(df[,i]=="> 99.9","99.95",
-                      if_else(df[,i] =="< 0.1", "0.05",
-                              df[,i]))
+      df[,i]<-dplyr::if_else(df[,i] %in% c("> 99.9", ">99.9", "> 99,9", ">99,9"),"99.95",
+                             if_else(df[,i] %in% c("< 0.1", "<0.1", "< 0,1", "<0,1"), "0.05",
+                                     df[,i]))
       ## Using the dplyr::if_else for a more stringent vectorisation
     }
     df
