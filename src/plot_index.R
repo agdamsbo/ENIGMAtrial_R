@@ -52,7 +52,9 @@ if (sub_plot=="_per"){
 }
 
 if (!is.null(facet.by)){
-  index_plot + facet_grid(cols=vars(facet))
+  index_plot + facet_grid(cols=vars(facet)) +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+    
 } else {
   index_plot
 }
