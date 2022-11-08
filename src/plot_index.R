@@ -1,9 +1,10 @@
 plot_index <- function(ds,id="record_id",sub_plot="_is",scores=c("_is","_lo","_up","_per"),dom_names=c("immediate","visuospatial","verbal","attention","delayed","total"),facet.by=NULL){
 
-  # id colname  of id column
+  # id colname  of id column. Base for colouring
   # ds data frame
   # sub_plot column subset to plot
   # dom_names domain names
+  # facet.by variable to base facet_grid on.
 
 library(ggplot2)
 library(dplyr)
