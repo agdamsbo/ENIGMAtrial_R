@@ -4,7 +4,7 @@ source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap
 ## Data export
 ## =============================================================================
 
-exp<-redcap_api_export_short(id= c(1:35),
+score<-redcap_api_export_short(id= c(1:35),
                             instruments= "rbans",
                             event= c("3_months_arm_1",
                                      "12_months_arm_1")) %>%
@@ -19,12 +19,12 @@ exp<-redcap_api_export_short(id= c(1:35),
   filter(record_id %in% sample(record_id,10)) |>
   mutate(record_id = rep(seq_along(unique(record_id)), each=2))
 
-names(exp) <- unlist(lapply(strsplit(colnames(exp),"_"),function(x){
+names(score) <- unlist(lapply(strsplit(colnames(exp),"_"),function(x){
   paste0(x[-1],collapse="_")
 }))
 
-names(exp)[2]<-"event"
+names(score)[2]<-"event"
 
-attr(exp,which = "na.action") <- NULL
+attr(score,which = "na.action") <- NULL
 
-save(exp,file = "score.rda")
+save(score,file = "score.rda")
