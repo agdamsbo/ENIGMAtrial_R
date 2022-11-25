@@ -21,14 +21,14 @@ source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap
 ## Data export
 ## =============================================================================
 
-df<-redcap_api_export_short(id= c(27,28,31),
+df<-redcap_api_export_short(id= c(1:35),
                             instruments= "rbans",
-                            event= c("3_months_arm_1","12_months_arm_1")) %>%
+                            event= c("3_months_arm_1",
+                              "12_months_arm_1")) %>%
   select(c("record_id",
            "redcap_event_name",
-           ends_with(c("_is","_lo","_up","_per")))) %>%
+           ends_with(c("_is","_lo","_up","_per"))))  %>%
   na.omit()
-    
 
 ## Next step: Plot change over time.
 
@@ -36,20 +36,43 @@ df<-redcap_api_export_short(id= c(27,28,31),
 ## Plots
 ## =============================================================================
 
-# Facet by
-# - instance/event? > done
-# - id > done
-# - no facet > done
-
 source("src/plot_index.R")
 
 
 library(patchwork)
 plot_index(df)/plot_index(df,sub_plot = "_per") ## Patchwork syntax
 
+
+# Data manipulation
+df <- df  |> 
+  mutate(redcap_event_name=factor(redcap_event_name, 
+                                  levels = c("3_months_arm_1","12_months_arm_1"),
+                                  labels = c("3 months","12 months")))
+
+
+
+df |> 
+  filter(record_id %in% record_id[duplicated(record_id)]) |> # Only patients with both 3 and 12 month
+  # filter(record_id %in% sample(record_id,10)) |> # 5 random patients
+  # filter(record_id %in% 28:32) |> # Only specified number
+  plot_index(id="redcap_event_name",facet.by = "record_id")
+
+
+
+sub.fil <- c(28:32)
+sub.fil <- sample(df$record_id,5)
+
 # Time plot compared with own
-plot_index(df,id="redcap_event_name",facet.by = "record_id")
+df |> 
+  # filter(record_id %in% record_id[duplicated(record_id)]) |> # Only patients with both 3 and 12 month
+  # filter(record_id %in% sample(record_id,5)) |> # 5 random patients
+  # filter(record_id %in% 28:32) |> # Only specified number
+  plot_index(id="redcap_event_name",facet.by = "record_id")
+
+# ggsave("example.png")
 
 # Time plot compared during follow-up
-plot_index(df,id="record_id",facet.by = "redcap_event_name")
+df |> 
+  # filter(record_id %in% sub.fil) |>
+  plot_index(id="record_id",facet.by = "redcap_event_name")
 

@@ -36,7 +36,6 @@ if (sub_plot=="_is"){
   scale_y_continuous(breaks=seq(40,160,by=10)) +
   ylab("Index Score") +
   xlab("Domain")+
-  # geom_hline(yintercept=100) + # Expected average
   labs(colour = "ID")
 }
 
@@ -48,7 +47,6 @@ if (sub_plot=="_per"){
     scale_y_continuous(breaks=seq(0,100,by=10)) +
     xlab("Cognitive domains") +
     ylab("Percentile") + 
-    # geom_hline(yintercept=50) + # Expected average
     labs(fill = "ID")
 }
 

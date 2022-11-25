@@ -48,7 +48,8 @@ remove_all_but(token,uri,remove_all_but)
 
 ### Modifies 12 months RBANS data and generates basic RBANS conclusion
 
-all_ids_12=TRUE
+## The look-up function is not working. The index has been fixed. Why??
+all_ids_12=FALSE
 
 source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap_upload_rbans12.R")
 
