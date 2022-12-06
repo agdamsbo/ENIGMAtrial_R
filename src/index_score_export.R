@@ -19,7 +19,7 @@ score<-redcap_api_export_short(id= c(1:35),
   filter(record_id %in% sample(record_id,10)) |>
   mutate(record_id = rep(seq_along(unique(record_id)), each=2))
 
-names(score) <- unlist(lapply(strsplit(colnames(exp),"_"),function(x){
+names(score) <- unlist(lapply(strsplit(colnames(score),"_"),function(x){
   paste0(x[-1],collapse="_")
 }))
 
