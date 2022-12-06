@@ -1,6 +1,6 @@
 ## Merge with "redcap_api_export.R" function??
 
-redcap_api_export_short<-function(event,id,instruments,items = "record_id"){
+redcap_api_export_short<-function(event=NULL,id=NULL,instruments=NULL,items = "record_id"){
   require(REDCapR)
   # event = specific event desired
   # id    = patient IDs to export
