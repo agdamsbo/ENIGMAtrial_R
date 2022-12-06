@@ -60,3 +60,7 @@ if (!is.null(facet.by)){
 
 }
 
+plot_index2 <- function(ds, ...){
+  require(patchwork)
+  plot_index(ds)/plot_index(ds,sub_plot = "_per")
+}
