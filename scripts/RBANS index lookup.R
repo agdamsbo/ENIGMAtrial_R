@@ -21,14 +21,17 @@ source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap
 ## Data export
 ## =============================================================================
 
-df<-redcap_api_export_short(id= c(1:35),
+df<-redcap_api_export_short(id= NULL,
                             instruments= "rbans",
                             event= c("3_months_arm_1",
                               "12_months_arm_1")) %>%
   select(c("record_id",
            "redcap_event_name",
            ends_with(c("_is","_lo","_up","_per"))))  %>%
-  na.omit()
+  na.omit()|> 
+  mutate(redcap_event_name=factor(redcap_event_name, 
+                                  levels = c("3_months_arm_1","12_months_arm_1"),
+                                  labels = c("3 months","12 months")))
 
 ## Next step: Plot change over time.
 
@@ -39,15 +42,12 @@ df<-redcap_api_export_short(id= c(1:35),
 source("src/plot_index.R")
 
 
-library(patchwork)
-plot_index(df)/plot_index(df,sub_plot = "_per") ## Patchwork syntax
-
-
-# Data manipulation
-df <- df  |> 
-  mutate(redcap_event_name=factor(redcap_event_name, 
-                                  levels = c("3_months_arm_1","12_months_arm_1"),
-                                  labels = c("3 months","12 months")))
+# library(patchwork)
+# plot_index(df)/plot_index(df,sub_plot = "_per") ## Patchwork syntax
+df |> 
+  filter(record_id %in% c(72,73,75),
+         redcap_event_name == "3 months") |> 
+  plot_index2()
 
 
 
