@@ -45,7 +45,7 @@ source("src/plot_index.R")
 # library(patchwork)
 # plot_index(df)/plot_index(df,sub_plot = "_per") ## Patchwork syntax
 df |> 
-  filter(record_id %in% c(72,73,75),
+  filter(record_id %in% c(34),
          redcap_event_name == "3 months") |> 
   plot_index2()
 
@@ -53,7 +53,7 @@ df |>
 
 df |> 
   filter(record_id %in% record_id[duplicated(record_id)]) |> # Only patients with both 3 and 12 month
-  # filter(record_id %in% sample(record_id,10)) |> # 5 random patients
+  filter(record_id %in% sample(record_id,10)) |> # 5 random patients
   # filter(record_id %in% 28:32) |> # Only specified number
   plot_index(id="redcap_event_name",facet.by = "record_id")
 
@@ -66,7 +66,7 @@ sub.fil <- sample(df$record_id,5)
 df |> 
   # filter(record_id %in% record_id[duplicated(record_id)]) |> # Only patients with both 3 and 12 month
   # filter(record_id %in% sample(record_id,5)) |> # 5 random patients
-  # filter(record_id %in% 28:32) |> # Only specified number
+  filter(record_id %in% 30:34) |> # Only specified number
   plot_index(id="redcap_event_name",facet.by = "record_id")
 
 # ggsave("example.png")
