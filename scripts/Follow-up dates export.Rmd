@@ -1,0 +1,59 @@
+---
+title: "Kontroller de kommende ca. 3 måneder"
+author: "AGDamsbo"
+date: "Udtræk: `r Sys.Date()`"
+knit: (function(inputFile, encoding) { 
+      render.date <- format(as.POSIXct(Sys.Date()), format = "%Y%m%d");
+      rmarkdown::render(inputFile,
+                        encoding=encoding, 
+                        output_file=file.path('/Users/au301842/ENIGMAtrial_R/output/',paste0(render.date,'kontroller.doc'))) })
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r include=FALSE}
+# Data export as in "REDCap dates to .ical with API.R"
+setwd("/Users/au301842/ENIGMAtrial_R/")
+# REDCap data export/import script
+source("src/date_api_export.R")
+## Drops environment but data.frame
+
+# Formatting
+source("src/date_api_export_prep.R")
+df<-date_api_export_prep(dta=d,include_all=FALSE,cut_date=0,num_c=2,date_col="_book",room_col = "_room")
+## Includes only one appointment for each ID. Problem?
+
+## Excluding patients with booking, but with EOS filled due to early end of study (ie date of EOS not blank)
+df <- df[!(df$id %in% d$record_id[!is.na(d$eos1)]),]
+
+# End date is 90 days after first date
+end.date<-as.Date(min(df$start))+90
+
+# Format for nice printing
+Sys.setlocale("LC_TIME", "da_DK.UTF-8")
+
+df <- df |> 
+  arrange(start) |> 
+  filter(start < end.date) |> 
+  mutate(start=format(as.POSIXct(start), format = "%A d. %d/%m kl %H:%M")) |> 
+  select(start, id, name) 
+```
+
+De næste kontroller fra `r format(as.POSIXct(Sys.Date()), format = "%d/%m/%Y")` og frem til `r format(as.POSIXlt(end.date), format = "%d/%m/%Y")` er:
+
+```{r}
+knitr::kable(apply(df,MARGIN = 1,FUN = function(i){
+  paste0(i[1],": ID",i[2],", ",i[3])
+  }),
+  col.names = NULL, 
+  format = "html")
+```
+
+
+
+
