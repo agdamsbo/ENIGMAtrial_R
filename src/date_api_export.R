@@ -25,5 +25,5 @@ d <- redcap_read(
   
 
 # Clean-up
-source("src/remove_all_but.R")
+source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/remove_all_but.R")
 remove_all_but(d)
