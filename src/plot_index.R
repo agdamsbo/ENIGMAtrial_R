@@ -3,6 +3,7 @@ plot_index <- function(ds,id="record_id",sub_plot="_is",scores=c("_is","_lo","_u
   # id colname  of id column. Base for colouring
   # ds data frame
   # sub_plot column subset to plot
+  # scores name bits of score variables
   # dom_names domain names
   # facet.by variable to base facet_grid on.
 
