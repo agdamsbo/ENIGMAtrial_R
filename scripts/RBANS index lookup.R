@@ -45,7 +45,7 @@ source("src/plot_index.R")
 # library(patchwork)
 # plot_index(df)/plot_index(df,sub_plot = "_per") ## Patchwork syntax
 df |> 
-  filter(record_id %in% c(34),
+  filter(record_id %in% c(30:34),
          redcap_event_name == "3 months") |> 
   plot_index2()
 

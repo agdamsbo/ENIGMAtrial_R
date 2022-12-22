@@ -18,42 +18,60 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ```{r include=FALSE}
 # Data export as in "REDCap dates to .ical with API.R"
-setwd("/Users/au301842/ENIGMAtrial_R/")
+# setwd("/Users/au301842/ENIGMAtrial_R/")
 # REDCap data export/import script
-source("src/date_api_export.R")
+source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/date_api_export.R")
+# source("src/date_api_export.R")
 ## Drops environment but data.frame
 
 # Formatting
-source("src/date_api_export_prep.R")
+source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/date_api_export_prep.R")
+# source("src/date_api_export_prep.R")
 df<-date_api_export_prep(dta=d,include_all=FALSE,cut_date=0,num_c=2,date_col="_book",room_col = "_room")
 ## Includes only one appointment for each ID. Problem?
 
 ## Excluding patients with booking, but with EOS filled due to early end of study (ie date of EOS not blank)
 df <- df[!(df$id %in% d$record_id[!is.na(d$eos1)]),]
 
-# End date is 90 days after first date
-end.date<-as.Date(min(df$start))+90
+# End date is 85 days after render date not to forget resently included patients for 3 months follow-up.
+end.date<-as.Date(Sys.Date())+85
 
 # Format for nice printing
 Sys.setlocale("LC_TIME", "da_DK.UTF-8")
 
 df <- df |> 
   arrange(start) |> 
-  filter(start < end.date) |> 
-  mutate(start=format(as.POSIXct(start), format = "%A d. %d/%m kl %H:%M")) |> 
-  select(start, id, name) 
+  filter(start < end.date) 
 ```
 
 De næste kontroller fra `r format(as.POSIXct(Sys.Date()), format = "%d/%m/%Y")` og frem til `r format(as.POSIXlt(end.date), format = "%d/%m/%Y")` er:
 
 ```{r}
-knitr::kable(apply(df,MARGIN = 1,FUN = function(i){
+knitr::kable(apply(df|> 
+                     mutate(start=format(as.POSIXct(start), 
+                                         format = "%A d. %d/%m kl %H:%M")) |> 
+                     select(start, id, name) ,MARGIN = 1,FUN = function(i){
   paste0(i[1],": ID",i[2],", ",i[3])
   }),
   col.names = NULL, 
   format = "html")
 ```
 
+```{r}
+library(readODS)
+df |> transmute(dato=start, id, kontrol=name, 
+                person="") |> 
+  write_ods(path = paste0("/Users/au301842/ENIGMAtrial_R/output/kontrol/",
+                         format(as.POSIXct(Sys.Date()), 
+                                format = "%Y%m%d"),
+                         "_kontroller.ods"))
+```
 
+
+# Whishes
+
+- Not-on-list check
+- Direkte registrering og efterfølgende generering af kalender (.odt eksport)
+  - Merges med kalender-funktion, for ikke at introducere ny kalender.
 
 

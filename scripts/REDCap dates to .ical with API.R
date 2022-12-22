@@ -1,4 +1,8 @@
 
+## =============================================================================
+## Getting data from REDCap
+## =============================================================================
+
 # REDCap data export/import script
 source("src/date_api_export.R")
 ## Drops environment but data.frame
@@ -11,10 +15,33 @@ df<-date_api_export_prep(dta=d,include_all=FALSE,cut_date=-5,num_c=2,date_col="_
 ## Excluding patients with booking, but with EOS filled due to early end of study (ie date of EOS not blank)
 df <- df[!(df$id %in% d$record_id[!is.na(d$eos1)]),]
 
-# Conversion
+## =============================================================================
+## Including assessor
+## =============================================================================
+
+files <- list.files(path="/Users/au301842/ENIGMAtrial_R/output/kontrol",full.names = TRUE)
+
+filled <- files[grepl("kontroller_f",files)] # Gets names of all files ending on kotroller_f (filled)
+
+# Loads all spreadsheets and binds, to keep older for reference
+f <- do.call(rbind,lapply(filled,function(i){
+  readODS::read_ods(i)
+  }))
+
+# Mutates and joins for better labelling
+df <- f |> transmute(id=id,
+                    name2=paste0(kontrol," [",toupper(person),"]")) |> 
+  right_join(df) |> 
+  mutate(label=ifelse(!is.na(name2),name2,name))
+
+## =============================================================================
+## Creating calendar and comitting
+## =============================================================================
+
+# Conversion to calendar files (.ics)
 library(calendar)
 source("src/convert_ical.R")
-ic_write(convert_ical(start=df$start,id=df$id,name=df$name,room=df$room)[[2]], file="enigma_control.ics")
+ic_write(convert_ical(start=df$start,id=df$id,name=df$label,room=df$room)[[2]], file="enigma_control.ics")
 
 # Commit and push GIT
 source("src/enigma_git_push.R")

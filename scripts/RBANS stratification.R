@@ -10,12 +10,15 @@ library(dplyr)
 
 ## Nnew read_redcap_data function introduced, that splits all forms into separate data.frames in list.
 ## Includes some clean-up.
+## 
+
+# source("src/read_redcap_tables.R")
 
 ## =============================================================================
 ## Data export
 ## =============================================================================
 
-ls <- stRoke::read_redcap_data(uri   = "https://redcap.au.dk/api/",
+ls <- stRoke::read_redcap_tables(uri   = "https://redcap.au.dk/api/",
                       token= names(suppressWarnings(read.csv("/Users/au301842/enigma_redcap_token.csv",colClasses = "character"))),
                       fields = c("class_toast","record_id"),
                       forms= "rbans",
@@ -37,6 +40,8 @@ df <- ls$rbans |> select(c("record_id",
 ## Plots
 ## =============================================================================
 
+table(df$redcap_event_name,df$class_toast)
+
 # This should just be one pipe with facet.by=event
 
 source("src/plot_index.R")
@@ -48,6 +53,17 @@ df |> select(-c(record_id)) |> group_by(class_toast,redcap_event_name) %>%
                                 labels = c("Storkar","Småkar","Kardio", "Ukendt"))) %>%
   plot_index(id="class_toast",scores = colnames(.)[-1],facet.by = "redcap_event_name")+
   labs(title="Stratified mean RBANS scores",
-       colour="TOAST")
+       colour="TOAST")+
+  geom_hline(yintercept = 70, linetype = 323, alpha = .5)+
+  geom_hline(yintercept = 85, linetype = 323, alpha = .5)+
+  geom_hline(yintercept = 100, alpha = .5)
 
+  
+## =============================================================================
+## Notes
+## =============================================================================
 
+# Der skal tages højde for infarkt volumen, evt NIHSS
+# 
+# 
+# 
