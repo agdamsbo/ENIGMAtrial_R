@@ -50,3 +50,5 @@ files/
 output/
 backup.csv
 *.rda
+
+.Renviron
