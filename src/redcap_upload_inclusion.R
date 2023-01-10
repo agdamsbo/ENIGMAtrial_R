@@ -24,21 +24,12 @@ dta <- redcap_read(
   events       = c("inclusion_arm_1","3_months_arm_1","12_months_arm_1"),
   raw_or_label = "raw",
   records      = records_mod[[1]],
-  fields        = c("record_id","redcap_event_name","cpr","incl_date","incl_since_start","incl_ratio","incl_data_mod","rbans_age","rbans_date") ## Only selecting relevant variables (fields)
+  fields        = c("record_id","redcap_event_name","incl_date","incl_since_start","incl_ratio","incl_data_mod","rbans_age","rbans_date") ## Only selecting relevant variables (fields)
 )$data %>%
-  mutate(kon=factor(ifelse(as.integer(substr(cpr, start = 11, stop = 11)) %%2 == 0,  # Sex determination
-                           "female", "male")),
-         dob=as.Date(ifelse(redcap_event_name=="inclusion_arm_1",dob_extract_cpr(cpr),NA),origin="1970-01-01"), # Date of birth
-         age=trunc(time_length(difftime(incl_date,dob),"years")), # Age at inclusion
-         incl_since_start=as.numeric(difftime(incl_date,project_start,units="weeks")), # Weeks since project start for data exploration
+  mutate(incl_since_start=as.numeric(difftime(incl_date,project_start,units="weeks")), # Weeks since project start for data exploration
          incl_ratio=incl_since_start/record_id, # Exploratory inclusion ratio
          incl_data_mod=ifelse(redcap_event_name=="inclusion_arm_1","yes",NA)) %>%  # Flag data modification
-  select(-c(cpr,incl_date)) ## Dropping cpr, as to not keep in memory
-
-for (i in unique(dta$record_id)){
-  dob<-dta$dob[dta$record_id==i&dta$redcap_event_name=="inclusion_arm_1"] # Subset date-of-birth from main data set
-  dta$rbans_age[dta$record_id==i]<-trunc(time_length(difftime(dta$rbans_date[dta$record_id==i],dob),"years")) # Age at RBANS testing
-}
+  select(-c(incl_date)) ## Dropping cpr, as to not keep in memory
 
 stts<-redcap_write(ds=dta,
                      redcap_uri   = uri,

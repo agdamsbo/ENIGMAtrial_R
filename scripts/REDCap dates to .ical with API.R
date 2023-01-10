@@ -4,7 +4,7 @@
 ## =============================================================================
 
 # REDCap data export/import script
-source("src/date_api_export.R")
+token <- keyring::key_get("enigma_api_key"); source("src/date_api_export.R")
 ## Drops environment but data.frame
 
 # Formatting
@@ -16,23 +16,73 @@ df<-date_api_export_prep(dta=d,include_all=FALSE,cut_date=-5,num_c=2,date_col="_
 df <- df[!(df$id %in% d$record_id[!is.na(d$eos1)]),]
 
 ## =============================================================================
+## Export spreadsheet with assessors on assigned
+## =============================================================================
+
+output_folder <- "/Users/au301842/ENIGMAtrial_R/output/kontrol"
+
+files_filter <- function(folder.path,filter.by,full.names=TRUE){
+  # List files in folder
+  files <- list.files(path=folder.path,full.names=full.names)
+  
+  # Gets names of all files ending on kotroller_f (filled)
+  files[grepl(filter.by,files)] 
+}
+
+filled <- files_filter(output_folder,"kontroller_f")
+
+# Loads the last (newest) filled spreadsheet to include new changes
+old_filled_file <- readODS::read_ods(filled[length(filled)])
+
+# End date is 85 days after render date not to forget recently included patients for 3 months follow-up.
+end.date<-as.Date(Sys.Date())+85
+
+# Format for nice printing
+Sys.setlocale("LC_TIME", "da_DK.UTF-8")
+
+df <- df |> 
+  arrange(start) |> 
+  filter(start < end.date) |> 
+  left_join(old_filled_file |> select(id,assessor)) %>% 
+  mutate(old=as.character(format(left_join(x=.,y=old_filled_file[c("id","tid")])[,"tid"], format="%Y-%m-%d %H:%M")),
+         changes=if_else(start!=old,"ÆNDRET","samme")) |>
+  rename(tid=start) |> 
+  select(-old)
+
+# Joins the filled file with the original. Keeps original time stamps
+
+df |> transmute(tid, id, kontrol=name, 
+                assessor="") |> 
+  readODS::write_ods(path = paste0(output_folder,
+                          format(as.POSIXct(Sys.Date()), 
+                                 format = "%Y%m%d"),
+                          "_kontroller.ods"))
+
+system2("open",output_folder)
+
+## =============================================================================
 ## Including assessor
 ## =============================================================================
 
-files <- list.files(path="/Users/au301842/ENIGMAtrial_R/output/kontrol",full.names = TRUE)
+filled <- files_filter(output_folder,"kontroller_f")
 
-filled <- files[grepl("kontroller_f",files)] # Gets names of all files ending on kotroller_f (filled)
+# Loads the last (newest) filled spreadsheet to include new changes
+filled_file <- readODS::read_ods(filled[length(filled)])
 
-# Loads all spreadsheets and binds, to keep older for reference
-f <- do.call(rbind,lapply(filled,function(i){
-  readODS::read_ods(i)
-  }))
+# Joins the filled file with the original. Keeps original time stamps
+inner_join(filled_file |> 
+             select(-tid), 
+           df |> select(c(id,room,start))) |> 
+  rename(tid=start,
+         assessor=person) |> 
+  assign("f",value=_)
+
 
 # Mutates and joins for better labelling
 df <- f |> transmute(id=id,
-                    name2=paste0(kontrol," [",toupper(person),"]")) |> 
+                    name2=paste0(kontrol," [",toupper(assessor),"]")) |> 
   right_join(df) |> 
-  mutate(label=ifelse(!is.na(name2),name2,name))
+  mutate(label=ifelse(!is.na(name2),name2,name)) |> na.omit()
 
 ## =============================================================================
 ## Creating calendar and comitting
@@ -45,7 +95,7 @@ ic_write(convert_ical(start=df$start,id=df$id,name=df$label,room=df$room)[[2]], 
 
 # Commit and push GIT
 source("src/enigma_git_push.R")
-enigma_git_push("calendar update")
+enigma_git_push(paste("calendar update",Sys.Date()))
 
 # Clean environment
 rm(list=ls(pos=1))

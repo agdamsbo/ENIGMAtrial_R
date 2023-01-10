@@ -1,6 +1,6 @@
 ## Automated data modification and upload
 
-token=names(suppressWarnings(read.csv("/Users/au301842/enigma_redcap_token.csv",colClasses = "character")))
+token=keyring::key_get("enigma_api_key")
 uri="https://redcap.au.dk/api/"
 
 ## =============================================================================
@@ -16,9 +16,10 @@ require(lubridate)
 ## =============================================================================
 
 ### Modifies the following
-### - kon
-### - dob
-### - age + rbans_age
+### - kon DEPRECATED, calculated in REDCap
+### - dob DEPRECATED, calculated in REDCap
+### - age DEPRECATED, calculated in REDCap
+### - rbans_age DEPRECATED, calculated in REDCap
 ### - incl_since_start
 ### - incl_ratio
 ### - incl_data_mod

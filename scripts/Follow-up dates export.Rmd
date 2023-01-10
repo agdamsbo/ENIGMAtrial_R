@@ -60,7 +60,7 @@ knitr::kable(apply(df|>
 ```{r}
 library(readODS)
 df |> transmute(dato=start, id, kontrol=name, 
-                person="") |> 
+                assessor="") |> 
   write_ods(path = paste0("/Users/au301842/ENIGMAtrial_R/output/kontrol/",
                          format(as.POSIXct(Sys.Date()), 
                                 format = "%Y%m%d"),

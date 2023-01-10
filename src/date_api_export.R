@@ -18,7 +18,7 @@ col_types <- readr::cols(
 
 d <- redcap_read(
     redcap_uri   = "https://redcap.au.dk/api/",
-    token        = keyring::key_get("enigma_api_key"),
+    token        = token,
     fields       = fields,
     col_types    = col_types
   )$data
