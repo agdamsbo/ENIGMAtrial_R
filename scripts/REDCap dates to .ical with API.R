@@ -18,7 +18,8 @@ df<-date_api_export_prep(dta=d,include_all=FALSE,cut_date=-5,num_c=2,date_col="_
 ## Includes only one appointment for each ID. Problem?
 
 ## Excluding patients with booking, but with EOS filled due to early end of study (ie date of EOS not blank)
-df <- df[!(df$id %in% d$record_id[!is.na(d$eos1)]),]
+df_all <- df[!(df$id %in% d$record_id[!is.na(d$eos1)]),]
+
 
 ## =============================================================================
 ## Export spreadsheet with assessors on assigned
@@ -45,7 +46,7 @@ end.date<-as.Date(Sys.Date())+85
 # Format for nice printing
 Sys.setlocale("LC_TIME", "da_DK.UTF-8")
 
-df <- df |> 
+df <- df_all |> 
   arrange(start) |> 
   filter(start < end.date) |> 
   left_join(old_filled_file |> select(id,assessor)) %>% 
@@ -78,10 +79,12 @@ filled_file <- readODS::read_ods(filled[length(filled)])
 f <- inner_join(df[c("id","name","tid")],filled_file[,colnames(filled_file)!="tid"])
 
 # Mutates and joins for better labelling
-df <- f |> transmute(id=id,
-                    name2=paste0(kontrol," [",toupper(assessor),"]")) |> 
-  right_join(df) |> 
-  mutate(label=ifelse(!is.na(name2),name2,name)) |> na.omit()
+df_cal <- f |> transmute(id=id,
+                    name2=ifelse(!is.na(assessor),
+                                 paste0(kontrol," [",toupper(assessor),"]"),
+                                 NA)) |> 
+  right_join(df_all) |> 
+  mutate(label=ifelse(!is.na(name2),name2,name))
 
 ## =============================================================================
 ## Creating calendar and comitting
@@ -90,7 +93,12 @@ df <- f |> transmute(id=id,
 # Conversion to calendar files (.ics)
 library(calendar)
 source("src/convert_ical.R")
-ic_write(convert_ical(start=df$tid,id=df$id,name=df$label,room=df$room)[[2]], file="enigma_control.ics")
+convert_ical(df_cal, 
+             start="start",
+             id="id",
+             name="label",
+             room="room")[[2]] |> 
+  ic_write(file="enigma_control.ics")
 
 # Commit and push GIT
 source("src/enigma_git_push.R")
