@@ -1,4 +1,9 @@
 
+# Workflow:
+# 
+# 
+# 
+
 ## =============================================================================
 ## Getting data from REDCap
 ## =============================================================================
@@ -52,8 +57,8 @@ df <- df |>
 # Joins the filled file with the original. Keeps original time stamps
 
 df |> transmute(tid, id, kontrol=name, 
-                assessor="") |> 
-  readODS::write_ods(path = paste0(output_folder,
+                assessor) |> 
+  readODS::write_ods(path = paste0(output_folder,"/",
                           format(as.POSIXct(Sys.Date()), 
                                  format = "%Y%m%d"),
                           "_kontroller.ods"))
@@ -70,13 +75,7 @@ filled <- files_filter(output_folder,"kontroller_f")
 filled_file <- readODS::read_ods(filled[length(filled)])
 
 # Joins the filled file with the original. Keeps original time stamps
-inner_join(filled_file |> 
-             select(-tid), 
-           df |> select(c(id,room,start))) |> 
-  rename(tid=start,
-         assessor=person) |> 
-  assign("f",value=_)
-
+f <- inner_join(df[c("id","name","tid")],filled_file[,colnames(filled_file)!="tid"])
 
 # Mutates and joins for better labelling
 df <- f |> transmute(id=id,
@@ -91,7 +90,7 @@ df <- f |> transmute(id=id,
 # Conversion to calendar files (.ics)
 library(calendar)
 source("src/convert_ical.R")
-ic_write(convert_ical(start=df$start,id=df$id,name=df$label,room=df$room)[[2]], file="enigma_control.ics")
+ic_write(convert_ical(start=df$tid,id=df$id,name=df$label,room=df$room)[[2]], file="enigma_control.ics")
 
 # Commit and push GIT
 source("src/enigma_git_push.R")
