@@ -22,7 +22,7 @@ col_types <- readr::cols(
 d <- redcap_read(
     redcap_uri   = "https://redcap.au.dk/api/",
     records_collapsed = id,
-    token        = names(suppressWarnings(read.csv("/Users/au301842/enigma_redcap_token.csv",colClasses = "character"))),
+    token        = keyring::key_get("enigma_api_key"),
     fields       = fields,
     col_types    = col_types
   )$data

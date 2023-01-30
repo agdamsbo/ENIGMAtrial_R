@@ -9,7 +9,7 @@ redcap_api_export_short<-function(event=NULL,id=NULL,instruments=NULL,items = "r
   
 redcap_read_oneshot(
   redcap_uri   = "https://redcap.au.dk/api/",
-  token        = names(suppressWarnings(read.csv("/Users/au301842/enigma_redcap_token.csv",colClasses = "character"))),
+  token        = keyring::key_get("enigma_api_key"),
   events       = event,
   records      = id,
   forms        = instruments,
