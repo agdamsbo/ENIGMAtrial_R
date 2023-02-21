@@ -27,5 +27,5 @@ doi_orcid_scrape<-function(id){
     
     dois<-c(dois,doi_vec[[1]])
   }
-  return(unique(dois))
+  unique(dois)
 }

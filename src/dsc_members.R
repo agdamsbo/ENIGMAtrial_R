@@ -17,9 +17,10 @@ pvwmudersbach <- ""
 tsehested     <- ""
 
 
-dsc_orcids<-c(agdamsbo  ,
-              gandersen ,
-              czsimonsen)
+dsc_orcids<-c(agdamsbo  #,
+              # gandersen ,
+              # czsimonsen
+              )
 
 
 

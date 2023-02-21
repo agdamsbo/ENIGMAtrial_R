@@ -19,7 +19,10 @@ library(rcrossref)
 # source("src/orcid_keyfile.R")
 
 # Auth method 1
-orcid_auth()
+# orcid_auth()
+# keyring::key_set(service = "ORCID_TOKEN")
+
+Sys.getenv(keyring::key_get(service = "ORCID_TOKEN"))
 
 # Data draw
 
