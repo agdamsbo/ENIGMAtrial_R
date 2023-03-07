@@ -7,17 +7,17 @@ plot_index <- function(ds,id="record_id",sub_plot="_is",scores=c("_is","_lo","_u
   # dom_names domain names
   # facet.by variable to base facet_grid on.
 
-library(ggplot2)
-library(dplyr)
-library(tidyr)
+# library(ggplot2)
+# library(dplyr)
+# library(tidyr)
  
   df_plot<-ds|>
     select(c(id,
              facet.by,
              ends_with(scores)))|>
-    pivot_longer(cols=-c(id,facet.by))|>
+    tidyr::pivot_longer(cols=-c(id,facet.by))|>
     subset(grepl(sub_plot,name))|>
-    mutate(value=as.numeric(value),
+    dplyr::mutate(value=as.numeric(value),
            name=factor(name,labels = dom_names))
   
   if (!is.null(facet.by)){

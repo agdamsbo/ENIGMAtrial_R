@@ -57,18 +57,23 @@ df <- df_all |>
 
 # Joins the filled file with the original. Keeps original time stamps
 
+file_path <- paste0(output_folder,"/",
+                    format(as.POSIXct(Sys.Date()), 
+                           format = "%Y%m%d"),
+                    "_kontroller.ods")
+
 df |> transmute(tid, id, kontrol=name, 
-                assessor) |> 
-  readODS::write_ods(path = paste0(output_folder,"/",
-                          format(as.POSIXct(Sys.Date()), 
-                                 format = "%Y%m%d"),
-                          "_kontroller.ods"))
+                assessor=ifelse(!is.na(assessor),assessor,"")) |> 
+  readODS::write_ods(path = file_path)
 
 system2("open",output_folder)
+system2("open",file_path)
 
 ## =============================================================================
 ## Including assessor
 ## =============================================================================
+
+stop("PART 2: fill file and continue manually!")
 
 filled <- files_filter(output_folder,"kontroller_f")
 

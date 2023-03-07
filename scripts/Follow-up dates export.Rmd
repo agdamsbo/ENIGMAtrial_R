@@ -16,10 +16,16 @@ output:
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
+
+# DEPRECATED
+
+
 ```{r include=FALSE}
 # Data export as in "REDCap dates to .ical with API.R"
 # setwd("/Users/au301842/ENIGMAtrial_R/")
 # REDCap data export/import script
+
+token <- keyring::key_get("enigma_api_key")
 source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/date_api_export.R")
 # source("src/date_api_export.R")
 ## Drops environment but data.frame
