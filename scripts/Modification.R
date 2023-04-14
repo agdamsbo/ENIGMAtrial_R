@@ -1,3 +1,15 @@
+## =============================================================================
+## On-machine run
+## =============================================================================
+
+# See: https://anderfernandez.com/en/blog/how-to-automate-r-scripts-on-windows-and-mac/
+# library(cronR)
+# path <- "/Users/au301842/ENIGMAtrial_R/scripts/Modification.R"
+# cmd <- cron_rscript(path)
+# cron_add(command = cmd, frequency = 'daily', at = "10AM",
+#          id = 'enigma_mods', description = 'ENNIGMA data modification', tags = c('enigma', 'r'))
+
+
 ## Automated data modification and upload
 
 token=keyring::key_get("enigma_api_key")

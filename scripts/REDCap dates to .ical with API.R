@@ -73,7 +73,7 @@ system2("open",file_path)
 ## Including assessor
 ## =============================================================================
 
-stop("PART 2: fill file and continue manually!")
+# stop("PART 2: fill file and continue manually!")
 
 filled <- files_filter(output_folder,"kontroller_f")
 
