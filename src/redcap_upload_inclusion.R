@@ -21,14 +21,28 @@ source("https://raw.githubusercontent.com/agdamsbo/daDoctoR/master/R/dob_extract
 dta <- redcap_read(
   redcap_uri   = uri,
   token        = token,
-  events       = c("inclusion_arm_1","3_months_arm_1","12_months_arm_1"),
+  events       = c("inclusion_arm_1", "3_months_arm_1", "12_months_arm_1"),
   raw_or_label = "raw",
   records      = records_mod[[1]],
-  fields        = c("record_id","redcap_event_name","incl_date","incl_since_start","incl_ratio","incl_data_mod","rbans_age","rbans_date") ## Only selecting relevant variables (fields)
+  fields        = c(
+    "record_id",
+    # "redcap_event_name",
+    "incl_date",
+    "incl_since_start",
+    "incl_ratio",
+    "incl_data_mod",
+    "rbans_age",
+    "rbans_date"
+  ) ## Only selecting relevant variables (fields)
 )$data %>%
-  mutate(incl_since_start=as.numeric(difftime(incl_date,project_start,units="weeks")), # Weeks since project start for data exploration
-         incl_ratio=incl_since_start/record_id, # Exploratory inclusion ratio
-         incl_data_mod=ifelse(redcap_event_name=="inclusion_arm_1","yes",NA)) %>%  # Flag data modification
+  mutate(
+    incl_since_start = as.numeric(difftime(incl_date, project_start, units =
+                                             "weeks")),
+    # Weeks since project start for data exploration
+    incl_ratio = incl_since_start / record_id,
+    # Exploratory inclusion ratio
+    incl_data_mod = ifelse(redcap_event_name == "inclusion_arm_1", "yes", NA)
+  ) %>%  # Flag data modification
   select(-c(incl_date)) ## Dropping cpr, as to not keep in memory
 
 stts<-redcap_write(ds=dta,
