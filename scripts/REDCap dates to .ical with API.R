@@ -14,7 +14,7 @@ token <- keyring::key_get("enigma_api_key"); source("src/date_api_export.R")
 
 # Formatting
 source("src/date_api_export_prep.R")
-df<-date_api_export_prep(dta=d,include_all=FALSE,cut_date=-5,num_c=2,date_col="_book",room_col = "_room")
+df<-date_api_export_prep(dta=d,include_all=FALSE,cut_date=-1,num_c=2,date_col="_book",room_col = "_room")
 ## Includes only one appointment for each ID. Problem?
 
 ## Excluding patients with booking, but with EOS filled due to early end of study (ie date of EOS not blank)
@@ -90,6 +90,7 @@ df_cal <- f |> transmute(id=id,
                                  NA)) |> 
   right_join(df_all) |> 
   mutate(label=ifelse(!is.na(name2),name2,name))
+
 
 ## =============================================================================
 ## Creating calendar and comitting
