@@ -14,7 +14,15 @@ token <- keyring::key_get("enigma_api_key"); source("src/date_api_export.R")
 
 # Formatting
 source("src/date_api_export_prep.R")
-df<-date_api_export_prep(dta=d,include_all=FALSE,cut_date=-1,num_c=2,date_col="_book",room_col = "_room")
+df <-
+  date_api_export_prep(
+    dta = d,
+    include_all = FALSE,
+    cut_date = -1,
+    num_c = 2,
+    date_col = "_book",
+    room_col = "_room"
+  )
 ## Includes only one appointment for each ID. Problem?
 
 ## Excluding patients with booking, but with EOS filled due to early end of study (ie date of EOS not blank)
@@ -46,13 +54,16 @@ end.date<-as.Date(Sys.Date())+85
 # Format for nice printing
 Sys.setlocale("LC_TIME", "da_DK.UTF-8")
 
-df <- df_all |> 
-  arrange(start) |> 
-  filter(start < end.date) |> 
-  left_join(old_filled_file |> select(id,assessor)) %>% 
-  mutate(old=as.character(format(left_join(x=.,y=old_filled_file[c("id","tid")])[,"tid"], format="%Y-%m-%d %H:%M")),
-         changes=if_else(start!=old,"ÆNDRET","samme")) |>
-  rename(tid=start) |> 
+df <- df_all |>
+  arrange(start) |>
+  filter(start < end.date) |>
+  left_join(old_filled_file |> select(id, assessor)) %>%
+  mutate(old = as.character(format(
+    left_join(x = ., y = old_filled_file[c("id", "tid")])[, "tid"], 
+    format = "%Y-%m-%d %H:%M"
+  )),
+  changes = if_else(start != old, "ÆNDRET", "samme")) |>
+  rename(tid = start) |>
   select(-old)
 
 # Joins the filled file with the original. Keeps original time stamps
