@@ -1,0 +1,47 @@
+---
+title: 'ENIGMA: 12 mdr bookinger'
+date: "`r Sys.Date()`"
+knit: (function(inputFile, encoding) { 
+      render.date <- format(as.POSIXct(Sys.Date()), format = "%Y%m%d");
+      rmarkdown::render(inputFile,
+                        encoding=encoding, 
+                        output_file=file.path('/Users/au301842/ENIGMAtrial_R/output/',paste0(render.date,'_12mdr_oversigt.pdf'))) })
+output:
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE)
+```
+
+```{r}
+# Initially run on 24.aug.2022
+
+source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap_api_export_short.R")
+
+df<-redcap_api_export_short(id= NULL,
+                            instruments= NULL,
+                            event= c("inclusion_arm_1","3_months_arm_1"),
+                            items = c("record_id","cpr","visit_book12"))|>
+  dplyr::select(!contains("repeat_"))|>
+  tidyr::pivot_wider(names_from = "redcap_event_name",
+              values_from = c("cpr","visit_book12")) |>
+  (\(x) "["(x,colSums(is.na(x)) < nrow(x)))() |> # Exclude empty columns
+  dplyr::filter(as.Date(visit_book12_3_months_arm_1) > Sys.Date()) |>
+  dplyr::mutate(note="",
+                visit_book12_3_months_arm_1=format(as.POSIXct(visit_book12_3_months_arm_1), 
+                                                   format = "%d-%m-%Y")) |> 
+  dplyr::rename("ID" = "record_id",
+                "cpr" = "cpr_inclusion_arm_1",
+                "12 mdr booking" = "visit_book12_3_months_arm_1",
+                "Noter" = "note"
+         )
+```
+
+```{r fig.pos='H'}
+knitr::kable(df,
+             format = "latex")
+```
+
+
+
