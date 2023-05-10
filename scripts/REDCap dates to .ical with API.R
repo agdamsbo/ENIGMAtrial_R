@@ -49,7 +49,7 @@ filled <- files_filter(output_folder,"kontroller_f")
 old_filled_file <- readODS::read_ods(filled[length(filled)])
 
 # End date is 85 days after render date not to forget recently included patients for 3 months follow-up.
-end.date<-as.Date(Sys.Date())+90
+end.date<-as.Date(Sys.Date())+120
 
 # Format for nice printing
 Sys.setlocale("LC_TIME", "da_DK.UTF-8")
