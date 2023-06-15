@@ -51,6 +51,7 @@ remove_all_but(token,uri,remove_all_but)
 ### Modifies 3 months RBANS data
 
 all_ids_3=FALSE
+all_ids_3 <- TRUE
 
 source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap_upload_rbans3.R")
 remove_all_but(token,uri,remove_all_but)
@@ -63,6 +64,8 @@ remove_all_but(token,uri,remove_all_but)
 
 ## The look-up function is not working. The index has been fixed. Why??
 all_ids_12=FALSE
+
+# all_ids_12 <- TRUE
 
 source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap_upload_rbans12.R")
 
