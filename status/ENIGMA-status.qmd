@@ -1,0 +1,168 @@
+---
+title: "ENIGMA status"
+editor: source
+---
+
+
+# ENIGMA-status
+
+## Inclusions
+
+```{r}
+library(tidyverse)
+library(gtsummary)
+library(patchwork)
+library(REDCapCAST)
+
+# inst <-
+  # REDCapR::redcap_instruments(redcap_uri = "https://redcap.au.dk/api/",
+                              # token = keyring::key_get("enigma_api_key"))$data
+
+d_list <- REDCapCAST::read_redcap_tables(
+  uri = "https://redcap.au.dk/api/",
+  token = keyring::key_get("enigma_api_key"),
+  fields = c("record_id", "incl_by" , "incl_date"),
+  forms = c(
+    "klassifikation_af_primre_stroke",
+    "baseline_stroke",
+    "registrering",
+    "baseline_nihss",
+    "hjde_vgt_og_blodtryk",
+    "rygeanamnese",
+    "eos"
+  )
+) 
+```
+
+```{r}
+redcap_wider <- function(list,glued="{.value}_{redcap_event_name}_long") {
+  l <- lapply(list,function(i){
+    incl <- any(duplicated(i[["record_id"]]))
+    
+    cname <- colnames(i)
+    vals <- cname[!cname%in%c("record_id","redcap_event_name")]
+    
+    i$redcap_event_name <- tolower(gsub(" ","_",i$redcap_event_name))
+    
+    if (incl){
+    s <- pivot_wider(i,
+            names_from = redcap_event_name,
+            values_from = all_of(vals),
+            names_glue = glued)
+    s[colnames(s)!="redcap_event_name"]
+    } else (i[colnames(i)!="redcap_event_name"])
+    
+    })
+
+  ## Additional conditioning is needed to handle repeated instruments.
+  
+  Reduce(f = full_join, x = l)
+}
+```
+
+```{r}
+d <- redcap_wider(d_list)
+```
+
+```{r Inclusion}
+source("/Users/au301842/ENIGMAtrial_R/src/status_plot.R")
+d |> status_plot()
+```
+
+## Baseline data
+
+```{r baseline}
+d |>
+  select(age,
+         kon,
+         civil,
+         hypertension,
+         diabetes,
+         resist_incl,
+         nihss_baseline_sum,
+         treated_thrombolysis,
+         treated_thrombectomy) |>
+  transmute(
+    age=age,
+    kon=kon,
+    civil = civil == "Bor alene",
+    hypertension = hypertension != "Nej",
+    diabetes = diabetes != "Nej",
+    resist_incl = resist_incl == "Ja",
+    nihss = nihss_baseline_sum,
+    thrombolysis = treated_thrombolysis == "Ja",
+    thrombectomy = treated_thrombectomy == "Ja"
+  ) |>
+  tbl_summary(
+    by = "kon",
+    missing = "ifany"#,
+    # label = list(
+    #   age ~ "Alder",
+    #   nihss_baseline_sum ~ "NIHSS at admission",
+    #   civil ~ "Living alone",
+    #   resist_incl ~ "RESIST participant",
+    #   thrombolysis ~ "IVT",
+    #   thrombectomy  ~ "EVT"
+    # )
+  ) |>
+  add_overall()
+```
+
+## TOAST classification
+
+```{r toast}
+d |>
+  select(kon, class_toast,
+         ) |>
+  tbl_summary(
+    by = "kon",
+    missing = "ifany",
+    missing_text = "Not classified",
+    label = list(
+      class_toast ~ "TOAST classification"
+    )
+  ) |>
+  add_overall()
+```
+
+## End-of-study overview
+
+```{r lost}
+d |>
+  select(kon, eos2, eos3) |>
+  mutate(eos2 = eos2,
+         eos3 = factor(
+           eos3,
+           labels = c("Other diagnose", "Lost to follow-up", "Dead", "Retracted consent")
+         )) |>
+  tbl_summary(
+    by = "kon",
+    missing = "ifany",
+    missing_text = "(NOT LOST)",
+    label = list(
+      eos2 ~ "Completed",
+      eos3 ~ "Reason")
+  ) |>
+  add_overall()
+```
+
+<!-- ## RESIST {.smaller} -->
+
+<!-- ```{r lost} -->
+<!-- d |> -->
+<!--   select(resist_incl, eos2, eos3) |> -->
+<!--   mutate(eos2 = eos2, -->
+<!--          eos3 = factor( -->
+<!--            eos3, -->
+<!--            labels = c("Other diagnose", "Lost to follow-up", "Dead", "Retracted consent") -->
+<!--          )) |> -->
+<!--   tbl_summary( -->
+<!--     by = "resist_incl", -->
+<!--     missing = "ifany", -->
+<!--     missing_text = "(Missing data)", -->
+<!--     label = list( -->
+<!--       eos2 ~ "Completed", -->
+<!--       eos3 ~ "Reason") -->
+<!--   ) |> -->
+<!--   add_overall() -->
+<!-- ``` -->

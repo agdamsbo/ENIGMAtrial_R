@@ -52,3 +52,5 @@ backup.csv
 *.rda
 
 .Renviron
+
+*.log

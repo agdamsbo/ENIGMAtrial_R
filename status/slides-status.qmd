@@ -1,0 +1,50 @@
+---
+title: "ENIGMA"
+subtitle: "Inclusion status"
+date: last-modified
+author:
+  - name: Andreas Gammelgaard DAmsbo
+    orcid: 0000-0002-7559-1154
+    email: andrlr@rm.dk
+    url: https://pure.au.dk/portal/en/persons/andreas-gammelgaard-damsbo(e3c4afce-3eba-4456-8b8b-2fd90775c87a).html
+    affiliations:
+      - ref: dsc
+      - ref: dcm
+      - ref: sdc
+affiliations:
+  - id: dsc
+    name: Danish Stroke Centre, AUH
+    city: Aarhus
+    state: Denmark
+    url: https://www.en.auh.dk/departments/danish-stroke-centre/
+  - id: dcm
+    name: Department of Clinical Medicine, AU
+    city: Aarhus
+    state: Denmark
+    url: https://clin.au.dk/
+  - id: sdc
+    name: Steno Diabetes Centre, AUH
+    city: Aarhus
+    state: Denmark
+    url: https://www.stenoaarhus.dk/
+format: 
+  clean-revealjs:
+    footer: "ENIGMA - status"
+    progress: true
+    show-slide-number: all
+    toc: true
+    toc-title: "Content"
+    # logo: images/dsc_hoved.png
+    # theme: solarized
+editor: visual
+---
+
+```{r}
+#| child: 'ENIGMA-status.qmd'
+```
+
+<!-- ```{r} -->
+
+<!-- #| child: 'ENIGMA-SVD.qmd' -->
+
+<!-- ``` -->

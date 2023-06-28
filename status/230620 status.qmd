@@ -1,0 +1,73 @@
+---
+title: "ENIGMA"
+subtitle: "Statusmøde 20. juni 2023"
+date: last-modified
+author:
+  - name: Andreas Gammelgaard Damsbo
+    orcid: 0000-0002-7559-1154
+    email: andrlr@rm.dk
+    url: https://pure.au.dk/portal/en/persons/andreas-gammelgaard-damsbo(e3c4afce-3eba-4456-8b8b-2fd90775c87a).html
+    # affiliations:
+    #   - ref: dsc
+    #   - ref: dcm
+    #   - ref: sdc
+affiliations:
+  - id: dsc
+    name: Danish Stroke Centre, AUH
+    city: Aarhus
+    state: Denmark
+    url: https://www.en.auh.dk/departments/danish-stroke-centre/
+  - id: dcm
+    name: Department of Clinical Medicine, AU
+    city: Aarhus
+    state: Denmark
+    url: https://clin.au.dk/
+  - id: sdc
+    name: Steno Diabetes Centre, AUH
+    city: Aarhus
+    state: Denmark
+    url: https://www.stenoaarhus.dk/
+format: 
+  clean-revealjs:
+    footer: "ENIGMA - status - 20.jun.2023"
+    progress: true
+    show-slide-number: all
+    slide-number: h.v
+    toc: true
+    toc-title: "Dagsorden"
+    toc-depth: 1
+    # logo: images/dsc_hoved.png
+    # theme: solarized
+editor: source
+---
+
+```{r}
+#| child: 'slides-status.qmd'
+```
+
+# Udfordringer
+
+## Overvejelser
+
+-   Mulig hjælp til inklusioner
+
+# Opdatering af forventede publikationer
+
+-   Udgangspunkt i tidligere dokument
+-   Nye ideer?
+-   Prioritering?
+
+# Næste møde
+
+# Eventuelt
+
+# Nyt projekt
+
+Lifestyle factors and small vessel disease in stroke patients
+
+```{r}
+#| child: 'slides-svdburden.qmd'
+#| 
+```
+
+<!-- ## {background-iframe="https://redcap.au.dk/redcap_v13.1.29/Design/online_designer.php?pid=8420" background-interactive="true"} -->

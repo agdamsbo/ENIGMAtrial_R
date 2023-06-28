@@ -1,0 +1,76 @@
+---
+title: "ENIGMA status"
+editor: source
+---
+
+# Status
+
+## Inclusions
+
+```{r}
+library(tidyverse)
+# remotes::install_github("agdamsbo/REDCapRITS")
+
+library(gtsummary)
+library(patchwork)
+library(REDCapCAST)
+
+# inst <-
+  # REDCapR::redcap_instruments(redcap_uri = "https://redcap.au.dk/api/",
+                              # token = keyring::key_get("enigma_api_key"))$data
+
+d_list <- read_redcap_tables(
+  uri = "https://redcap.au.dk/api/",
+  token = keyring::key_get("enigma_api_key"),
+  fields = c("record_id", "incl_by" , "incl_date", "kon"),
+  forms = c("klassifikation_af_primre_stroke",
+            "mrs",
+            "rbans"),
+  # events = c("3_months_arm_1", "12_months_arm_1", "end_of_study_arm_1"),
+  raw_or_label = "raw"
+)
+```
+
+```{r}
+d <- redcap_wider(d_list)
+```
+
+## Baseline data {.smaller}
+
+```{r baseline}
+test <- d |> mutate(
+  obs_dem_3 = rbans_i_is_3_months_arm_1 < 70 |
+    mrs_score_3_months_arm_1 >= 3,
+  obs_dem_12 = rbans_i_is_12_months_arm_1 < 70 |
+    mrs_score_12_months_arm_1 >= 3
+) |>
+  filter(class_toast == 2) |>
+  select(record_id,
+    rbans_i_is_3_months_arm_1,
+    rbans_i_is_12_months_arm_1,
+    mrs_score_3_months_arm_1,
+    mrs_score_12_months_arm_1,
+    class_toast,
+    obs_dem_3,
+    obs_dem_12
+  ) #|>
+#na.omit()
+  
+```
+
+## TOAST classification {.smaller}
+
+```{r toast}
+d |>
+  select(kon, class_toast,
+         ) |>
+  tbl_summary(
+    by = "kon",
+    missing = "ifany",
+    missing_text = "Not classified",
+    label = list(
+      class_toast ~ "TOAST classification"
+    )
+  ) |>
+  add_overall()
+```
