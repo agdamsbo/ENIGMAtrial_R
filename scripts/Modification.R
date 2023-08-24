@@ -27,7 +27,9 @@ substrRight <- function(x, n){
 # Gives true if VPN is on
 substrRight(proxy_inf[4],1)=="0"
 }
-abroad=FALSE
+abroad=TRUE
+
+Sys.time() ## Just to set a mark in the log
 
 # This is a poor mans test, but it does the job for now (!)
 if (abroad) {
