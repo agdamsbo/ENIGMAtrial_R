@@ -7,24 +7,46 @@
 records_mod <- redcap_read_oneshot(
   redcap_uri   = uri,
   token        = token,
-  fields       = c("record_id","eos_data_mod","rbans_perf") ## Only selecting relevant variables
+  fields       = c("record_id","eos_data_mod","rbans_perf","rbans_a_rs","rbans_b_rs","rbans_c_rs","rbans_d_rs","rbans_e_rs") ## Only selecting relevant variables
 )$data %>%
   filter(redcap_event_name %in% c("12_months_arm_1","end_of_study_arm_1"))
 
 # For trouble shooting
 # records_mod$eos_data_mod<-NA
 
+## 230929: These scripts are not written to account for missing entries in raw RBANS scores
+## This modification is added to handle missing entries a little more gracefully
+## Determining if missing any raw scores
+missing.raws <- apply(is.na(select(records_mod,ends_with("_rs"))),1,any)
+
+## Complete entries
+complete.12.entries <- records_mod$record_id[!missing.raws]
+
+# print(paste("Missing raw RBANS scores for subject",paste(records_mod$record_id[missing.raws],collapse = ", ")))
 if (all_ids_12==FALSE){
   # IDs with performed RBANS, and not yet modified
-  ids<-setdiff(records_mod$record_id[!is.na(records_mod$rbans_perf==1)], #IDs with 12 months RBANS performed
+  ids<-setdiff(complete.12.entries, #IDs with 12 months RBANS performed
                na.omit(records_mod$record_id[records_mod$eos_data_mod=="yes"]) #IDs with data modified already
   ) 
 }
 
 if (all_ids_12==TRUE){
-## Set all IDs for reupload
-ids<-records_mod$record_id[!is.na(records_mod$rbans_perf==1)]
+  ## Set all IDs for reupload
+  ids<-complete.12.entries
 }
+
+## Old approach just checks if the flag "performed" was checked
+# if (all_ids_12==FALSE){
+#   # IDs with performed RBANS, and not yet modified
+#   ids<-setdiff(records_mod$record_id[!is.na(records_mod$rbans_perf==1)], #IDs with 12 months RBANS performed
+#                na.omit(records_mod$record_id[records_mod$eos_data_mod=="yes"]) #IDs with data modified already
+#   ) 
+# }
+# 
+# if (all_ids_12==TRUE){
+# ## Set all IDs for reupload
+# ids<-records_mod$record_id[!is.na(records_mod$rbans_perf==1)]
+# }
 
 ## =============================================================================
 ## Step 2: Doing table look-ups for RBANS incl upload
