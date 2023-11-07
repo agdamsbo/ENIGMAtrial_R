@@ -9,25 +9,22 @@
 ## =============================================================================
 
 # REDCap data export/import script
-token <- keyring::key_get("enigma_api_key"); source("src/date_api_export.R")
+token <- keyring::key_get("enigma_api_key")
+
+source("src/date_api_export.R")
 ## Drops environment but data.frame
 
 # Formatting
 source("src/date_api_export_prep.R")
-df <-
-  date_api_export_prep(
-    dta = d,
-    include_all = FALSE,
-    cut_date = -1,
-    num_c = 2,
-    date_col = "_book",
-    room_col = "_room"
-  )
-## Includes only one appointment for each ID. Problem?
 
-## Excluding patients with booking, but with EOS filled due to early end of study (ie date of EOS not blank)
-df_all <- df[!(df$id %in% d$record_id[!is.na(d$eos1)]),]
+errors <- apply(is.na(df_all[2:3]),1,any)|!df_all$protocol_check
 
+if (any(errors)){
+  print(df_all[errors,])
+  stop("Check ligge at booking oplysningerne passer for disse")
+}
+
+df_all <- df_all |> select(-ends_with("check"))
 
 ## =============================================================================
 ## Export spreadsheet with assessors on assigned
@@ -57,14 +54,14 @@ Sys.setlocale("LC_TIME", "da_DK.UTF-8")
 df <- df_all |>
   arrange(start) |>
   filter(start < end.date) |>
-  left_join(old_filled_file |> select(id, assessor)) %>%
-  mutate(old = as.character(format(
-    left_join(x = ., y = old_filled_file[c("id", "tid")])[, "tid"], 
-    format = "%Y-%m-%d %H:%M"
-  )),
-  changes = if_else(start != old, "ÆNDRET", "samme")) |>
-  rename(tid = start) |>
-  select(-old)
+  left_join(old_filled_file |> select(id, tid, assessor)) %>%
+  mutate(
+    changes = if_else(start != tid, "ÆNDRET", "samme")
+  ) |>
+  # Remove old tid
+  select(-tid)|>
+  # Setting new tid
+  rename(tid = start) 
 
 # Joins the filled file with the original. Keeps original time stamps
 
