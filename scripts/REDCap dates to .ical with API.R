@@ -7,7 +7,7 @@
 ## =============================================================================
 ## Getting data from REDCap
 ## =============================================================================
-
+library(tidyverse)
 # REDCap data export/import script
 token <- keyring::key_get("enigma_api_key")
 
