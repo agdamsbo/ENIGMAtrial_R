@@ -3,7 +3,7 @@ title: "ENIGMA"
 subtitle: "Inclusion status"
 date: last-modified
 author:
-  - name: Andreas Gammelgaard DAmsbo
+  - name: Andreas Gammelgaard Damsbo
     orcid: 0000-0002-7559-1154
     email: andrlr@rm.dk
     url: https://pure.au.dk/portal/en/persons/andreas-gammelgaard-damsbo(e3c4afce-3eba-4456-8b8b-2fd90775c87a).html
@@ -40,7 +40,15 @@ editor: visual
 ---
 
 ```{r}
-#| child: 'ENIGMA-status.qmd'
+#| include: false
+
+
+```
+
+
+
+```{r}
+#| child: 'status/ENIGMA-status.qmd'
 ```
 
 <!-- ```{r} -->

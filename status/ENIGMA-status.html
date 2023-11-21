@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.340">
+<meta name="generator" content="quarto-1.3.450">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -94,201 +94,68 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<section id="enigma-status" class="level1">
-<h1>ENIGMA-status</h1>
-<section id="inclusions" class="level2">
-<h2 class="anchored" data-anchor-id="inclusions">Inclusions</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>targets<span class="sc">::</span><span class="fu">tar_config_set</span>(<span class="at">store =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"_targets"</span>))</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.1.2     ✔ readr     2.1.4
+✔ dplyr     1.1.3     ✔ readr     2.1.4
 ✔ forcats   1.0.0     ✔ stringr   1.5.0
-✔ ggplot2   3.4.2     ✔ tibble    3.2.1
-✔ lubridate 1.9.2     ✔ tidyr     1.3.0
-✔ purrr     1.0.1     
+✔ ggplot2   3.4.3     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.0
+✔ purrr     1.0.2     
 ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
 ✖ dplyr::filter() masks stats::filter()
 ✖ dplyr::lag()    masks stats::lag()
 ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtsummary)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(REDCapCAST)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># inst &lt;-</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># REDCapR::redcap_instruments(redcap_uri = "https://redcap.au.dk/api/",</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>                              <span class="co"># token = keyring::key_get("enigma_api_key"))$data</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>d_list <span class="ot">&lt;-</span> REDCapCAST<span class="sc">::</span><span class="fu">read_redcap_tables</span>(</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">uri =</span> <span class="st">"https://redcap.au.dk/api/"</span>,</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">token =</span> keyring<span class="sc">::</span><span class="fu">key_get</span>(<span class="st">"enigma_api_key"</span>),</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">fields =</span> <span class="fu">c</span>(<span class="st">"record_id"</span>, <span class="st">"incl_by"</span> , <span class="st">"incl_date"</span>),</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">forms =</span> <span class="fu">c</span>(</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"klassifikation_af_primre_stroke"</span>,</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"baseline_stroke"</span>,</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">"registrering"</span>,</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">"baseline_nihss"</span>,</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">"hjde_vgt_og_blodtryk"</span>,</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">"rygeanamnese"</span>,</span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">"eos"</span></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(targets)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtsummary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>39 event instrument metadata records were read from REDCap in 0.2 seconds.  The http status code was 200.
-The data dictionary describing 398 fields was read from REDCap in 0.2 seconds.  The http status code was 200.
-553 records and 4 columns were read from REDCap in 0.1 seconds.  The http status code was 200.
-Starting to read 104 records  at 2023-06-20 09:06:04.
-Reading batch 1 of 2, with subjects 1 through 100 (ie, 100 unique subject records).
-541 records and 118 columns were read from REDCap in 0.3 seconds.  The http status code was 200.
-Reading batch 2 of 2, with subjects 101 through 104 (ie, 4 unique subject records).
-12 records and 118 columns were read from REDCap in 0.1 seconds.  The http status code was 200.
-
-── Column specification ────────────────────────────────────────────────────────
-cols(
-  .default = col_character(),
-  record_id = col_double(),
-  redcap_repeat_instrument = col_logical(),
-  redcap_repeat_instance = col_logical(),
-  incl_date = col_date(format = ""),
-  dob = col_date(format = ""),
-  dob_minus1 = col_date(format = ""),
-  age_dec = col_double(),
-  age = col_double(),
-  cpr_last = col_double(),
-  incl_since_start = col_double(),
-  incl_ratio = col_double(),
-  resist_id = col_double(),
-  incl_book3_min = col_logical(),
-  incl_book3_max = col_logical(),
-  incl_book3 = col_datetime(format = ""),
-  incl_other3 = col_logical(),
-  admission_datetime = col_datetime(format = ""),
-  onset_datetime = col_datetime(format = ""),
-  nihss_baseline_date = col_date(format = ""),
-  nihss_baseline_sum = col_double()
-  # ... with 15 more columns
-)
-ℹ Use `spec()` for the full column specifications.
-The data dictionary describing 398 fields was read from REDCap in 0.1 seconds.  The http status code was 200.</code></pre>
+<pre><code>#BlackLivesMatter</code></pre>
 </div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># library(quarto)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="enigma-status" class="level1">
+<h1>ENIGMA-status</h1>
+<section id="inclusions" class="level2">
+<h2 class="anchored" data-anchor-id="inclusions">Inclusions</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># library(tidyverse)</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># library(gtsummary)</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># library(patchwork)</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># library(REDCapCAST)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>redcap_wider <span class="ot">&lt;-</span> <span class="cf">function</span>(list,<span class="at">glued=</span><span class="st">"{.value}_{redcap_event_name}_long"</span>) {</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  l <span class="ot">&lt;-</span> <span class="fu">lapply</span>(list,<span class="cf">function</span>(i){</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    incl <span class="ot">&lt;-</span> <span class="fu">any</span>(<span class="fu">duplicated</span>(i[[<span class="st">"record_id"</span>]]))</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    cname <span class="ot">&lt;-</span> <span class="fu">colnames</span>(i)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    vals <span class="ot">&lt;-</span> cname[<span class="sc">!</span>cname<span class="sc">%in%</span><span class="fu">c</span>(<span class="st">"record_id"</span>,<span class="st">"redcap_event_name"</span>)]</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    i<span class="sc">$</span>redcap_event_name <span class="ot">&lt;-</span> <span class="fu">tolower</span>(<span class="fu">gsub</span>(<span class="st">" "</span>,<span class="st">"_"</span>,i<span class="sc">$</span>redcap_event_name))</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (incl){</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    s <span class="ot">&lt;-</span> <span class="fu">pivot_wider</span>(i,</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">names_from =</span> redcap_event_name,</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>            <span class="at">values_from =</span> <span class="fu">all_of</span>(vals),</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>            <span class="at">names_glue =</span> glued)</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    s[<span class="fu">colnames</span>(s)<span class="sc">!=</span><span class="st">"redcap_event_name"</span>]</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> (i[<span class="fu">colnames</span>(i)<span class="sc">!=</span><span class="st">"redcap_event_name"</span>])</span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    })</span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Additional conditioning is needed to handle repeated instruments.</span></span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Reduce</span>(<span class="at">f =</span> full_join, <span class="at">x =</span> l)</span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">redcap_wider</span>(d_list)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Joining with `by = join_by(record_id)`
-Joining with `by = join_by(record_id)`
-Joining with `by = join_by(record_id)`
-Joining with `by = join_by(record_id)`
-Joining with `by = join_by(record_id)`
-Joining with `by = join_by(record_id)`</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"/Users/au301842/ENIGMAtrial_R/src/status_plot.R"</span>)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>d <span class="sc">|&gt;</span> <span class="fu">status_plot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Using an external vector in selections was deprecated in tidyselect 1.1.0.
-ℹ Please use `all_of()` or `any_of()` instead.
-  # Was:
-  data %&gt;% select(num)
-
-  # Now:
-  data %&gt;% select(all_of(num))
-
-See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Using an external vector in selections was deprecated in tidyselect 1.1.0.
-ℹ Please use `all_of()` or `any_of()` instead.
-  # Was:
-  data %&gt;% select(eos_date)
-
-  # Now:
-  data %&gt;% select(all_of(eos_date))
-
-See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-ℹ Please use `linewidth` instead.</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>targets<span class="sc">::</span><span class="fu">tar_read</span>(plot_inclusion)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="ENIGMA-status_files/figure-html/Inclusion-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section>
-<section id="baseline-data" class="level2 smaller">
-<h2 class="smaller anchored" data-anchor-id="baseline-data">Baseline data</h2>
+<section id="baseline-data" class="level2">
+<h2 class="anchored" data-anchor-id="baseline-data">Baseline data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>d <span class="sc">|&gt;</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(age,</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>         kon,</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>         civil,</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>         hypertension,</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>         diabetes,</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>         resist_incl,</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>         nihss_baseline_sum) <span class="sc">|&gt;</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">hypertension =</span> hypertension <span class="sc">!=</span> <span class="st">"Nej"</span>,</span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">diabetes =</span> diabetes <span class="sc">!=</span> <span class="st">"Nej"</span>,</span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">resist_incl =</span> resist_incl <span class="sc">==</span> <span class="st">"Ja"</span>,</span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">civil =</span> civil <span class="sc">==</span> <span class="st">"Bor alene"</span></span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_summary</span>(</span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> <span class="st">"kon"</span>,</span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">missing =</span> <span class="st">"ifany"</span>,</span>
-<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="fu">list</span>(</span>
-<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>      nihss_baseline_sum <span class="sc">~</span> <span class="st">"NIHSS at admission"</span>,</span>
-<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>      civil <span class="sc">~</span> <span class="st">"Living alone"</span>,</span>
-<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>      resist_incl <span class="sc">~</span> <span class="st">"RESIST participant"</span></span>
-<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_overall</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>targets<span class="sc">::</span><span class="fu">tar_read</span>(gt_baseline_table)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 
-<div id="etyhdhfbgf" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#etyhdhfbgf table {
+<div id="psyurtswnc" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#psyurtswnc table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#etyhdhfbgf thead, #etyhdhfbgf tbody, #etyhdhfbgf tfoot, #etyhdhfbgf tr, #etyhdhfbgf td, #etyhdhfbgf th {
+#psyurtswnc thead, #psyurtswnc tbody, #psyurtswnc tfoot, #psyurtswnc tr, #psyurtswnc td, #psyurtswnc th {
   border-style: none;
 }
 
-#etyhdhfbgf p {
+#psyurtswnc p {
   margin: 0;
   padding: 0;
 }
 
-#etyhdhfbgf .gt_table {
+#psyurtswnc .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -314,12 +181,12 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   border-left-color: #D3D3D3;
 }
 
-#etyhdhfbgf .gt_caption {
+#psyurtswnc .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#etyhdhfbgf .gt_title {
+#psyurtswnc .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -331,7 +198,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   border-bottom-width: 0;
 }
 
-#etyhdhfbgf .gt_subtitle {
+#psyurtswnc .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -343,7 +210,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   border-top-width: 0;
 }
 
-#etyhdhfbgf .gt_heading {
+#psyurtswnc .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -355,13 +222,13 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   border-right-color: #D3D3D3;
 }
 
-#etyhdhfbgf .gt_bottom_border {
+#psyurtswnc .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#etyhdhfbgf .gt_col_headings {
+#psyurtswnc .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -376,7 +243,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   border-right-color: #D3D3D3;
 }
 
-#etyhdhfbgf .gt_col_heading {
+#psyurtswnc .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -396,7 +263,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   overflow-x: hidden;
 }
 
-#etyhdhfbgf .gt_column_spanner_outer {
+#psyurtswnc .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -408,15 +275,15 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   padding-right: 4px;
 }
 
-#etyhdhfbgf .gt_column_spanner_outer:first-child {
+#psyurtswnc .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#etyhdhfbgf .gt_column_spanner_outer:last-child {
+#psyurtswnc .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#etyhdhfbgf .gt_column_spanner {
+#psyurtswnc .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -428,11 +295,11 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   width: 100%;
 }
 
-#etyhdhfbgf .gt_spanner_row {
+#psyurtswnc .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#etyhdhfbgf .gt_group_heading {
+#psyurtswnc .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -458,7 +325,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   text-align: left;
 }
 
-#etyhdhfbgf .gt_empty_group_heading {
+#psyurtswnc .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -473,15 +340,15 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   vertical-align: middle;
 }
 
-#etyhdhfbgf .gt_from_md > :first-child {
+#psyurtswnc .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#etyhdhfbgf .gt_from_md > :last-child {
+#psyurtswnc .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#etyhdhfbgf .gt_row {
+#psyurtswnc .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -500,7 +367,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   overflow-x: hidden;
 }
 
-#etyhdhfbgf .gt_stub {
+#psyurtswnc .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -513,7 +380,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   padding-right: 5px;
 }
 
-#etyhdhfbgf .gt_stub_row_group {
+#psyurtswnc .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -527,15 +394,15 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   vertical-align: top;
 }
 
-#etyhdhfbgf .gt_row_group_first td {
+#psyurtswnc .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#etyhdhfbgf .gt_row_group_first th {
+#psyurtswnc .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#etyhdhfbgf .gt_summary_row {
+#psyurtswnc .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -545,16 +412,16 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   padding-right: 5px;
 }
 
-#etyhdhfbgf .gt_first_summary_row {
+#psyurtswnc .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#etyhdhfbgf .gt_first_summary_row.thick {
+#psyurtswnc .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#etyhdhfbgf .gt_last_summary_row {
+#psyurtswnc .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -564,7 +431,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   border-bottom-color: #D3D3D3;
 }
 
-#etyhdhfbgf .gt_grand_summary_row {
+#psyurtswnc .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -574,7 +441,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   padding-right: 5px;
 }
 
-#etyhdhfbgf .gt_first_grand_summary_row {
+#psyurtswnc .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -584,7 +451,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   border-top-color: #D3D3D3;
 }
 
-#etyhdhfbgf .gt_last_grand_summary_row_top {
+#psyurtswnc .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -594,11 +461,11 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   border-bottom-color: #D3D3D3;
 }
 
-#etyhdhfbgf .gt_striped {
+#psyurtswnc .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#etyhdhfbgf .gt_table_body {
+#psyurtswnc .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -607,7 +474,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   border-bottom-color: #D3D3D3;
 }
 
-#etyhdhfbgf .gt_footnotes {
+#psyurtswnc .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -621,7 +488,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   border-right-color: #D3D3D3;
 }
 
-#etyhdhfbgf .gt_footnote {
+#psyurtswnc .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -630,7 +497,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   padding-right: 5px;
 }
 
-#etyhdhfbgf .gt_sourcenotes {
+#psyurtswnc .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -644,7 +511,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   border-right-color: #D3D3D3;
 }
 
-#etyhdhfbgf .gt_sourcenote {
+#psyurtswnc .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -652,63 +519,63 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   padding-right: 5px;
 }
 
-#etyhdhfbgf .gt_left {
+#psyurtswnc .gt_left {
   text-align: left;
 }
 
-#etyhdhfbgf .gt_center {
+#psyurtswnc .gt_center {
   text-align: center;
 }
 
-#etyhdhfbgf .gt_right {
+#psyurtswnc .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#etyhdhfbgf .gt_font_normal {
+#psyurtswnc .gt_font_normal {
   font-weight: normal;
 }
 
-#etyhdhfbgf .gt_font_bold {
+#psyurtswnc .gt_font_bold {
   font-weight: bold;
 }
 
-#etyhdhfbgf .gt_font_italic {
+#psyurtswnc .gt_font_italic {
   font-style: italic;
 }
 
-#etyhdhfbgf .gt_super {
+#psyurtswnc .gt_super {
   font-size: 65%;
 }
 
-#etyhdhfbgf .gt_footnote_marks {
+#psyurtswnc .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#etyhdhfbgf .gt_asterisk {
+#psyurtswnc .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#etyhdhfbgf .gt_indent_1 {
+#psyurtswnc .gt_indent_1 {
   text-indent: 5px;
 }
 
-#etyhdhfbgf .gt_indent_2 {
+#psyurtswnc .gt_indent_2 {
   text-indent: 10px;
 }
 
-#etyhdhfbgf .gt_indent_3 {
+#psyurtswnc .gt_indent_3 {
   text-indent: 15px;
 }
 
-#etyhdhfbgf .gt_indent_4 {
+#psyurtswnc .gt_indent_4 {
   text-indent: 20px;
 }
 
-#etyhdhfbgf .gt_indent_5 {
+#psyurtswnc .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -717,36 +584,44 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
     
     <tr class="gt_col_headings">
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="<strong>Characteristic</strong>"><strong>Characteristic</strong></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>Overall</strong>, N = 104<span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>Overall</strong>, N = 104<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>female</strong>, N = 38<span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>female</strong>, N = 38<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>male</strong>, N = 66<span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>male</strong>, N = 66<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>Overall</strong>, N = 120<span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>Overall</strong>, N = 120<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>female</strong>, N = 45<span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>female</strong>, N = 45<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>male</strong>, N = 75<span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>male</strong>, N = 75<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
     </tr>
   </thead>
   <tbody class="gt_table_body">
     <tr><td headers="label" class="gt_row gt_left">age</td>
 <td headers="stat_0" class="gt_row gt_center">74 (69, 79)</td>
-<td headers="stat_1" class="gt_row gt_center">74 (70, 80)</td>
-<td headers="stat_2" class="gt_row gt_center">74 (69, 79)</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">Living alone</td>
-<td headers="stat_0" class="gt_row gt_center">32 (31%)</td>
-<td headers="stat_1" class="gt_row gt_center">18 (47%)</td>
-<td headers="stat_2" class="gt_row gt_center">14 (21%)</td></tr>
+<td headers="stat_1" class="gt_row gt_center">75 (70, 80)</td>
+<td headers="stat_2" class="gt_row gt_center">73 (69, 79)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">civil</td>
+<td headers="stat_0" class="gt_row gt_center">38 (32%)</td>
+<td headers="stat_1" class="gt_row gt_center">23 (52%)</td>
+<td headers="stat_2" class="gt_row gt_center">15 (20%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">hypertension</td>
-<td headers="stat_0" class="gt_row gt_center">69 (66%)</td>
-<td headers="stat_1" class="gt_row gt_center">27 (71%)</td>
-<td headers="stat_2" class="gt_row gt_center">42 (64%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">78 (66%)</td>
+<td headers="stat_1" class="gt_row gt_center">32 (73%)</td>
+<td headers="stat_2" class="gt_row gt_center">46 (61%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">diabetes</td>
-<td headers="stat_0" class="gt_row gt_center">12 (12%)</td>
-<td headers="stat_1" class="gt_row gt_center">3 (7.9%)</td>
-<td headers="stat_2" class="gt_row gt_center">9 (14%)</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">RESIST participant</td>
-<td headers="stat_0" class="gt_row gt_center">38 (37%)</td>
-<td headers="stat_1" class="gt_row gt_center">14 (37%)</td>
-<td headers="stat_2" class="gt_row gt_center">24 (36%)</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">NIHSS at admission</td>
+<td headers="stat_0" class="gt_row gt_center">15 (13%)</td>
+<td headers="stat_1" class="gt_row gt_center">4 (9.1%)</td>
+<td headers="stat_2" class="gt_row gt_center">11 (15%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">resist_incl</td>
+<td headers="stat_0" class="gt_row gt_center">38 (32%)</td>
+<td headers="stat_1" class="gt_row gt_center">14 (31%)</td>
+<td headers="stat_2" class="gt_row gt_center">24 (32%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">nihss</td>
 <td headers="stat_0" class="gt_row gt_center">3.0 (1.0, 5.0)</td>
-<td headers="stat_1" class="gt_row gt_center">3.0 (2.0, 4.8)</td>
-<td headers="stat_2" class="gt_row gt_center">3.0 (1.0, 5.8)</td></tr>
+<td headers="stat_1" class="gt_row gt_center">3.0 (2.0, 4.3)</td>
+<td headers="stat_2" class="gt_row gt_center">3.0 (1.0, 5.0)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">thrombolysis</td>
+<td headers="stat_0" class="gt_row gt_center">60 (50%)</td>
+<td headers="stat_1" class="gt_row gt_center">21 (48%)</td>
+<td headers="stat_2" class="gt_row gt_center">39 (52%)</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">thrombectomy</td>
+<td headers="stat_0" class="gt_row gt_center">11 (9.2%)</td>
+<td headers="stat_1" class="gt_row gt_center">1 (2.3%)</td>
+<td headers="stat_2" class="gt_row gt_center">10 (13%)</td></tr>
   </tbody>
   
   <tfoot class="gt_footnotes">
@@ -759,40 +634,40 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
 </div>
 </div>
 </section>
-<section id="toast-classification" class="level2 smaller">
-<h2 class="smaller anchored" data-anchor-id="toast-classification">TOAST classification</h2>
+<section id="toast-classification" class="level2">
+<h2 class="anchored" data-anchor-id="toast-classification">TOAST classification</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>d <span class="sc">|&gt;</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(kon, class_toast,</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>         ) <span class="sc">|&gt;</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_summary</span>(</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> <span class="st">"kon"</span>,</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">missing =</span> <span class="st">"ifany"</span>,</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">missing_text =</span> <span class="st">"Not classified"</span>,</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="fu">list</span>(</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>      class_toast <span class="sc">~</span> <span class="st">"TOAST classification"</span></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_overall</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>targets<span class="sc">::</span><span class="fu">tar_read</span>(data) <span class="sc">|&gt;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(kon, class_toast,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>         ) <span class="sc">|&gt;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_summary</span>(</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> <span class="st">"kon"</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">missing =</span> <span class="st">"ifany"</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">missing_text =</span> <span class="st">"Not classified"</span>,</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="fu">list</span>(</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>      class_toast <span class="sc">~</span> <span class="st">"TOAST classification"</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_overall</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 
-<div id="zzyrztjspn" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#zzyrztjspn table {
+<div id="hhohbfsmsb" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#hhohbfsmsb table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#zzyrztjspn thead, #zzyrztjspn tbody, #zzyrztjspn tfoot, #zzyrztjspn tr, #zzyrztjspn td, #zzyrztjspn th {
+#hhohbfsmsb thead, #hhohbfsmsb tbody, #hhohbfsmsb tfoot, #hhohbfsmsb tr, #hhohbfsmsb td, #hhohbfsmsb th {
   border-style: none;
 }
 
-#zzyrztjspn p {
+#hhohbfsmsb p {
   margin: 0;
   padding: 0;
 }
 
-#zzyrztjspn .gt_table {
+#hhohbfsmsb .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -818,12 +693,12 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   border-left-color: #D3D3D3;
 }
 
-#zzyrztjspn .gt_caption {
+#hhohbfsmsb .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#zzyrztjspn .gt_title {
+#hhohbfsmsb .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -835,7 +710,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   border-bottom-width: 0;
 }
 
-#zzyrztjspn .gt_subtitle {
+#hhohbfsmsb .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -847,7 +722,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   border-top-width: 0;
 }
 
-#zzyrztjspn .gt_heading {
+#hhohbfsmsb .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -859,13 +734,13 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   border-right-color: #D3D3D3;
 }
 
-#zzyrztjspn .gt_bottom_border {
+#hhohbfsmsb .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#zzyrztjspn .gt_col_headings {
+#hhohbfsmsb .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -880,7 +755,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   border-right-color: #D3D3D3;
 }
 
-#zzyrztjspn .gt_col_heading {
+#hhohbfsmsb .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -900,7 +775,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   overflow-x: hidden;
 }
 
-#zzyrztjspn .gt_column_spanner_outer {
+#hhohbfsmsb .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -912,15 +787,15 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   padding-right: 4px;
 }
 
-#zzyrztjspn .gt_column_spanner_outer:first-child {
+#hhohbfsmsb .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#zzyrztjspn .gt_column_spanner_outer:last-child {
+#hhohbfsmsb .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#zzyrztjspn .gt_column_spanner {
+#hhohbfsmsb .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -932,11 +807,11 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   width: 100%;
 }
 
-#zzyrztjspn .gt_spanner_row {
+#hhohbfsmsb .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#zzyrztjspn .gt_group_heading {
+#hhohbfsmsb .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -962,7 +837,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   text-align: left;
 }
 
-#zzyrztjspn .gt_empty_group_heading {
+#hhohbfsmsb .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -977,15 +852,15 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   vertical-align: middle;
 }
 
-#zzyrztjspn .gt_from_md > :first-child {
+#hhohbfsmsb .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#zzyrztjspn .gt_from_md > :last-child {
+#hhohbfsmsb .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#zzyrztjspn .gt_row {
+#hhohbfsmsb .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1004,7 +879,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   overflow-x: hidden;
 }
 
-#zzyrztjspn .gt_stub {
+#hhohbfsmsb .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1017,7 +892,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   padding-right: 5px;
 }
 
-#zzyrztjspn .gt_stub_row_group {
+#hhohbfsmsb .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1031,15 +906,15 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   vertical-align: top;
 }
 
-#zzyrztjspn .gt_row_group_first td {
+#hhohbfsmsb .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#zzyrztjspn .gt_row_group_first th {
+#hhohbfsmsb .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#zzyrztjspn .gt_summary_row {
+#hhohbfsmsb .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1049,16 +924,16 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   padding-right: 5px;
 }
 
-#zzyrztjspn .gt_first_summary_row {
+#hhohbfsmsb .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#zzyrztjspn .gt_first_summary_row.thick {
+#hhohbfsmsb .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#zzyrztjspn .gt_last_summary_row {
+#hhohbfsmsb .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1068,7 +943,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   border-bottom-color: #D3D3D3;
 }
 
-#zzyrztjspn .gt_grand_summary_row {
+#hhohbfsmsb .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1078,7 +953,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   padding-right: 5px;
 }
 
-#zzyrztjspn .gt_first_grand_summary_row {
+#hhohbfsmsb .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1088,7 +963,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   border-top-color: #D3D3D3;
 }
 
-#zzyrztjspn .gt_last_grand_summary_row_top {
+#hhohbfsmsb .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1098,11 +973,11 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   border-bottom-color: #D3D3D3;
 }
 
-#zzyrztjspn .gt_striped {
+#hhohbfsmsb .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#zzyrztjspn .gt_table_body {
+#hhohbfsmsb .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1111,7 +986,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   border-bottom-color: #D3D3D3;
 }
 
-#zzyrztjspn .gt_footnotes {
+#hhohbfsmsb .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1125,7 +1000,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   border-right-color: #D3D3D3;
 }
 
-#zzyrztjspn .gt_footnote {
+#hhohbfsmsb .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1134,7 +1009,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   padding-right: 5px;
 }
 
-#zzyrztjspn .gt_sourcenotes {
+#hhohbfsmsb .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1148,7 +1023,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   border-right-color: #D3D3D3;
 }
 
-#zzyrztjspn .gt_sourcenote {
+#hhohbfsmsb .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1156,63 +1031,63 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   padding-right: 5px;
 }
 
-#zzyrztjspn .gt_left {
+#hhohbfsmsb .gt_left {
   text-align: left;
 }
 
-#zzyrztjspn .gt_center {
+#hhohbfsmsb .gt_center {
   text-align: center;
 }
 
-#zzyrztjspn .gt_right {
+#hhohbfsmsb .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#zzyrztjspn .gt_font_normal {
+#hhohbfsmsb .gt_font_normal {
   font-weight: normal;
 }
 
-#zzyrztjspn .gt_font_bold {
+#hhohbfsmsb .gt_font_bold {
   font-weight: bold;
 }
 
-#zzyrztjspn .gt_font_italic {
+#hhohbfsmsb .gt_font_italic {
   font-style: italic;
 }
 
-#zzyrztjspn .gt_super {
+#hhohbfsmsb .gt_super {
   font-size: 65%;
 }
 
-#zzyrztjspn .gt_footnote_marks {
+#hhohbfsmsb .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#zzyrztjspn .gt_asterisk {
+#hhohbfsmsb .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#zzyrztjspn .gt_indent_1 {
+#hhohbfsmsb .gt_indent_1 {
   text-indent: 5px;
 }
 
-#zzyrztjspn .gt_indent_2 {
+#hhohbfsmsb .gt_indent_2 {
   text-indent: 10px;
 }
 
-#zzyrztjspn .gt_indent_3 {
+#hhohbfsmsb .gt_indent_3 {
   text-indent: 15px;
 }
 
-#zzyrztjspn .gt_indent_4 {
+#hhohbfsmsb .gt_indent_4 {
   text-indent: 20px;
 }
 
-#zzyrztjspn .gt_indent_5 {
+#hhohbfsmsb .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -1221,9 +1096,9 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
     
     <tr class="gt_col_headings">
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="<strong>Characteristic</strong>"><strong>Characteristic</strong></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>Overall</strong>, N = 104<span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>Overall</strong>, N = 104<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>female</strong>, N = 38<span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>female</strong>, N = 38<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>male</strong>, N = 66<span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>male</strong>, N = 66<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>Overall</strong>, N = 120<span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>Overall</strong>, N = 120<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>female</strong>, N = 45<span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>female</strong>, N = 45<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>male</strong>, N = 75<span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>male</strong>, N = 75<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
     </tr>
   </thead>
   <tbody class="gt_table_body">
@@ -1232,25 +1107,25 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
 <td headers="stat_1" class="gt_row gt_center"></td>
 <td headers="stat_2" class="gt_row gt_center"></td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Kardioemboli</td>
-<td headers="stat_0" class="gt_row gt_center">23 (26%)</td>
-<td headers="stat_1" class="gt_row gt_center">8 (26%)</td>
-<td headers="stat_2" class="gt_row gt_center">15 (27%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">27 (28%)</td>
+<td headers="stat_1" class="gt_row gt_center">11 (31%)</td>
+<td headers="stat_2" class="gt_row gt_center">16 (26%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Småkarssygdom</td>
-<td headers="stat_0" class="gt_row gt_center">23 (26%)</td>
-<td headers="stat_1" class="gt_row gt_center">13 (42%)</td>
-<td headers="stat_2" class="gt_row gt_center">10 (18%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">25 (26%)</td>
+<td headers="stat_1" class="gt_row gt_center">13 (37%)</td>
+<td headers="stat_2" class="gt_row gt_center">12 (19%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Storkarssygdom</td>
-<td headers="stat_0" class="gt_row gt_center">25 (29%)</td>
-<td headers="stat_1" class="gt_row gt_center">6 (19%)</td>
-<td headers="stat_2" class="gt_row gt_center">19 (34%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">28 (29%)</td>
+<td headers="stat_1" class="gt_row gt_center">6 (17%)</td>
+<td headers="stat_2" class="gt_row gt_center">22 (35%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Ukendt årsag</td>
-<td headers="stat_0" class="gt_row gt_center">16 (18%)</td>
-<td headers="stat_1" class="gt_row gt_center">4 (13%)</td>
-<td headers="stat_2" class="gt_row gt_center">12 (21%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">17 (18%)</td>
+<td headers="stat_1" class="gt_row gt_center">5 (14%)</td>
+<td headers="stat_2" class="gt_row gt_center">12 (19%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Not classified</td>
-<td headers="stat_0" class="gt_row gt_center">17</td>
-<td headers="stat_1" class="gt_row gt_center">7</td>
-<td headers="stat_2" class="gt_row gt_center">10</td></tr>
+<td headers="stat_0" class="gt_row gt_center">23</td>
+<td headers="stat_1" class="gt_row gt_center">10</td>
+<td headers="stat_2" class="gt_row gt_center">13</td></tr>
   </tbody>
   
   <tfoot class="gt_footnotes">
@@ -1263,44 +1138,44 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
 </div>
 </div>
 </section>
-<section id="end-of-study-overview" class="level2 smaller">
-<h2 class="smaller anchored" data-anchor-id="end-of-study-overview">End-of-study overview</h2>
+<section id="end-of-study-overview" class="level2">
+<h2 class="anchored" data-anchor-id="end-of-study-overview">End-of-study overview</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>d <span class="sc">|&gt;</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(kon, eos2, eos3) <span class="sc">|&gt;</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">eos2 =</span> eos2,</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">eos3 =</span> <span class="fu">factor</span>(</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>           eos3,</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Other diagnose"</span>, <span class="st">"Lost to follow-up"</span>, <span class="st">"Dead"</span>, <span class="st">"Retracted consent"</span>)</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>         )) <span class="sc">|&gt;</span></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_summary</span>(</span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> <span class="st">"kon"</span>,</span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">missing =</span> <span class="st">"ifany"</span>,</span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">missing_text =</span> <span class="st">"(NOT LOST)"</span>,</span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="fu">list</span>(</span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>      eos2 <span class="sc">~</span> <span class="st">"Completed"</span>,</span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>      eos3 <span class="sc">~</span> <span class="st">"Reason"</span>)</span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_overall</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>targets<span class="sc">::</span><span class="fu">tar_read</span>(data) <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(kon, eos2, eos3) <span class="sc">|&gt;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">eos2 =</span> eos2,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">eos3 =</span> <span class="fu">factor</span>(</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>           eos3,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Other diagnose"</span>, <span class="st">"Lost to follow-up"</span>, <span class="st">"Dead"</span>, <span class="st">"Retracted consent"</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>         )) <span class="sc">|&gt;</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_summary</span>(</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> <span class="st">"kon"</span>,</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">missing =</span> <span class="st">"ifany"</span>,</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">missing_text =</span> <span class="st">"(NOT LOST)"</span>,</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="fu">list</span>(</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>      eos2 <span class="sc">~</span> <span class="st">"Completed"</span>,</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>      eos3 <span class="sc">~</span> <span class="st">"Reason"</span>)</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_overall</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 
-<div id="ghllnhakui" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#ghllnhakui table {
+<div id="xfsgrqzvmy" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#xfsgrqzvmy table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ghllnhakui thead, #ghllnhakui tbody, #ghllnhakui tfoot, #ghllnhakui tr, #ghllnhakui td, #ghllnhakui th {
+#xfsgrqzvmy thead, #xfsgrqzvmy tbody, #xfsgrqzvmy tfoot, #xfsgrqzvmy tr, #xfsgrqzvmy td, #xfsgrqzvmy th {
   border-style: none;
 }
 
-#ghllnhakui p {
+#xfsgrqzvmy p {
   margin: 0;
   padding: 0;
 }
 
-#ghllnhakui .gt_table {
+#xfsgrqzvmy .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1326,12 +1201,12 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   border-left-color: #D3D3D3;
 }
 
-#ghllnhakui .gt_caption {
+#xfsgrqzvmy .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ghllnhakui .gt_title {
+#xfsgrqzvmy .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1343,7 +1218,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   border-bottom-width: 0;
 }
 
-#ghllnhakui .gt_subtitle {
+#xfsgrqzvmy .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1355,7 +1230,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   border-top-width: 0;
 }
 
-#ghllnhakui .gt_heading {
+#xfsgrqzvmy .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1367,13 +1242,13 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   border-right-color: #D3D3D3;
 }
 
-#ghllnhakui .gt_bottom_border {
+#xfsgrqzvmy .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ghllnhakui .gt_col_headings {
+#xfsgrqzvmy .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1388,7 +1263,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   border-right-color: #D3D3D3;
 }
 
-#ghllnhakui .gt_col_heading {
+#xfsgrqzvmy .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1408,7 +1283,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   overflow-x: hidden;
 }
 
-#ghllnhakui .gt_column_spanner_outer {
+#xfsgrqzvmy .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1420,15 +1295,15 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   padding-right: 4px;
 }
 
-#ghllnhakui .gt_column_spanner_outer:first-child {
+#xfsgrqzvmy .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ghllnhakui .gt_column_spanner_outer:last-child {
+#xfsgrqzvmy .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ghllnhakui .gt_column_spanner {
+#xfsgrqzvmy .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1440,11 +1315,11 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   width: 100%;
 }
 
-#ghllnhakui .gt_spanner_row {
+#xfsgrqzvmy .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ghllnhakui .gt_group_heading {
+#xfsgrqzvmy .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1470,7 +1345,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   text-align: left;
 }
 
-#ghllnhakui .gt_empty_group_heading {
+#xfsgrqzvmy .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1485,15 +1360,15 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   vertical-align: middle;
 }
 
-#ghllnhakui .gt_from_md > :first-child {
+#xfsgrqzvmy .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ghllnhakui .gt_from_md > :last-child {
+#xfsgrqzvmy .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ghllnhakui .gt_row {
+#xfsgrqzvmy .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1512,7 +1387,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   overflow-x: hidden;
 }
 
-#ghllnhakui .gt_stub {
+#xfsgrqzvmy .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1525,7 +1400,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   padding-right: 5px;
 }
 
-#ghllnhakui .gt_stub_row_group {
+#xfsgrqzvmy .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1539,15 +1414,15 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   vertical-align: top;
 }
 
-#ghllnhakui .gt_row_group_first td {
+#xfsgrqzvmy .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ghllnhakui .gt_row_group_first th {
+#xfsgrqzvmy .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ghllnhakui .gt_summary_row {
+#xfsgrqzvmy .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1557,16 +1432,16 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   padding-right: 5px;
 }
 
-#ghllnhakui .gt_first_summary_row {
+#xfsgrqzvmy .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ghllnhakui .gt_first_summary_row.thick {
+#xfsgrqzvmy .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ghllnhakui .gt_last_summary_row {
+#xfsgrqzvmy .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1576,7 +1451,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   border-bottom-color: #D3D3D3;
 }
 
-#ghllnhakui .gt_grand_summary_row {
+#xfsgrqzvmy .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1586,7 +1461,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   padding-right: 5px;
 }
 
-#ghllnhakui .gt_first_grand_summary_row {
+#xfsgrqzvmy .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1596,7 +1471,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   border-top-color: #D3D3D3;
 }
 
-#ghllnhakui .gt_last_grand_summary_row_top {
+#xfsgrqzvmy .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1606,11 +1481,11 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   border-bottom-color: #D3D3D3;
 }
 
-#ghllnhakui .gt_striped {
+#xfsgrqzvmy .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ghllnhakui .gt_table_body {
+#xfsgrqzvmy .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1619,7 +1494,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   border-bottom-color: #D3D3D3;
 }
 
-#ghllnhakui .gt_footnotes {
+#xfsgrqzvmy .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1633,7 +1508,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   border-right-color: #D3D3D3;
 }
 
-#ghllnhakui .gt_footnote {
+#xfsgrqzvmy .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1642,7 +1517,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   padding-right: 5px;
 }
 
-#ghllnhakui .gt_sourcenotes {
+#xfsgrqzvmy .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1656,7 +1531,7 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   border-right-color: #D3D3D3;
 }
 
-#ghllnhakui .gt_sourcenote {
+#xfsgrqzvmy .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1664,63 +1539,63 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
   padding-right: 5px;
 }
 
-#ghllnhakui .gt_left {
+#xfsgrqzvmy .gt_left {
   text-align: left;
 }
 
-#ghllnhakui .gt_center {
+#xfsgrqzvmy .gt_center {
   text-align: center;
 }
 
-#ghllnhakui .gt_right {
+#xfsgrqzvmy .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ghllnhakui .gt_font_normal {
+#xfsgrqzvmy .gt_font_normal {
   font-weight: normal;
 }
 
-#ghllnhakui .gt_font_bold {
+#xfsgrqzvmy .gt_font_bold {
   font-weight: bold;
 }
 
-#ghllnhakui .gt_font_italic {
+#xfsgrqzvmy .gt_font_italic {
   font-style: italic;
 }
 
-#ghllnhakui .gt_super {
+#xfsgrqzvmy .gt_super {
   font-size: 65%;
 }
 
-#ghllnhakui .gt_footnote_marks {
+#xfsgrqzvmy .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ghllnhakui .gt_asterisk {
+#xfsgrqzvmy .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ghllnhakui .gt_indent_1 {
+#xfsgrqzvmy .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ghllnhakui .gt_indent_2 {
+#xfsgrqzvmy .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ghllnhakui .gt_indent_3 {
+#xfsgrqzvmy .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ghllnhakui .gt_indent_4 {
+#xfsgrqzvmy .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ghllnhakui .gt_indent_5 {
+#xfsgrqzvmy .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -1729,9 +1604,9 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
     
     <tr class="gt_col_headings">
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="<strong>Characteristic</strong>"><strong>Characteristic</strong></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>Overall</strong>, N = 104<span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>Overall</strong>, N = 104<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>female</strong>, N = 38<span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>female</strong>, N = 38<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>male</strong>, N = 66<span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>male</strong>, N = 66<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>Overall</strong>, N = 120<span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>Overall</strong>, N = 120<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>female</strong>, N = 45<span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>female</strong>, N = 45<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>male</strong>, N = 75<span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>male</strong>, N = 75<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
     </tr>
   </thead>
   <tbody class="gt_table_body">
@@ -1740,13 +1615,13 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
 <td headers="stat_1" class="gt_row gt_center"></td>
 <td headers="stat_2" class="gt_row gt_center"></td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Ja</td>
-<td headers="stat_0" class="gt_row gt_center">43 (67%)</td>
-<td headers="stat_1" class="gt_row gt_center">14 (58%)</td>
-<td headers="stat_2" class="gt_row gt_center">29 (72%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">55 (69%)</td>
+<td headers="stat_1" class="gt_row gt_center">18 (58%)</td>
+<td headers="stat_2" class="gt_row gt_center">37 (76%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Nej</td>
-<td headers="stat_0" class="gt_row gt_center">21 (33%)</td>
-<td headers="stat_1" class="gt_row gt_center">10 (42%)</td>
-<td headers="stat_2" class="gt_row gt_center">11 (28%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">25 (31%)</td>
+<td headers="stat_1" class="gt_row gt_center">13 (42%)</td>
+<td headers="stat_2" class="gt_row gt_center">12 (24%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;(NOT LOST)</td>
 <td headers="stat_0" class="gt_row gt_center">40</td>
 <td headers="stat_1" class="gt_row gt_center">14</td>
@@ -1756,25 +1631,25 @@ See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</co
 <td headers="stat_1" class="gt_row gt_center"></td>
 <td headers="stat_2" class="gt_row gt_center"></td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Other diagnose</td>
-<td headers="stat_0" class="gt_row gt_center">1 (4.8%)</td>
+<td headers="stat_0" class="gt_row gt_center">1 (4.0%)</td>
 <td headers="stat_1" class="gt_row gt_center">0 (0%)</td>
-<td headers="stat_2" class="gt_row gt_center">1 (9.1%)</td></tr>
+<td headers="stat_2" class="gt_row gt_center">1 (8.3%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Lost to follow-up</td>
-<td headers="stat_0" class="gt_row gt_center">2 (9.5%)</td>
-<td headers="stat_1" class="gt_row gt_center">0 (0%)</td>
-<td headers="stat_2" class="gt_row gt_center">2 (18%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">3 (12%)</td>
+<td headers="stat_1" class="gt_row gt_center">1 (7.7%)</td>
+<td headers="stat_2" class="gt_row gt_center">2 (17%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Dead</td>
-<td headers="stat_0" class="gt_row gt_center">1 (4.8%)</td>
+<td headers="stat_0" class="gt_row gt_center">1 (4.0%)</td>
 <td headers="stat_1" class="gt_row gt_center">0 (0%)</td>
-<td headers="stat_2" class="gt_row gt_center">1 (9.1%)</td></tr>
+<td headers="stat_2" class="gt_row gt_center">1 (8.3%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;Retracted consent</td>
-<td headers="stat_0" class="gt_row gt_center">17 (81%)</td>
-<td headers="stat_1" class="gt_row gt_center">10 (100%)</td>
-<td headers="stat_2" class="gt_row gt_center">7 (64%)</td></tr>
+<td headers="stat_0" class="gt_row gt_center">20 (80%)</td>
+<td headers="stat_1" class="gt_row gt_center">12 (92%)</td>
+<td headers="stat_2" class="gt_row gt_center">8 (67%)</td></tr>
     <tr><td headers="label" class="gt_row gt_left">&nbsp;&nbsp;&nbsp;&nbsp;(NOT LOST)</td>
-<td headers="stat_0" class="gt_row gt_center">83</td>
-<td headers="stat_1" class="gt_row gt_center">28</td>
-<td headers="stat_2" class="gt_row gt_center">55</td></tr>
+<td headers="stat_0" class="gt_row gt_center">95</td>
+<td headers="stat_1" class="gt_row gt_center">32</td>
+<td headers="stat_2" class="gt_row gt_center">63</td></tr>
   </tbody>
   
   <tfoot class="gt_footnotes">
