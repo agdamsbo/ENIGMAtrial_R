@@ -1,0 +1,19 @@
+---
+title: "Page source"
+format: html
+---
+
+Denne side er opbygget med Quarto i RStudio med hjælp fra
+`targets`-pakken, der er et værktøj til opbygge pipelines.
+
+Til orientering og inspiration er visulaiseringen af pipelinen brugt til
+at generere denne side herunder.
+
+```{r}
+targets::tar_config_set(store = here::here("_targets"))
+```
+
+```{r}
+targets::tar_visnetwork()
+```
+

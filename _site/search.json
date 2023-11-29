@@ -1,0 +1,44 @@
+[
+  {
+    "objectID": "doc/kilde.html",
+    "href": "doc/kilde.html",
+    "title": "Page source",
+    "section": "",
+    "text": "Denne side er opbygget med Quarto i RStudio med hjælp fra targets-pakken, der er et værktøj til opbygge pipelines.\nTil orientering og inspiration er visulaiseringen af pipelinen brugt til at generere denne side herunder.\n\n\nThe next free record name in REDCap was successfully determined in 0.2 seconds.  The http status code was 200.  Is is 123."
+  },
+  {
+    "objectID": "doc/about.html",
+    "href": "doc/about.html",
+    "title": "Om ENIGMA",
+    "section": "",
+    "text": "Formålet er at undersøge kognitiv svækkelse efter stroke\nTil undersøgelsen indgår MR, blodprøver, spørgeskemaer og kognitiv undersøgelse\nOpfølgningsstudie over 12 måneder og med registerbaseret langtidsopfølgning\nMål om 150 patienter over 3,5 år\nRESIST-patienter kan inkluderes - langtidsopfølgning\n\n\n\n\n\n\n\nInklusion\nEksklusion\n\n\n\n\nPersoner ≥60 år\nmRS &gt; 2\n\n\nAIS eller TCI\nKonkurrerende livstruende sygdom\n\n\nMR-verificeret\nAnden betydelig neurologisk sygdom\n\n\n\nSkal selv gives samtykke\n\n\n\nSkal tåle MR med kontrast\n\n\n\neGFR &lt; 30\n\n\n\n\n\n\n\nSmåkarssygdom og kognitiv funktion\nFysisk aktivitet og kognitiv funktion før/efter\nPerkonditionering og kognitivt outcome\nTidligere opmærksomhed på tab af kognitiv funktion\nMikrocirkulation ved AIS"
+  },
+  {
+    "objectID": "doc/about.html#baggrund",
+    "href": "doc/about.html#baggrund",
+    "title": "Om ENIGMA",
+    "section": "",
+    "text": "Formålet er at undersøge kognitiv svækkelse efter stroke\nTil undersøgelsen indgår MR, blodprøver, spørgeskemaer og kognitiv undersøgelse\nOpfølgningsstudie over 12 måneder og med registerbaseret langtidsopfølgning\nMål om 150 patienter over 3,5 år\nRESIST-patienter kan inkluderes - langtidsopfølgning"
+  },
+  {
+    "objectID": "doc/about.html#kriterier",
+    "href": "doc/about.html#kriterier",
+    "title": "Om ENIGMA",
+    "section": "",
+    "text": "Inklusion\nEksklusion\n\n\n\n\nPersoner ≥60 år\nmRS &gt; 2\n\n\nAIS eller TCI\nKonkurrerende livstruende sygdom\n\n\nMR-verificeret\nAnden betydelig neurologisk sygdom\n\n\n\nSkal selv gives samtykke\n\n\n\nSkal tåle MR med kontrast\n\n\n\neGFR &lt; 30"
+  },
+  {
+    "objectID": "doc/about.html#ny-viden",
+    "href": "doc/about.html#ny-viden",
+    "title": "Om ENIGMA",
+    "section": "",
+    "text": "Småkarssygdom og kognitiv funktion\nFysisk aktivitet og kognitiv funktion før/efter\nPerkonditionering og kognitivt outcome\nTidligere opmærksomhed på tab af kognitiv funktion\nMikrocirkulation ved AIS"
+  },
+  {
+    "objectID": "doc/status.html",
+    "href": "doc/status.html",
+    "title": "Status",
+    "section": "",
+    "text": "Afslutning af inklusionsperiode\n\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.4     ✔ readr     2.1.4\n✔ forcats   1.0.0     ✔ stringr   1.5.1\n✔ ggplot2   3.4.4     ✔ tibble    3.2.1\n✔ lubridate 1.9.3     ✔ tidyr     1.3.0\n✔ purrr     1.0.2     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\n\nDet er besluttet at sidste inklusiondag er 1. juni 2024. Det forventes at 144 patienter er inkluderet baseret på de seneste 4 måneders inklusion.\n\n\nDeltagere lost to follow-up\nDer har i inklusionsperioden været en del frafald af deltagere. I alt er der foreløbigt 26 deltagere, der er afsluttet før tid.\nHerunder er fordelingen plottet delt på køn."
+  }
+]

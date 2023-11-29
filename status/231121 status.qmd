@@ -1,6 +1,6 @@
 ---
 title: "ENIGMA"
-subtitle: "Statusmøde 20. juni 2023"
+subtitle: "Statusmøde 21. november 2023"
 date: last-modified
 author:
   - name: Andreas Gammelgaard Damsbo
@@ -29,7 +29,7 @@ affiliations:
     url: https://www.stenoaarhus.dk/
 format: 
   clean-revealjs:
-    footer: "ENIGMA - status - 20.jun.2023"
+    footer: "ENIGMA - status - 21.nov.2023"
     progress: true
     show-slide-number: all
     slide-number: h.v
@@ -42,35 +42,53 @@ editor: source
 ---
 
 ```{r}
-#| child: 'slides-status.qmd'
-targets::tar_config_set(store = here::here("_targets"))
-library(tidyverse)
-library(targets)
+#| child: 'ENIGMA-status.qmd'
 ```
 
 # Udfordringer
 
-## Overvejelser
-
--   Mulig hjælp til inklusioner
+- Inklusionsrate faldet. Fastholdes nogenlunde.
+- Hjælp til kontroller ikke længere muligt.
 
 # Opdatering af forventede publikationer
 
--   Udgangspunkt i tidligere dokument
+- Status på protokolartikel  
+- Dokumentet er nyligt rundsendt
 -   Nye ideer?
 -   Prioritering?
+
+#	Afslutning af inklusionsperiode
+
+```{r}
+targets::tar_config_set(store = here::here("_targets"))
+source(here::here("status/functions.R"))
+library(tidyverse)
+library(targets)
+data <- targets::tar_read(data)
+
+latest_months <- 4
+
+included_in_june <- targets::tar_read(data) |>
+  filtered_model(latest.months = latest_months) |>
+  predict_from_date()
+```
+
+Med sidste inklusion 1. juni 2024 er forventningen at `r included_in_june` er inkluderet baseret på de seneste `r latest_months` måneders inklusion.
+
+## Fremskrivninger
+
+```{r}
+targets::tar_read(plot_inclusion)
+```
+
+```{r}
+tibble(last_months=c(2,4,6),
+       enddate=estimate_enddate(data=targets::tar_read(data),basis = last_months)) |> gt::gt()
+```
+
+#	Databehandling og udgivelser
 
 # Næste møde
 
 # Eventuelt
 
-# Nyt projekt
-
-Lifestyle factors and small vessel disease in stroke patients
-
-```{r}
-#| child: 'slides-svdburden.qmd'
-#| 
-```
-
-<!-- ## {background-iframe="https://redcap.au.dk/redcap_v13.1.29/Design/online_designer.php?pid=8420" background-interactive="true"} -->

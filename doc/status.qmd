@@ -1,0 +1,39 @@
+---
+title: "Status"
+format: html
+date: last-modified
+---
+
+# Afslutning af inklusionsperiode
+
+```{r}
+targets::tar_config_set(store = here::here("_targets"))
+source(here::here("R/functions.R"))
+library(tidyverse)
+library(targets)
+data <- targets::tar_read(data)
+```
+
+```{r}
+latest_months <- 4
+
+included_in_june <- data |>
+  filtered_model(latest.months = latest_months) |>
+  predict_from_date()
+```
+
+Det er besluttet at sidste inklusiondag er 1. juni 2024. Det forventes
+at `r included_in_june` patienter er inkluderet baseret på de seneste
+`r latest_months` måneders inklusion.
+
+# Deltagere lost to follow-up
+
+Der har i inklusionsperioden været en del frafald af deltagere. I alt er
+der foreløbigt `r nrow(lost_subjects(data))` deltagere, der er afsluttet
+før tid.
+
+Herunder er fordelingen plottet delt på køn.
+
+```{r}
+targets::tar_read(plot_lost2follow)
+```

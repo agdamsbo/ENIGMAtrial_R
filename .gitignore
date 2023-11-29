@@ -54,3 +54,5 @@ backup.csv
 .Renviron
 
 *.log
+
+/.quarto/

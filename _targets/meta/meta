@@ -1,0 +1,21 @@
+name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
+.Random.seed|object|d7122ead52c9804f|||||||||||||||
+cheap_data_check|stem|8c35e13284ef92e1|5a30794115f5d0bc|ef46db3751d8e999|-1692042384|/Users/au301842/ENIGMAtrial_R/data/next_id.csv|t19690.413484043s|f3582cdc107e111b|10|file|local|vector|||0.005||
+data|stem|815e0a2c6985cde4|e3747af9ac58f53b|419b076bfed992ea|1588979285||t19690.4494783144s|c03dd536a3e44ccd|14030|rds|local|vector|||3.052||
+data_status_check|function|8850b045d993f1a4|||||||||||||||
+estimate_enddate|function|473e75432f52aec2|||||||||||||||
+file_id_data_check|stem|8c35e13284ef92e1|5a30794115f5d0bc|ef46db3751d8e999|703925600|/Users/au301842/ENIGMAtrial_R/data/next_id.csv|t19690.461516936s|f3582cdc107e111b|10|file|local|vector|||0.084||
+filtered_model|function|29ec24e00828dbf2|||||||||||||||
+gt_baseline_table|stem|d6657e64d258c54b|b1f3c771d3c01e07|f91175f3394b0a80|-1139914614||t19690.4495015472s|634c8a07b59c5800|17035|rds|local|vector|||1.363||
+lost_subjects|function|ef6efac2cd215340|||||||||||||||
+lost2follow_plot|function|38a295c3e5860999|||||||||||||||
+lost2follow_tbl|function|d6997703c55a82eb|||||||||||||||
+plot_inclusion|stem|a7b83dd132084787|8ad96aa39ff86e16|466c4a2f2e752df5|581613065||t19690.4494854448s|dd292a213d6cd7b4|192895|rds|local|vector|||0.512|1m22mUsing an external vector in selections was deprecated in tidyselect 1.1.0.36mℹ39m Please use all_of or any_of instead.   Was  data  selectnum   Now  data  selectall_ofnumSee httpstidyselect.rlib.orgreferencefaqexternalvector.html.. 1m22mUsing an external vector in selections was deprecated in tidyselect 1.1.0.36mℹ39m Please use all_of or any_of instead.   Was  data  selecteos_date   Now  data  selectall_ofeos_dateSee httpstidyselect.rlib.orgreferencefaqexternalvector.html.. 1m22mUsing size aesthetic for lines was deprecated in ggplot2 3.4.0.36mℹ39m Please use linewidth instead.|
+plot_lost2follow|stem|99952e7c21d1ee06|a7d6c1042f3f51a4|a6abb13e6b020037|34437657||t19690.4495024214s|4b25af738c9e18b9|88260|rds|local|vector|||0.01||
+predict_from_date|function|14a2ed29fc820f4e|||||||||||||||
+predict_from_num|function|381db176a9bc2051|||||||||||||||
+print_baseline|function|b05ed0aa619fe1e8|||||||||||||||
+quarto_website|stem|80b92853367e5bc4|9ca9049b72035e9e|8747491dd5eb1d8c|1602464050|_site*doc/about.qmd*doc/kilde.qmd*doc/status.qmd*index.qmd*_quarto.yml|t19690.4616379048s|c165c2509541efcb|2132304|file|local|vector|||9.472||
+redcap2list|function|4e18853a59199f8a|||||||||||||||
+status_plot|function|753483efb58cbba7|||||||||||||||
+status_presentation|stem||659645c55d1c2a5b|5104816ddb274597|725715114||t19681.3773103713s||0|file|local|vector|||3.089||33m39m System command quarto failed

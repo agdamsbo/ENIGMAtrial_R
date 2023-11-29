@@ -1,0 +1,41 @@
+Package: ENIGMAtrial
+Title: ENIGMA trial
+Version: 0.0.1
+Authors@R: 
+    person("Andreas Gammelgaard", "Damsbo", , "agdamsbo@clin.au.dk", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-7559-1154"))
+Description: Documenting coding work in the ENIGMA trial. This includes everything from preparation to final analyses.
+License: GPL-v3
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+Imports: 
+    broom,
+    dplyr,
+    fs,
+    ggplot2,
+    here,
+    keyring,
+    knitr,
+    parsnip,
+    purrr,
+    readr,
+    recipes,
+    REDCapCAST,
+    REDCapR,
+    rmarkdown,
+    stringr,
+    stRoke,
+    styler,
+    tarchetypes,
+    targets,
+    tidyr,
+    usethis,
+    workflows
+Suggests: 
+    pak,
+    prodigenr,
+    quarto,
+    roxygen2
+Depends: 
+    tidyverse
