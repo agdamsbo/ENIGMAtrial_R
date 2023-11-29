@@ -1,0 +1,12 @@
+---
+title: "Udgivelser"
+format: html
+---
+
+Der er endnu ikke udgivet videnskabelige artikler på baggrund af data
+fra ENIGMA.
+
+Her er [link til oversigt over planlagte
+artikler](https://aarhusuniversitet.sharepoint.com/:w:/r/sites/NNFSTIMULATEproject/Shared%20Documents/ENIGMA/Planlagte%20udgivelser/Planlagte%20artikler%20i%20ENIGMA.docx?d=w507cb79014044b28bd6602ebe7c34665&csf=1&web=1&e=NhaWXv)
+(kræver login).
+

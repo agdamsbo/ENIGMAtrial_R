@@ -12,8 +12,10 @@ website:
         text: Start
       - href: doc/status.qmd
         text: Status
+      - href: doc/papers.qmd
+        text: Udgivelser
       - href: doc/kilde.qmd
-        text: Kilde
+        text: Sidekilde
       - href: doc/about.qmd
         text: Om
   page-footer:
