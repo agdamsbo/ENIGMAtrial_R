@@ -56,3 +56,4 @@ backup.csv
 *.log
 
 /.quarto/
+_site
