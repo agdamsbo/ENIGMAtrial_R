@@ -1,6 +1,6 @@
 ---
 title: "Om ENIGMA"
-editor: visual
+editor: source
 ---
 
 # ENIGMA studiet

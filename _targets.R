@@ -52,7 +52,7 @@ source("/Users/au301842/ENIGMAtrial_R/src/status_plot.R")
 # I'm working to think of a better trigger to work with REDCap without just
 # downloading everything.
 # It is run every time the pipeline is build to trigger.
-data_status_check()
+suppressMessages(data_status_check())
 
 # Replace the target list below with your own:
 list(

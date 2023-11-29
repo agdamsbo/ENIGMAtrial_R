@@ -1,5 +1,10 @@
 ---
-title: "Om"
+title: "ENIGMA"
 format: html
+type: about
 ---
 
+Hermed en kort side til opdatering af inklusionsstatus mm for
+ENIGMA-studiet på Neurologi, AUH.
+
+Siden er primært til intern brug.
