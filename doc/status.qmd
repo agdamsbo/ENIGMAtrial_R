@@ -19,6 +19,15 @@ affiliations:
     url: https://www.en.auh.dk/departments/danish-stroke-centre/
 ---
 
+# Inklusionsrate
+
+Herunder plot af inklusionsraten. Den rette sorte linjer repræsenterer
+forventningen om 1 inklusion pr uge.
+
+```{r}
+targets::tar_read(plot_inclusion)
+```
+
 # Afslutning af inklusionsperiode
 
 ```{r}
@@ -47,7 +56,7 @@ I forbindels emed afslutning af projektet, er her samlet nogle nøgtal
 ang inklusionsantal og deltagere uden fuld opfølgning
 (lost-to-follow-up):
 
-| Nøgtal                                | Antal                    |
+| Nøgtal                                | Værdi                    |
 |---------------------------------------|--------------------------|
 | Planlagt afslutning af inklusion      | 1\. juni 2024            |
 | Forventede inkluderede ved afslutning | `r included_in_june`     |
