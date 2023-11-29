@@ -66,9 +66,9 @@ lost2follow_plot <- function(data) {
     ggplot2::geom_boxplot(width = 0.1, outlier.shape = NA) +
     ggplot2::geom_jitter(shape = 16, position = ggplot2::position_jitter()) +
     ggplot2::theme_minimal(base_size = 18) +
-    ggplot2::xlab("Inklusionstid") +
+    ggplot2::xlab("Inklusionstid (dage)") +
     ggplot2::ylab(NULL) +
-    ggplot2::ggtitle("Inklusionstid for deltagere uden fuld opfølgning") +
+    ggplot2::ggtitle("Deltagere uden fuld opfølgning") +
     ggplot2::theme(legend.position = "none")
 }
 

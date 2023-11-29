@@ -7,6 +7,7 @@ date: last-modified
 # Afslutning af inklusionsperiode
 
 ```{r}
+#| message: false
 targets::tar_config_set(store = here::here("_targets"))
 source(here::here("R/functions.R"))
 library(tidyverse)
@@ -20,19 +21,25 @@ latest_months <- 4
 included_in_june <- data |>
   filtered_model(latest.months = latest_months) |>
   predict_from_date()
+
+n_lost <- nrow(lost_subjects(data))
+f_lost <- n_lost/nrow(data)
+p_lost <- round(f_lost*100,1)
+n_complete <- floor(included_in_june*(1-f_lost))
 ```
 
-Det er besluttet at sidste inklusiondag er 1. juni 2024. Det forventes
-at `r included_in_june` patienter er inkluderet baseret på de seneste
-`r latest_months` måneders inklusion.
+I forbindels emed afslutning af projektet, er her samlet nogle nøgtal
+ang inklusionsantal og deltagere uden fuld opfølgning
+(lost-to-follow-up):
 
-# Deltagere lost to follow-up
+| Nøgtal                                | Antal                    |
+|---------------------------------------|--------------------------|
+| Planlagt afslutning af inklusion      | 1\. juni 2024            |
+| Forventede inkluderede ved afslutning | `r included_in_june`     |
+| Antal lost-to-follow-up               | `r n_lost` (`r p_lost`%) |
+| Forventede antal med fuld opfølgning  | `r n_complete`           |
 
-Der har i inklusionsperioden været en del frafald af deltagere. I alt er
-der foreløbigt `r nrow(lost_subjects(data))` deltagere, der er afsluttet
-før tid.
-
-Herunder er fordelingen plottet delt på køn.
+Herunder er tidspunkt for frafaldet plottet delt på køn.
 
 ```{r}
 targets::tar_read(plot_lost2follow)
