@@ -21,7 +21,7 @@ errors <- apply(is.na(df_all[2:3]),1,any)|!df_all$protocol_check
 
 if (any(errors)){
   print(df_all[errors,])
-  stop("Check ligge at booking oplysningerne passer for disse")
+  stop("Check lige at booking-oplysningerne passer for disse")
 }
 
 df_all <- df_all |> select(-ends_with("check"))
@@ -116,7 +116,7 @@ convert_ical(df_cal,
 
 # Commit and push GIT
 source("src/enigma_git_push.R")
-enigma_git_push(paste("calendar update",Sys.Date()))
+git_commit_push(f.path = "enigma_control.ics", c.message = paste("calendar update",Sys.Date()))
 
 # Clean environment
 rm(list=ls(pos=1))

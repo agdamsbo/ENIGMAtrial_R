@@ -1,37 +1,33 @@
-path <- "/Users/au301842/Downloads/ENIGMA-MROversigtTilRegnska_DATA_2023-10-06_2300.csv"
-
-ds <- read.csv(path)
-
-readRenviron("/Users/au301842/ENIGMAtrial_R/.Renviron")
-
-token <- Sys.getenv('ENIGMA_REDCAP_API')
-uri <- Sys.getenv('ENIGMA_REDCAP_URI')
+# path <- "/Users/au301842/Downloads/ENIGMA-MROversigtTilRegnska_DATA_2023-12-05_1431.csv"
+#
+# ds <- read.csv(path)
 
 # ds <- ds[,!grepl("^mr_",names(ds))]
 
 # fields <- sub("___[0-9]$","",names(ds)) |> unique()
-fields <- names(ds)
+# fields <- names(ds)
+#
+# fields <- fields[!grepl("redcap_", fields)]
+#
+# fields <- unique(gsub("___[0-9]", "", fields))
 
-fields <- fields[!grepl("redcap_",fields)]
-
-fields <- unique(gsub("___[0-9]","",fields))
-
-ids <- unique(ds$record_id)
-
-ls <- REDCapCAST::read_redcap_tables(uri,token,records = ids, fields = fields)
-
-ds_clean <- redcap_wider(ls)
+# ids <- unique(ds$record_id)
 
 # Function to remove row if all fields are NA
-all.na.omit <- function(ds){
-  fil <- !apply(is.na(ds),1,all)
-  ds[fil,]
-}
+# all.na.omit <- function(ds) {
+#   fil <- !apply(is.na(ds), 1, all)
+#   ds[fil, ]
+# }
 
-ds_clean <- ds_clean[(ds_clean$mr_24h_perf=="Ja"|ds_clean$mr_12m_perf=="Ja"),] |> all.na.omit()
+readRenviron("/Users/au301842/ENIGMAtrial_R/.Renviron")
 
-ds_exp <- ds_clean |> dplyr::select(record_id, resist_id, incl_date, dplyr::ends_with("_perf"))
-
-openxlsx::write.xlsx(ds_exp,paste0(unlist(strsplitx(path,split = "ENIGMA"))[1],"MR_overblik",Sys.Date(),".xlsx"),
-          rowNames = FALSE)
-
+REDCapCAST::read_redcap_tables(uri = "https://redcap.au.dk/api/", token = Sys.getenv("ENIGMA_REDCAP_API"), fields = c(
+  "incl_date", "record_id", "resist_id", "incl_mr", "mr_reg",
+  "mr_24h_perf", "mr_24h_prot", "mr_24h_corr", "mr_12m_perf"
+)) |>
+  REDCapCAST::redcap_wider() |>
+  dplyr::filter((mr_24h_perf == "Ja" | mr_12m_perf == "Ja")) |>
+  dplyr::select(record_id, resist_id, incl_date, dplyr::ends_with("_perf")) |>
+  openxlsx::write.xlsx(paste0("/Users/au301842/Downloads/MR_overblik_a", Sys.Date(), ".xlsx"),
+    rowNames = FALSE
+  )
