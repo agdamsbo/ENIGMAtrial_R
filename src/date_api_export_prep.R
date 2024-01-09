@@ -35,7 +35,7 @@ df_all <- lapply(2:3,function(i){
   )
 }) |> bind_rows() |> 
   # Filter to only include bookings after current date (include previous five days)
-  filter((start>ymd_hms(lubridate::now())-5*86400 | is.na(start)&!protocol_check)) |> 
+  filter((start>ymd_hms(lubridate::now())-90*86400 | is.na(start)&!protocol_check)) |>
   # Inly include the first coming visit
   filter(!duplicated(id))
 

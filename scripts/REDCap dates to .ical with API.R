@@ -19,8 +19,10 @@ source("src/date_api_export_prep.R")
 
 errors <- apply(is.na(df_all[2:3]),1,any)|!df_all$protocol_check
 
-if (any(errors)){
-  print(df_all[errors,])
+df_error <- df_all |> dplyr::filter(start > lubridate::now(), errors)
+
+if (nrow(df_error)>1){
+  print(df_error)
   stop("Check lige at booking-oplysningerne passer for disse")
 }
 
@@ -87,6 +89,8 @@ filled <- files_filter(output_folder,"kontroller_f")
 
 # Loads the last (newest) filled spreadsheet to include new changes
 filled_file <- readODS::read_ods(filled[length(filled)])
+
+# all <- filled |> purrr::map(readODS::read_ods) |> purrr::reduce(dplyr::full_join)
 
 # Joins the filled file with the original. Keeps original time stamps
 f <- inner_join(df[c("id","name","tid")],filled_file[,colnames(filled_file)!="tid"])
