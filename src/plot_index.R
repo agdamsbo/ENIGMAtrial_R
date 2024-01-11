@@ -17,7 +17,7 @@ plot_index <- function(ds,id="record_id",sub_plot="_is",scores=c("_is","_lo","_u
              tidyselect::ends_with(scores)))|>
     tidyr::pivot_longer(cols=-c(id,facet.by))|>
     subset(grepl(sub_plot,name))|>
-    dplyr::mutate(value=as.numeric(value),
+    dplyr::mutate(value=suppressWarnings(as.numeric(value)),
            name=factor(name,labels = dom_names))
   
   if (!is.null(facet.by)){
