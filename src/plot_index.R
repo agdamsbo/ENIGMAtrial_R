@@ -12,9 +12,9 @@ plot_index <- function(ds,id="record_id",sub_plot="_is",scores=c("_is","_lo","_u
 # library(tidyr)
  
   df_plot<-ds|>
-    select(c(id,
+    dplyr::select(c(id,
              facet.by,
-             ends_with(scores)))|>
+             tidyselect::ends_with(scores)))|>
     tidyr::pivot_longer(cols=-c(id,facet.by))|>
     subset(grepl(sub_plot,name))|>
     dplyr::mutate(value=as.numeric(value),
@@ -30,30 +30,30 @@ plot_index <- function(ds,id="record_id",sub_plot="_is",scores=c("_is","_lo","_u
 
 if (sub_plot=="_is"){
   index_plot<-df_plot|>
-    ggplot(aes(x=name, y=value, color=factor(id), group=factor(id))) + 
-  geom_point() +
-  geom_path() +
-  expand_limits(y=c(40,160)) +
-  scale_y_continuous(breaks=seq(40,160,by=10)) +
-  ylab("Index Score") +
-  xlab("Domain")+
-  labs(colour = "ID")
+    ggplot2::ggplot(ggplot2::aes(x=name, y=value, color=factor(id), group=factor(id))) + 
+    ggplot2::geom_point() +
+    ggplot2::geom_path() +
+    ggplot2::expand_limits(y=c(40,160)) +
+    ggplot2::scale_y_continuous(breaks=seq(40,160,by=10)) +
+    ggplot2::ylab("Index Score") +
+    ggplot2::xlab("Domain")+
+    ggplot2::labs(colour = "ID")
 }
 
 if (sub_plot=="_per"){
   index_plot<-df_plot|>
-    ggplot(aes(x=name, y=value, fill=factor(id)))+
-    geom_col(position = "dodge") +
-    expand_limits(y=c(0,100)) +
-    scale_y_continuous(breaks=seq(0,100,by=10)) +
-    xlab("Cognitive domains") +
-    ylab("Percentile") + 
-    labs(fill = "ID")
+    ggplot2::ggplot(ggplot2::aes(x=name, y=value, fill=factor(id)))+
+    ggplot2::geom_col(position = "dodge") +
+    ggplot2::expand_limits(y=c(0,100)) +
+    ggplot2::scale_y_continuous(breaks=seq(0,100,by=10)) +
+    ggplot2::xlab("Cognitive domains") +
+    ggplot2::ylab("Percentile") + 
+    ggplot2::labs(fill = "ID")
 }
 
 if (!is.null(facet.by)){
-  index_plot + facet_grid(cols=vars(facet)) +
-    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+  index_plot + ggplot2::facet_grid(cols=vars(facet)) +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, hjust=1)) 
     
 } else {
   index_plot
