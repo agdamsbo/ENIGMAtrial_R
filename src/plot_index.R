@@ -27,7 +27,7 @@ plot_index <- function(ds,id="record_id",sub_plot="_is",scores=c("_is","_lo","_u
   }
 
 
-
+suppressWarnings(
 if (sub_plot=="_is"){
   index_plot<-df_plot|>
     ggplot2::ggplot(ggplot2::aes(x=name, y=value, color=factor(id), group=factor(id))) + 
@@ -38,8 +38,9 @@ if (sub_plot=="_is"){
     ggplot2::ylab("Index Score") +
     ggplot2::xlab("Domain")+
     ggplot2::labs(colour = "ID")
-}
+})
 
+suppressWarnings(
 if (sub_plot=="_per"){
   index_plot<-df_plot|>
     ggplot2::ggplot(ggplot2::aes(x=name, y=value, fill=factor(id)))+
@@ -49,7 +50,7 @@ if (sub_plot=="_per"){
     ggplot2::xlab("Cognitive domains") +
     ggplot2::ylab("Percentile") + 
     ggplot2::labs(fill = "ID")
-}
+})
 
 if (!is.null(facet.by)){
   index_plot + ggplot2::facet_grid(cols=vars(facet)) +
