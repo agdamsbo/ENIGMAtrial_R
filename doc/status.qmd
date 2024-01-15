@@ -71,3 +71,8 @@ Herunder er tidspunkt for frafaldet plottet delt på køn.
 ```{r}
 targets::tar_read(plot_lost2follow)
 ```
+
+## Projektkalender
+
+Abonnér på kontrol-aftaler i projektet [via linket
+her](webcal://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/enigma_control.ics).
