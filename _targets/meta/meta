@@ -1,21 +1,21 @@
 name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
-.Random.seed|object|beefe7c125a344f5|||||||||||||||
+.Random.seed|object|759cf4480a087a8e|||||||||||||||
 cheap_data_check|stem|8c35e13284ef92e1|5a30794115f5d0bc|ef46db3751d8e999|-1692042384|/Users/au301842/ENIGMAtrial_R/data/next_id.csv|t19690.413484043s|f3582cdc107e111b|10|file|local|vector|||0.005||
-data|stem|e96e165ac7f2e8ab|e3747af9ac58f53b|85303fd869c45194|1588979285||t19711.5964510756s|9325c1ccd26acf5d|14040|rds|local|vector|||3||
+data|stem|28b71943169b3edc|0994c9a80d5f6630|555a47a7f4485bda|1588979285||t19737.5213295514s|627e96fb3897ece3|14206|rds|local|vector|||2.432||
 data_status_check|function|8850b045d993f1a4|||||||||||||||
 estimate_enddate|function|473e75432f52aec2|||||||||||||||
-file_id_data_check|stem|a5cb6bd00e5aeb40|5a30794115f5d0bc|ef46db3751d8e999|703925600|/Users/au301842/ENIGMAtrial_R/data/next_id.csv|t19711.6079431154s|f3582cdc107e111b|10|file|local|vector|||0.08||
+file_id_data_check|stem|76ee90e4b1d55e95|5a30794115f5d0bc|ef46db3751d8e999|703925600|/Users/au301842/ENIGMAtrial_R/data/next_id.csv|t19737.5173453117s|f3582cdc107e111b|10|file|local|vector|||0.048||
 filtered_model|function|29ec24e00828dbf2|||||||||||||||
-gt_baseline_table|stem|053d7a6834605aae|b1f3c771d3c01e07|0c22ec0036fff46f|-1139914614||t19711.5964743945s|59a5f51fea1d58c2|17072|rds|local|vector|||1.481||
+gt_baseline_table|stem|230be284e11c80c5|b1f3c771d3c01e07|36c57e2f3fc77ba3|-1139914614||t19737.5054315271s|6ad31aac6ec98314|16806|rds|local|vector|||1.202||
 lost_subjects|function|ef6efac2cd215340|||||||||||||||
 lost2follow_plot|function|05b4db55e4aadac5|||||||||||||||
 lost2follow_tbl|function|d6997703c55a82eb|||||||||||||||
-plot_inclusion|stem|0b38d4a5dcdf317e|8ad96aa39ff86e16|d4c34c430395c884|581613065||t19711.5964569814s|3eda3a0179b2ad8e|192917|rds|local|vector|||0.438|1m22mUsing an external vector in selections was deprecated in tidyselect 1.1.0.36mℹ39m Please use all_of or any_of instead.   Was  data  selectnum   Now  data  selectall_ofnumSee httpstidyselect.rlib.orgreferencefaqexternalvector.html.. 1m22mUsing an external vector in selections was deprecated in tidyselect 1.1.0.36mℹ39m Please use all_of or any_of instead.   Was  data  selecteos_date   Now  data  selectall_ofeos_dateSee httpstidyselect.rlib.orgreferencefaqexternalvector.html.. 1m22mUsing size aesthetic for lines was deprecated in ggplot2 3.4.0.36mℹ39m Please use linewidth instead.|
-plot_lost2follow|stem|d09eb50c7197a525|a7d6c1042f3f51a4|610e509ba4eb33af|34437657||t19711.5964750387s|a637f89215c84aa1|88288|rds|local|vector|||0.01||
+plot_inclusion|stem|bd441e1591c3df90|8ad96aa39ff86e16|1082de6f530458f3|581613065||t19737.5054173142s|3ff48ed6a9c7a577|193106|rds|local|vector|||0.245|1m22mUsing an external vector in selections was deprecated in tidyselect 1.1.0.36mℹ39m Please use all_of or any_of instead.   Was  data  selectnum   Now  data  selectall_ofnumSee httpstidyselect.rlib.orgreferencefaqexternalvector.html.. 1m22mUsing an external vector in selections was deprecated in tidyselect 1.1.0.36mℹ39m Please use all_of or any_of instead.   Was  data  selecteos_date   Now  data  selectall_ofeos_dateSee httpstidyselect.rlib.orgreferencefaqexternalvector.html.. 1m22mUsing size aesthetic for lines was deprecated in ggplot2 3.4.0.36mℹ39m Please use linewidth instead.|
+plot_lost2follow|stem|b65f89a5f275dd65|a7d6c1042f3f51a4|41d3f36892528897|34437657||t19737.5054321162s|569952607e9a45c3|88459|rds|local|vector|||0.01||
 predict_from_date|function|14a2ed29fc820f4e|||||||||||||||
 predict_from_num|function|381db176a9bc2051|||||||||||||||
 print_baseline|function|b05ed0aa619fe1e8|||||||||||||||
-quarto_website|stem|4727b657666b9ab9|0b87256de5ac8610|62ecff02e90c271b|1602464050|_site*doc/about.qmd*doc/kilde.qmd*doc/papers.qmd*doc/status.qmd*index.qmd*_quarto.yml|t19711.5965269047s|42acb44d9cb6d569|4766|file|local|vector|||4.489||
-redcap2list|function|4e18853a59199f8a|||||||||||||||
+quarto_website|stem|c5b024b19169e75f|0b87256de5ac8610|3f98280dbffb7fd4|1602464050|_site*doc/about.qmd*doc/kilde.qmd*doc/papers.qmd*doc/status.qmd*index.qmd*_quarto.yml|t19737.5173975169s|0aba3ce350f55491|4983|file|local|vector|||3.261||
+redcap2list|function|43fec2576206341c|||||||||||||||
 status_plot|function|753483efb58cbba7|||||||||||||||
 status_presentation|stem||659645c55d1c2a5b|5104816ddb274597|725715114||t19681.3773103713s||0|file|local|vector|||3.089||33m39m System command quarto failed

@@ -5,11 +5,10 @@
 #' @return list
 #' @examples
 #' redcap2list()
-redcap2list <- function(next_id) {
+redcap2list <- function() {
   REDCapCAST::read_redcap_tables(
     uri = "https://redcap.au.dk/api/",
     token = keyring::key_get("enigma_api_key"),
-    records = seq_len(next_id - 1),
     fields = c("record_id", "incl_by", "incl_date", "age", "kon", "resist_incl"),
     forms = c(
       "klassifikation_af_primre_stroke",

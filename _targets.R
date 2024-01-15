@@ -57,13 +57,9 @@ suppressMessages(data_status_check())
 # Replace the target list below with your own:
 list(
   tar_target(
-    name = file_id_data_check,
-    format = "file",
-    command = here::here("data/next_id.csv")
-  ),
-  tar_target(
     name = data,
-    command = REDCapCAST::redcap_wider(redcap2list(next_id=read.csv(file_id_data_check)[[1]]))
+    command = REDCapCAST:: redcap_wider(redcap2list()),
+    cue = tar_cue("always")
   ),
   tar_target(
     name = plot_inclusion,

@@ -19,6 +19,15 @@ affiliations:
     url: https://www.en.auh.dk/departments/danish-stroke-centre/
 ---
 
+```{r}
+#| message: false
+targets::tar_config_set(store = here::here("_targets"))
+source(here::here("R/functions.R"))
+library(tidyverse)
+library(targets)
+data <- targets::tar_read(data)
+```
+
 # Inklusionsrate
 
 Herunder plot af inklusionsraten. Den rette sorte linjer repræsenterer
@@ -28,16 +37,10 @@ forventningen om 1 inklusion pr uge.
 targets::tar_read(plot_inclusion)
 ```
 
-# Afslutning af inklusionsperiode
+Senest blev patient nr `r max(data$record_id)` inkluderet den
+`r strftime(max(data$incl_date),format="%d-%m-%Y")`.
 
-```{r}
-#| message: false
-targets::tar_config_set(store = here::here("_targets"))
-source(here::here("R/functions.R"))
-library(tidyverse)
-library(targets)
-data <- targets::tar_read(data)
-```
+# Afslutning af inklusionsperiode
 
 ```{r}
 latest_months <- 4

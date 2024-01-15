@@ -1,7 +1,12 @@
 ---
 title: "ENIGMA"
 format: html
-type: about
+about: 
+  template: jolla
+  links: 
+    - href: "mailto:andrlr@rm.dk"
+      icon: "envelope"
+      text: Contact
 ---
 
 Hermed en kort side til opdatering af inklusionsstatus mm for
