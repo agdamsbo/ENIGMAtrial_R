@@ -1,29 +1,43 @@
 
-# Workflow:
-# 
-# 
-# 
-
 ## =============================================================================
 ## Getting data from REDCap
 ## =============================================================================
-library(tidyverse)
+
 # REDCap data export/import script
-token <- keyring::key_get("enigma_api_key")
-
+# token <- keyring::key_get("enigma_api_key")
+library(calendar)
 source("src/date_api_export.R")
-## Drops environment but data.frame
-
-# Formatting
 source("src/date_api_export_prep.R")
+source("src/convert_ical.R")
+source("src/enigma_git_push.R")
+
+
+#' Title
+#'
+#' @param token 
+#' @param allow.stops 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' enigma_calendar_update(allow.stops=TRUE)
+#' enigma_calendar_update(allow.stops=FALSE)
+enigma_calendar_update <- function(token=keyring::key_get("enigma_api_key"),
+                                   allow.stops=TRUE){
+
+df_all <- data_api_export(token) |> data_api_export_prep()
 
 errors <- apply(is.na(df_all[2:3]),1,any)|!df_all$protocol_check
 
 df_error <- df_all |> dplyr::filter(start > lubridate::now(), errors)
 
+
 if (nrow(df_error)>1){
   print(df_error)
+  if (allow.stops){
   stop("Check lige at booking-oplysningerne passer for disse")
+    }
 }
 
 df_all <- df_all |> select(-ends_with("check"))
@@ -76,14 +90,17 @@ df |> transmute(tid, id, kontrol=name,
                 assessor=ifelse(!is.na(assessor),assessor,"")) |> 
   readODS::write_ods(path = file_path)
 
+if (allow.stops) {
 system2("open",output_folder)
 system2("open",file_path)
-
+}
 ## =============================================================================
 ## Including assessor
 ## =============================================================================
 
-stop("PART 2: fill file and continue manually!")
+if (allow.stops) {
+  stop("PART 2: fill file and continue manually!")
+}
 
 filled <- files_filter(output_folder,"kontroller_f")
 
@@ -109,18 +126,16 @@ df_cal <- f |> transmute(id=id,
 ## =============================================================================
 
 # Conversion to calendar files (.ics)
-library(calendar)
-source("src/convert_ical.R")
+
 convert_ical(df_cal, 
              start="start",
              id="id",
              name="label",
              room="room")[[2]] |> 
-  ic_write(file="enigma_control.ics")
+  calendar::ic_write(file="enigma_control.ics")
 
 # Commit and push GIT
-source("src/enigma_git_push.R")
-git_commit_push(f.path = "enigma_control.ics", c.message = paste("calendar update",Sys.Date()))
 
-# Clean environment
-rm(list=ls(pos=1))
+git_commit_push(f.path = "enigma_control.ics", c.message = paste("calendar update",Sys.Date()))
+}
+

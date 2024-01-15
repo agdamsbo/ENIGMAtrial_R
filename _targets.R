@@ -73,6 +73,10 @@ list(
     name = plot_lost2follow,
     command = lost2follow_plot(data)
   ) ,
+  tar_target(
+    name = calandar_update,
+    command = enigma_calendar_update(allow.stops=FALSE)
+  ) ,
   tar_quarto(
     name = quarto_website,
     path = "."

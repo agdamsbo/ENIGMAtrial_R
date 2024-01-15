@@ -1,15 +1,20 @@
 
+data_api_export_prep <- function(d){
 d_mod <- d |> 
   # Defining variable for next visit
-  mutate(eos_next_book=as.POSIXct(ifelse(is.na(visit_book12),incl_book3,visit_book12))) |> 
+  dplyr::mutate(eos_next_book=as.POSIXct(ifelse(is.na(visit_book12),incl_book3,visit_book12))) |> 
   # Filter to only include patients booking after EOS if early out
   # filter(eos_next_book>=eos1) |> 
   # Filter to only include patients not completed
-  filter(is.na(eos1)) |> 
+  dplyr::filter(is.na(eos1)) |> 
   # Exclude EOS vars
-  select(-starts_with("eos"))
+  dplyr::select(-starts_with("eos"))
 
-splitter <- gsub("^\\d.*|[A-Za-z_]", "", colnames(d_mod)) |> stRoke::add_padding(pad = "0") %>% paste0("A",.)|> factor()
+splitter <- gsub("^\\d.*|[A-Za-z_]", "", colnames(d_mod)) |> 
+  stRoke::add_padding(pad = "0")  |>  (\(x){
+    paste0("A",x)
+  })() |> 
+  factor()
 
 d_list <- d_mod |> split.default(f = splitter)
 
@@ -20,7 +25,7 @@ reg <- c(0,3,12)*30
 reg_range <- data.frame(time1=reg-15,time2=reg+15)
 
 df_all <- lapply(2:3,function(i){
-  tibble(
+  dplyr::tibble(
     id=d_list[[1]][,1],
     start=d_list[[i]][,1],
     room=ifelse(is.na(d_list[[i]][,2]),d_list[[i]][,3],d_list[[i]][,2]),
@@ -33,15 +38,18 @@ df_all <- lapply(2:3,function(i){
       !is.na(time2visit_check),
     name=paste(gsub("[A0]", "", names(d_list)[i]),"mdr")
   )
-}) |> bind_rows() |> 
+}) |> dplyr::bind_rows() |> 
   # Filter to only include bookings after current date (include previous five days)
-  filter((start>ymd_hms(lubridate::now())-90*86400 | is.na(start)&!protocol_check)) |>
+  dplyr::filter((start>lubridate::ymd_hms(lubridate::now())-90*86400 | is.na(start)&!protocol_check)) |>
   # Inly include the first coming visit
-  filter(!duplicated(id))
+  dplyr::filter(!duplicated(id))
 
+df_all
+
+}
 # Clean-up
-source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/remove_all_but.R")
-remove_all_but(df_all,d)
+# source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/remove_all_but.R")
+# remove_all_but(df_all,d)
 
 
 # date_api_export_prep<-function(dta,include_all=FALSE,cut_date=-5,num_c=2,ev_names=c("3mdr","12mdr"),date_col="_book",room_col="_room",other_col="_other"){
