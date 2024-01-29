@@ -1,1 +1,1 @@
-Sitemap: https://github.com/agdamsbo/ENIGMAtrial_R/sitemap.xml
+Sitemap: https://agdamsbo.github.io/ENIGMAtrial_R/sitemap.xml
