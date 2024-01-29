@@ -32,6 +32,7 @@ dta <- redcap_read(
   fields       = "record_id"
 )$data
   
+dta <- dta |> dplyr::mutate(rbans_age = floor(stRoke::age_calc(dob=readr::parse_date(rbans_dob,format="%d-%m-%Y"),enddate=rbans_date)))
 
 ## Handling only 3 months data
 
