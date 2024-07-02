@@ -1,17 +1,24 @@
 [
   {
+    "objectID": "doc/status.html",
+    "href": "doc/status.html",
+    "title": "Status",
+    "section": "",
+    "text": "Herunder plot af inklusionsraten. Den rette sorte linjer repræsenterer forventningen om 1 inklusion pr uge.\n\n\n\n\n\n\n\n\n\nSenest blev patient nr 125 inkluderet den 15-01-2024."
+  },
+  {
+    "objectID": "doc/status.html#projektkalender",
+    "href": "doc/status.html#projektkalender",
+    "title": "Status",
+    "section": "Projektkalender",
+    "text": "Projektkalender\nAbonnér på kontrol-aftaler i projektet via linket her."
+  },
+  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "ENIGMA",
     "section": "",
     "text": "Hermed en kort side til opdatering af inklusionsstatus mm for ENIGMA-studiet på Neurologi, AUH.\nSiden er primært til intern brug."
-  },
-  {
-    "objectID": "doc/papers.html",
-    "href": "doc/papers.html",
-    "title": "Udgivelser",
-    "section": "",
-    "text": "Der er endnu ikke udgivet videnskabelige artikler på baggrund af data fra ENIGMA.\nHer er link til oversigt over planlagte artikler (kræver login)."
   },
   {
     "objectID": "doc/about.html",
@@ -42,24 +49,17 @@
     "text": "Småkarssygdom og kognitiv funktion\nFysisk aktivitet og kognitiv funktion før/efter\nPerkonditionering og kognitivt outcome\nTidligere opmærksomhed på tab af kognitiv funktion\nMikrocirkulation ved AIS"
   },
   {
+    "objectID": "doc/papers.html",
+    "href": "doc/papers.html",
+    "title": "Udgivelser",
+    "section": "",
+    "text": "Der er endnu ikke udgivet videnskabelige artikler på baggrund af data fra ENIGMA.\nHer er link til oversigt over planlagte artikler (kræver login)."
+  },
+  {
     "objectID": "doc/kilde.html",
     "href": "doc/kilde.html",
     "title": "Page source",
     "section": "",
     "text": "Denne side er opbygget med Quarto i RStudio med hjælp fra targets-pakken, der er et værktøj til opbygge pipelines.\nTil orientering og inspiration er visulaiseringen af pipelinen brugt til at generere denne side herunder.\n\n\nThe next free record name in REDCap was successfully determined in 0.2 seconds.  The http status code was 200.  Is is 123."
-  },
-  {
-    "objectID": "doc/status.html",
-    "href": "doc/status.html",
-    "title": "Status",
-    "section": "",
-    "text": "Herunder plot af inklusionsraten. Den rette sorte linjer repræsenterer forventningen om 1 inklusion pr uge.\n\n\n\n\n\n\n\n\n\nSenest blev patient nr 125 inkluderet den 15-01-2024."
-  },
-  {
-    "objectID": "doc/status.html#projektkalender",
-    "href": "doc/status.html#projektkalender",
-    "title": "Status",
-    "section": "Projektkalender",
-    "text": "Projektkalender\nAbonnér på kontrol-aftaler i projektet via linket her."
   }
 ]
