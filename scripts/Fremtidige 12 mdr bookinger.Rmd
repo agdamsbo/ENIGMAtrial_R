@@ -30,7 +30,7 @@ df<-redcap_api_export_short(id= NULL,
   dplyr::filter(as.Date(visit_book12_3_months_arm_1) > Sys.Date()) |>
   dplyr::mutate(note="",
                 visit_book12_3_months_arm_1=format(as.POSIXct(visit_book12_3_months_arm_1), 
-                                                   format = "%d-%m-%Y")) |> 
+                                                   format = "%d-%m-%Y %H:%M")) |> 
   dplyr::rename("ID" = "record_id",
                 "cpr" = "cpr_inclusion_arm_1",
                 "12 mdr booking" = "visit_book12_3_months_arm_1",
@@ -42,6 +42,3 @@ df<-redcap_api_export_short(id= NULL,
 knitr::kable(df,
              format = "latex")
 ```
-
-
-

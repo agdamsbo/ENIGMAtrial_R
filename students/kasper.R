@@ -19,5 +19,6 @@ df <- REDCapCAST::easy_redcap(
     # IQCODE score
     "iq_score"
   ),
-  events = c("inclusion_arm_1", "3_months_arm_1")
+  events = c("inclusion_arm_1", "3_months_arm_1"),
+  widen.data = TRUE
 )

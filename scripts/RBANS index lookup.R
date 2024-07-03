@@ -87,3 +87,17 @@ rbans |>
   # filter(record_id %in% sub.fil) |>
   plot_index(id="record_id",facet.by = "redcap_event")
 
+
+## =============================================================================
+## ID lookup
+## =============================================================================
+
+ds <- REDCapCAST::read_redcap_instrument(uri = "https://redcap.au.dk/api/",
+                                   key = "enigma_api_key",
+                                   instrument = "rbans",records = 97) 
+ds |> 
+  # (function(.x){
+  #   split(.x,.x[["redcap_event_name"]])
+  # })() |> 
+  dplyr::select(redcap_event_name,tidyselect::everything()) |> 
+  cognitive.index.lookup::plot_index()

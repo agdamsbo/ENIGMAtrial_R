@@ -1,17 +1,25 @@
 ---
-title: "ENIGMA status"
+title: "ENIGMA intro"
 editor: visual
 ---
 
-# ENIGMA studiet
+# Introduktion
 
 ## Baggrund
 
+::: incremental
 -   Formålet er at undersøge kognitiv svækkelse efter stroke
--   Til undersøgelsen indgår MR, blodprøver, spørgeskemaer og kognitiv undersøgelse
--   Opfølgningsstudie over 12 måneder og med registerbaseret langtidsopfølgning
+
+-   Til undersøgelsen indgår MR, blodprøver, spørgeskemaer og kognitiv
+    undersøgelse
+
+-   Opfølgningsstudie over 12 måneder og med registerbaseret
+    langtidsopfølgning
+
 -   Mål om 150 patienter over 3,5 år
+
 -   RESIST-patienter kan inkluderes - langtidsopfølgning
+:::
 
 ## Kriterier
 
@@ -20,14 +28,28 @@ editor: visual
 | Personer ≥60 år | mRS \> 2                           |
 | AIS eller TCI   | Konkurrerende livstruende sygdom   |
 | MR-verificeret  | Anden betydelig neurologisk sygdom |
-|                 | Skal selv gives samtykke           |
+|                 | Skal selv give samtykke            |
 |                 | Skal tåle MR med kontrast          |
 |                 | eGFR \< 30                         |
 
 ## Ny viden
 
--   Småkarssygdom og kognitiv funktion
--   Fysisk aktivitet og kognitiv funktion før/efter
--   Perkonditionering og kognitivt outcome
--   Tidligere opmærksomhed på tab af kognitiv funktion
--   Mikrocirkulation ved AIS
+<!-- -   Småkarssygdom og kognitiv funktion -->
+
+<!-- -   Fysisk aktivitet og kognitiv funktion før/efter -->
+
+<!-- -   Perkonditionering og kognitivt outcome -->
+
+<!-- -   Tidligere opmærksomhed på tab af kognitiv funktion -->
+
+<!-- -   Mikrocirkulation ved AIS -->
+
+Sammenhænge mellem...
+
+-   kapillær dysfunktion og fald i kognition efter stroke
+
+-   EV profiler og kognitiv funktion efter stroke
+
+-   fysisk aktivitet, småkarssydgom og kognition efter stroke
+
+-   perkonditionering, EV profiler og kognition efter stroke

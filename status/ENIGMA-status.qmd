@@ -8,25 +8,15 @@ targets::tar_config_set(store = here::here("_targets"))
 library(tidyverse)
 library(targets)
 library(gtsummary)
-# library(quarto)
 ```
 
-
-# ENIGMA-status
+# Status
 
 ## Inclusions
-
-```{r}
-# library(tidyverse)
-# library(gtsummary)
-# library(patchwork)
-# library(REDCapCAST)
-```
 
 ```{r Inclusion}
 targets::tar_read(plot_inclusion)
 ```
-
 
 ## Baseline data
 
@@ -38,8 +28,8 @@ targets::tar_read(gt_baseline_table)
 
 ```{r toast}
 targets::tar_read(data) |>
-  select(kon, class_toast, ) |>
-  tbl_summary(
+  dplyr::select(kon, class_toast, ) |>
+  gtsummary::tbl_summary(
     by = "kon",
     missing = "ifany",
     missing_text = "Not classified",
@@ -47,29 +37,59 @@ targets::tar_read(data) |>
       class_toast ~ "TOAST classification"
     )
   ) |>
-  add_overall()
+  gtsummary::add_overall()
 ```
 
 ## End-of-study overview
 
 ```{r lost}
 targets::tar_read(data) |>
-  select(kon, eos2, eos3) |>
-  mutate(
+  dplyr::select(kon, eos2, eos3) |>
+  dplyr::mutate(
     eos2 = eos2,
     eos3 = factor(
       eos3,
       labels = c("Other diagnose", "Lost to follow-up", "Dead", "Retracted consent")
     )
   ) |>
-  tbl_summary(
+  gtsummary::tbl_summary(
     by = "kon",
     missing = "ifany",
-    missing_text = "(NOT LOST)",
+    missing_text = "(STILL IN STUDY)",
     label = list(
       eos2 ~ "Completed",
       eos3 ~ "Reason"
     )
   ) |>
-  add_overall()
+  gtsummary::add_overall()
+```
+
+## End-of-study overview - RESIST
+
+```{r lost-resist}
+targets::tar_read(data) |> 
+  dplyr::mutate(
+    eos2 = eos2,
+    eos3 = factor(
+      eos3,
+      labels = c("Other diagnose", "Lost to follow-up", "Dead", "Retracted consent")
+    )
+  ) |> dplyr::filter(resist_incl=="Ja") |> 
+  dplyr::select(kon, eos2, eos3) |>
+  gtsummary::tbl_summary(
+    by = "kon",
+    missing = "ifany",
+    missing_text = "(STILL IN STUDY)",
+    label = list(
+      eos2 ~ "Completed",
+      eos3 ~ "Reason"
+    )
+  ) |>
+  gtsummary::add_overall()
+```
+
+### Lost to follow-up
+
+```{r}
+targets::tar_read(plot_lost2follow)
 ```

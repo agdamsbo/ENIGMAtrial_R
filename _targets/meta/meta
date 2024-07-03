@@ -1,27 +1,31 @@
 name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
-.Random.seed|object|89fd7d4a99cba48f|||||||||||||||
-calandar_update|stem|581355bf828aba97|6794d049d1d99c58|0ea85f3031700f85|-1732258403||t19737.5423815368s|a1c456b03adbfbf8|44|rds|local|vector|||4.101||
+.Random.seed|object|b06ffb9802e1919b|||||||||||||||
+calandar_update|stem|581355bf828aba97|6794d049d1d99c58|269cd4d47c0bf60e|-1732258403||t19751.4521518332s|a1c456b03adbfbf8|44|rds|local|vector|||5.041||
 cheap_data_check|stem|8c35e13284ef92e1|5a30794115f5d0bc|ef46db3751d8e999|-1692042384|/Users/au301842/ENIGMAtrial_R/data/next_id.csv|t19690.413484043s|f3582cdc107e111b|10|file|local|vector|||0.005||
 convert_ical|function|b0c1a01da4043b14|||||||||||||||
-data|stem|28b71943169b3edc|0994c9a80d5f6630|555a47a7f4485bda|-2078757027||t19737.5446211063s|627e96fb3897ece3|14206|rds|local|vector|||2.624||
+data|stem|23220b25bcc994dd|0994c9a80d5f6630|555a47a7f4485bda|-2078757027||t19753.6396971488s|7be3a16f7a61ef87|14393|rds|local|vector|||3.263||
 data_api_export|function|c83911bd4e4dde95|||||||||||||||
 data_api_export_prep|function|5f5960419b539597|||||||||||||||
 data_status_check|function|8850b045d993f1a4|||||||||||||||
-enigma_calendar_update|function|5df0a1ab23380d0b|||||||||||||||
+date_api_export|function|c83911bd4e4dde95|||||||||||||||
+df|object|5e585e83c9de60f4|||||||||||||||
+enigma_calendar_update|function|3dac115c3ae004f5|||||||||||||||
 estimate_enddate|function|473e75432f52aec2|||||||||||||||
 file_id_data_check|stem|76ee90e4b1d55e95|5a30794115f5d0bc|ef46db3751d8e999|703925600|/Users/au301842/ENIGMAtrial_R/data/next_id.csv|t19737.5173453117s|f3582cdc107e111b|10|file|local|vector|||0.048||
 filtered_model|function|29ec24e00828dbf2|||||||||||||||
 git_commit_push|function|a4fa303bcdf325f7|||||||||||||||
-gt_baseline_table|stem|230be284e11c80c5|b1f3c771d3c01e07|36c57e2f3fc77ba3|-145884098||t19737.5424254487s|6ad31aac6ec98314|16806|rds|local|vector|||1.061||
+gt_baseline_table|stem|2a307e754ed93f0a|b1f3c771d3c01e07|0449f88e687d9764|-145884098||t19753.6397151773s|cbc2c57165ce6a6b|31700|rds|local|vector|||1.029||
 lost_subjects|function|ef6efac2cd215340|||||||||||||||
-lost2follow_plot|function|05b4db55e4aadac5|||||||||||||||
+lost2follow_plot|function|6af2e0d7dd5b5df7|||||||||||||||
 lost2follow_tbl|function|d6997703c55a82eb|||||||||||||||
-plot_inclusion|stem|bd441e1591c3df90|8ad96aa39ff86e16|1082de6f530458f3|-1442851130||t19737.5424129812s|3ff48ed6a9c7a577|193106|rds|local|vector|||0.137|1m22mUsing an external vector in selections was deprecated in tidyselect 1.1.0.36mℹ39m Please use all_of or any_of instead.   Was  data  selectnum   Now  data  selectall_ofnumSee httpstidyselect.rlib.orgreferencefaqexternalvector.html.. 1m22mUsing an external vector in selections was deprecated in tidyselect 1.1.0.36mℹ39m Please use all_of or any_of instead.   Was  data  selecteos_date   Now  data  selectall_ofeos_dateSee httpstidyselect.rlib.orgreferencefaqexternalvector.html.. 1m22mUsing size aesthetic for lines was deprecated in ggplot2 3.4.0.36mℹ39m Please use linewidth instead.|
-plot_lost2follow|stem|b65f89a5f275dd65|a7d6c1042f3f51a4|41d3f36892528897|1226080489||t19737.5424259934s|569952607e9a45c3|88459|rds|local|vector|||0.009||
+ls|object|65f7b337482d00c3|||||||||||||||
+plot_inclusion|stem|5538fa54680b398e|8ad96aa39ff86e16|950d29ce2d6672cf|-1442851130||t19753.6397029092s|17d27575c505a937|193286|rds|local|vector|||0.414|1m22mUsing an external vector in selections was deprecated in tidyselect 1.1.0.36mℹ39m Please use all_of or any_of instead.   Was  data  selectnum   Now  data  selectall_ofnumSee httpstidyselect.rlib.orgreferencefaqexternalvector.html.. 1m22mUsing an external vector in selections was deprecated in tidyselect 1.1.0.36mℹ39m Please use all_of or any_of instead.   Was  data  selecteos_date   Now  data  selectall_ofeos_dateSee httpstidyselect.rlib.orgreferencefaqexternalvector.html.. 1m22mUsing size aesthetic for lines was deprecated in ggplot2 3.4.0.36mℹ39m Please use linewidth instead.|
+plot_lost2follow|stem|32f416dc82851b1f|a7d6c1042f3f51a4|f9c119102120d341|1226080489||t19753.6397162992s|79dd113ea666ce54|219100|rds|local|vector|||0.014||
 predict_from_date|function|14a2ed29fc820f4e|||||||||||||||
 predict_from_num|function|381db176a9bc2051|||||||||||||||
-print_baseline|function|b05ed0aa619fe1e8|||||||||||||||
-quarto_website|stem|c038a0676d6b37f2|0b87256de5ac8610|3f98280dbffb7fd4|-339984444|_site*doc/about.qmd*doc/kilde.qmd*doc/papers.qmd*doc/status.qmd*index.qmd*_quarto.yml|t19737.5447131608s|aa382c64c4546603|2443616|file|local|vector|||7.565||
+print_baseline|function|02615b927eb94578|||||||||||||||
+quarto_website|stem|ca0f8197fb8adaac|84315f9b18c119a8|8a10e0554639b7af|-339984444|_site*doc/about.qmd*doc/kilde.qmd*doc/papers.qmd*doc/status.qmd*index.qmd*scripts/fremtidige-bookinger.qmd*_quarto.yml|t19753.6398534338s|fc33c0be18608d42|2695964|file|local|vector|||11.859||
+rbans_ready|function|b8ba8dae1c3b1c31|||||||||||||||
 redcap2list|function|43fec2576206341c|||||||||||||||
 status_plot|function|753483efb58cbba7|||||||||||||||
 status_presentation|stem||659645c55d1c2a5b|5104816ddb274597|725715114||t19681.3773103713s||0|file|local|vector|||3.089||33m39m System command quarto failed

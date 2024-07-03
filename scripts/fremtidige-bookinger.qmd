@@ -1,0 +1,68 @@
+---
+title: "ENIGMA bookinger"
+author: Andreas G Damsbo
+date: "`r Sys.Date()`"
+format: pdf
+---
+
+```{r}
+#| echo: false
+#| message: false
+df <- REDCapCAST::read_redcap_tables(
+  uri = "https://redcap.au.dk/api/",
+  token = keyring::key_get("enigma_api_key"),
+  fields = c(
+    "cpr",
+    "record_id",
+    "incl_book3",
+    "visit_book12",
+    "eos2"
+  ),
+  raw_or_label = "label"
+)
+
+## Filter days after today
+## Filter only still included
+## Long format
+## Include: ID, CPR, data-time, Noter
+
+ls <- c(1:2) |> lapply(\(x){
+  dplyr::full_join(df[[x]], df[[3]] |> dplyr::select(record_id, eos2))
+})
+
+ls[[2]] <- dplyr::left_join(ls[[2]], ls[[1]] |> dplyr::select(record_id, cpr))
+
+ls <- ls |>
+  lapply(\(x){
+    ds <- x |>
+      dplyr::filter(is.na(eos2)) |>
+      dplyr::select(-eos2, -redcap_event_name) |>
+      dplyr::select(record_id, cpr, tidyselect::everything())
+
+    ds <- ds[ds[[grep("_book", names(ds))]] > Sys.Date(), ]
+    ds |>
+      setNames(c("ID", "CPR", "Booking")) |>
+      dplyr::mutate(Booking = format(Booking, "%d-%m%-%Y %H:%M"))
+  }) |>
+  setNames(c("3mdrbooking", "12mdrbooking"))
+```
+
+## Booking til 3 mdr kontrol
+
+Tjek at tider stemmer med booking i EPJ
+
+```{r fig.pos='H'}
+#| echo: false
+#| message: false
+knitr::kable(ls[[1]])
+```
+
+## Booking til 12 mdr kontrol
+
+Tjek tider i EPJ, samt MR skanning til samme dag ca 2 timer efter.
+
+```{r fig.pos='H'}
+#| echo: false
+#| message: false
+knitr::kable(ls[[2]])
+```

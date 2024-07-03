@@ -7,18 +7,15 @@ records_mod <- redcap_read_oneshot(
   fields       = c("record_id","visit_data_mod","rbans_perf") ## Only selecting relevant variables
 )$data
 
-if (all_ids_3==FALSE){
+if (all_ids_3){
+  ## Set all IDs for reupload
+  ids<-records_mod$record_id[!is.na(records_mod$rbans_perf==1)]
+} else {
   # IDs with performed RBANS, and not yet modified
   ids<-setdiff(records_mod$record_id[!is.na(records_mod$rbans_perf==1)], #IDs with 12 months RBANS performed
                na.omit(records_mod$record_id[records_mod$visit_data_mod=="yes"]) #IDs with data modified already
   ) 
 }
-
-if (all_ids_3==TRUE){
-  ## Set all IDs for reupload
-  ids<-records_mod$record_id[!is.na(records_mod$rbans_perf==1)]
-}
-
 
 if (length(ids)>0){
 ### Data export
@@ -36,7 +33,8 @@ dta <- dta |> dplyr::mutate(rbans_age = floor(stRoke::age_calc(dob=readr::parse_
 
 ## Handling only 3 months data
 
-source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap_rbans_lookup.R")
+source(here::here("src/redcap_rbans_lookup.R"))
+# source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap_rbans_lookup.R")
 
 ## Write
 

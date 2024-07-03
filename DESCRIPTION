@@ -20,6 +20,7 @@ Imports:
     knitr,
     openxlsx,
     parsnip,
+    patchwork,
     purrr,
     readODS,
     readr,
@@ -35,11 +36,13 @@ Imports:
     targets,
     tidyr,
     usethis,
-    workflows
+    workflows,
+    calendar
 Suggests: 
     pak,
     prodigenr,
     quarto,
+    remotes,
     roxygen2
 Depends: 
     tidyverse

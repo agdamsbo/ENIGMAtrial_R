@@ -8,6 +8,10 @@
 # cmd <- cron_rscript(path)
 # cron_add(command = cmd, frequency = 'daily', at = "10AM",
 #          id = 'enigma_mods', description = 'ENNIGMA data modification', tags = c('enigma', 'r'))
+# cron_rm(id = 'enigma_mods')
+# system("/usr/local/bin/Rscript /Users/au301842/ENIGMAtrial_R/scripts/Modification.R")
+
+setwd("/Users/au301842/ENIGMAtrial_R/")
 
 ## =============================================================================
 ## Abroad mode: Only run when on VPN
@@ -98,10 +102,13 @@ remove_all_but(token,uri,remove_all_but)
 
 ### Modifies 3 months RBANS data
 
+renv::install("agdamsbo/cognitive.index.lookup")
+
 all_ids_3=FALSE
 # all_ids_3 <- TRUE
 
-source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap_upload_rbans3.R")
+source(here::here("src/redcap_upload_rbans3.R"))
+# source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap_upload_rbans3.R")
 remove_all_but(token,uri,remove_all_but)
 
 ## =============================================================================
@@ -115,7 +122,8 @@ all_ids_12=FALSE
 
 # all_ids_12 <- TRUE
 
-source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap_upload_rbans12.R")
+source(here::here("src/redcap_upload_rbans12.R"))
+# source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap_upload_rbans12.R")
 
 ## =============================================================================
 ## Cleans environment

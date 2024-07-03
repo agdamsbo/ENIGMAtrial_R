@@ -22,6 +22,18 @@ redcap2list <- function() {
   )
 }
 
+#' Removes IDs with missing raws and calculates age
+#'
+#' @param data data set
+#'
+#' @return data.frame
+#' @export
+rbans_ready <- function(data) {
+  data |>
+    dplyr::filter(dplyr::if_any(tidyselect::ends_with("_rs"), ~ !is.na(.))) |>
+    dplyr::mutate(rbans_age = floor(stRoke::age_calc(dob = readr::parse_date(rbans_dob, format = "%d-%m-%Y"), enddate = rbans_date)))
+}
+
 #' Subset and filtered dataset
 #'
 #' @param data data
@@ -63,7 +75,8 @@ lost2follow_plot <- function(data) {
     ggplot2::ggplot(ggplot2::aes(x = incl_time, y = kon, color = kon)) +
     ggplot2::geom_violin() +
     ggplot2::geom_boxplot(width = 0.1, outlier.shape = NA) +
-    ggplot2::geom_jitter(shape = 16, position = ggplot2::position_jitter()) +
+    ggplot2::geom_jitter(shape = 16, position = ggplot2::position_jitter()) + 
+    ggplot2::scale_x_continuous(breaks=c(0,90,365))+
     ggplot2::theme_minimal(base_size = 18) +
     ggplot2::xlab("Inklusionstid (dage)") +
     ggplot2::ylab(NULL) +
@@ -103,15 +116,17 @@ print_baseline <- function(data) {
     ) |>
     gtsummary::tbl_summary(
       by = "kon",
-      missing = "no" # ,
-      # label = list(
-      #   age ~ "Alder",
-      #   nihss_baseline_sum ~ "NIHSS at admission",
-      #   civil ~ "Living alone",
-      #   resist_incl ~ "RESIST participant",
-      #   thrombolysis ~ "IVT",
-      #   thrombectomy  ~ "EVT"
-      # )
+      missing = "no",
+      label = list(
+        age ~ "Alder",
+        # kon ~ "Køn",
+        civil ~ "Bor alene",
+        nihss ~ "NIHSS at admission",
+        civil ~ "Living alone",
+        resist_incl ~ "RESIST participant",
+        thrombolysis ~ "IVT",
+        thrombectomy ~ "EVT"
+      )
     ) |>
     gtsummary::add_overall()
 }
@@ -217,135 +232,153 @@ estimate_enddate <- function(data, basis = c(2, 4, 6)) {
 
 
 
-source("src/date_api_export.R")
-source("src/date_api_export_prep.R")
-source("src/convert_ical.R")
-source("src/enigma_git_push.R")
+source(here::here("src/date_api_export.R"))
+source(here::here("src/date_api_export_prep.R"))
+source(here::here("src/convert_ical.R"))
+source(here::here("src/enigma_git_push.R"))
 
 
 #' Export, generate and upload follow-up calendar
 #'
-#' @param token 
-#' @param allow.stops 
+#' @param token
+#' @param allow.stops
 #'
 #' @return
 #' @export
 #'
 #' @examples
-#' enigma_calendar_update(allow.stops=TRUE)
-#' enigma_calendar_update(allow.stops=FALSE)
-enigma_calendar_update <- function(token=keyring::key_get("enigma_api_key"),
-                                   allow.stops=TRUE){
-  
-  df_all <- data_api_export(token) |> data_api_export_prep()
-  
-  errors <- apply(is.na(df_all[2:3]),1,any)|!df_all$protocol_check
-  
+#' enigma_calendar_update(allow.stops = TRUE)
+#' # Blind update:
+#' enigma_calendar_update(allow.stops = FALSE)
+enigma_calendar_update <- function(token = keyring::key_get("enigma_api_key"),
+                                   allow.stops = TRUE, pt1 = TRUE, pt2 = TRUE) {
+  df_all <- date_api_export(token) |> data_api_export_prep()
+
+  errors <- apply(is.na(df_all[2:3]), 1, any) | !df_all$protocol_check
+
   df_error <- df_all |> dplyr::filter(start > lubridate::now(), errors)
-  
-  
-  if (nrow(df_error)>1){
+
+
+  if (nrow(df_error) > 1) {
     print(df_error)
-    if (allow.stops){
+    if (allow.stops & pt1) {
       stop("Check lige at booking-oplysningerne passer for disse")
     }
   }
-  
+
   df_all <- df_all |> dplyr::select(-ends_with("check"))
-  
+
   ## =============================================================================
   ## Export spreadsheet with assessors on assigned
   ## =============================================================================
-  
+
   output_folder <- "/Users/au301842/ENIGMAtrial_R/output/kontrol"
-  
-  files_filter <- function(folder.path,filter.by,full.names=TRUE){
+
+  files_filter <- function(folder.path, filter.by, full.names = TRUE) {
     # List files in folder
-    files <- list.files(path=folder.path,full.names=full.names)
-    
+    files <- list.files(path = folder.path, full.names = full.names)
+
     # Gets names of all files ending on kotroller_f (filled)
-    files[grepl(filter.by,files)] 
+    files[grepl(filter.by, files)]
   }
-  
-  filled <- files_filter(output_folder,"kontroller_f")
-  
+
+  filled <- files_filter(output_folder, "kontroller_f")
+
   # Loads the last (newest) filled spreadsheet to include new changes
   old_filled_file <- readODS::read_ods(filled[length(filled)])
-  
+
   # End date is 85 days after render date not to forget recently included patients for 3 months follow-up.
-  end.date<-as.Date(Sys.Date())+85
-  
+  end.date <- as.Date(Sys.Date()) + 100
+
   # Format for nice printing
   Sys.setlocale("LC_TIME", "da_DK.UTF-8")
-  
+
   df <- df_all |>
     dplyr::arrange(start) |>
     dplyr::filter(start < end.date) |>
-    dplyr::left_join(old_filled_file |> dplyr::select(id, tid, assessor)) %>%
+    dplyr::left_join(old_filled_file |> dplyr::select(id, tid, assessor)) |>
     dplyr::mutate(
       changes = dplyr::if_else(start != tid, "ÆNDRET", "samme")
     ) |>
     # Remove old tid
-    dplyr::select(-tid)|>
+    dplyr::select(-tid) |>
     # Setting new tid
-    dplyr::rename(tid = start) 
-  
+    dplyr::rename(tid = start)
+
   # Joins the filled file with the original. Keeps original time stamps
-  
-  file_path <- paste0(output_folder,"/",
-                      format(as.POSIXct(Sys.Date()), 
-                             format = "%Y%m%d"),
-                      "_kontroller.ods")
-  
-  df |> dplyr::transmute(tid, id, kontrol=name, 
-                  assessor=ifelse(!is.na(assessor),assessor,"")) |> 
+
+  file_path <- paste0(
+    output_folder, "/",
+    format(as.POSIXct(Sys.Date()),
+      format = "%Y%m%d"
+    ),
+    "_kontroller.ods"
+  )
+
+  df |>
+    dplyr::transmute(tid, id,
+      kontrol = name,
+      assessor = ifelse(!is.na(assessor), assessor, "")
+    ) |>
     readODS::write_ods(path = file_path)
-  
-  if (allow.stops) {
-    system2("open",output_folder)
-    system2("open",file_path)
+
+  if (allow.stops & pt2) {
+    system2("open", output_folder)
+    system2("open", file_path)
   }
   ## =============================================================================
   ## Including assessor
   ## =============================================================================
-  
-  if (allow.stops) {
+
+  if (allow.stops & pt2) {
     stop("PART 2: fill file and continue manually!")
   }
-  
-  filled <- files_filter(output_folder,"kontroller_f")
-  
+
+  filled <- files_filter(output_folder, "kontroller_f")
+
   # Loads the last (newest) filled spreadsheet to include new changes
   filled_file <- readODS::read_ods(filled[length(filled)])
-  
+
   # all <- filled |> purrr::map(readODS::read_ods) |> purrr::reduce(dplyr::full_join)
-  
+
   # Joins the filled file with the original. Keeps original time stamps
-  f <- dplyr::inner_join(df[c("id","name","tid")],filled_file[,colnames(filled_file)!="tid"])
-  
+  f <- dplyr::inner_join(df[c("id", "name", "tid")], filled_file[, colnames(filled_file) != "tid"])
+
   # Mutates and joins for better labelling
-  df_cal <- f |> dplyr::transmute(id=id,
-                           name2=ifelse(!is.na(assessor),
-                                        paste0(kontrol," [",toupper(assessor),"]"),
-                                        NA)) |> 
-    dplyr::right_join(df_all) |> 
-    dplyr::mutate(label=ifelse(!is.na(name2),name2,name))
-  
-  
+  df_cal <- f |>
+    dplyr::transmute(
+      id = id,
+      name2 = ifelse(!is.na(assessor),
+        paste0(kontrol, " [", toupper(assessor), "]"),
+        NA
+      )
+    ) |>
+    dplyr::right_join(df_all) |>
+    dplyr::mutate(label = ifelse(!is.na(name2), name2, name))
+
+
   ## =============================================================================
   ## Creating calendar and comitting
   ## =============================================================================
-  
+
   # Conversion to calendar files (.ics)
-  
-  convert_ical(df_cal, 
-               start="start",
-               id="id",
-               name="label",
-               room="room")[[2]] |> 
-    calendar::ic_write(file="enigma_control.ics")
-  
+
+  convert_ical(df_cal,
+    start = "start",
+    id = "id",
+    name = "label",
+    room = "room"
+  )[[2]] |>
+    calendar::ic_write(file = "enigma_control.ics")
+
   # Commit and push GIT
-  
-  git_commit_push(f.path = "enigma_control.ics", c.message = paste("calendar update",Sys.Date()))
+
+  git_commit_push(f.path = "enigma_control.ics", c.message = paste("calendar update", Sys.Date()))
 }
+
+
+# rmarkdown::render(here::here("scripts/Fremtidige 12 mdr bookinger.Rmd"),output_file=file.path(here::here('output',paste0(format(Sys.Date(),"%Y%m%d"),'_12mdr_oversigt.pdf'))))
+
+
+# This works well
+# rmarkdown::render(here::here("scripts/fremtidige-bookinger.qmd"),output_file=file.path(here::here('output',paste0(format(Sys.Date(),"%Y%m%d"),'_ENIGMA_booking_oversigt.pdf'))))

@@ -1,4 +1,4 @@
-data_api_export <- function(token){
+date_api_export <- function(token){
   REDCapCAST::read_redcap_tables(
     uri   = "https://redcap.au.dk/api/",
     token        = token,

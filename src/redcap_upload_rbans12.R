@@ -23,16 +23,14 @@ missing.raws <- apply(is.na(select(records_mod,ends_with("_rs"))),1,any)
 complete.12.entries <- records_mod$record_id[!missing.raws]
 
 # print(paste("Missing raw RBANS scores for subject",paste(records_mod$record_id[missing.raws],collapse = ", ")))
-if (all_ids_12==FALSE){
+if (all_ids_12){
+  ## Set all IDs for reupload
+  ids<-complete.12.entries
+} else {
   # IDs with performed RBANS, and not yet modified
   ids<-setdiff(complete.12.entries, #IDs with 12 months RBANS performed
                na.omit(records_mod$record_id[records_mod$eos_data_mod=="yes"]) #IDs with data modified already
   ) 
-}
-
-if (all_ids_12==TRUE){
-  ## Set all IDs for reupload
-  ids<-complete.12.entries
 }
 
 ## Old approach just checks if the flag "performed" was checked
@@ -70,7 +68,8 @@ dta <- dta |> dplyr::mutate(rbans_age = floor(stRoke::age_calc(dob=readr::parse_
 
 ## Handling 12 months
 
-source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap_rbans_lookup.R")
+source(here::here("src/redcap_rbans_lookup.R"))
+# source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap_rbans_lookup.R")
 
 ## Last minute flag to indicate modification performed
 df<-df%>%full_join(.,data.frame(record_id=.$record_id,
