@@ -23,13 +23,14 @@ df <- REDCapCAST::easy_redcap(
   widen.data = TRUE
 )
 
-
+## Example table to show how labels are kept
 df |>
   gtsummary::tbl_summary(
     by = kon,
     label = list(
-      age ~ "Age",
-      nihss_baseline_sum ~ "Admission NIHSS"
+      nihss_baseline_sum = "NIHSS",
+      iq_score = "IQCODE"
     )
-  ) |>
-  gtsummary::add_overall()
+  ) |> 
+  gtsummary::add_overall() |> 
+  gtsummary::add_p()
