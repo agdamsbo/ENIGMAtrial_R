@@ -25,10 +25,13 @@ dta <- redcap_read(
   events       = "3_months_arm_1",
   raw_or_label = "raw",
   records      = ids,
-  forms        = "rbans",
+  forms        = "rbans", 
+  filter_logic = "[rbans_perf]='1' and [rbans_complete]='2'",
   fields       = "record_id"
 )$data
   
+if (nrow(dta)>0){
+
 dta <- dta |> dplyr::mutate(rbans_age = floor(stRoke::age_calc(dob=readr::parse_date(rbans_dob,format="%d-%m-%Y"),enddate=rbans_date)))
 
 ## Handling only 3 months data
@@ -40,5 +43,5 @@ source(here::here("src/redcap_rbans_lookup.R"))
 
 stts<-redcap_write(ds=df%>%mutate(visit_data_mod="yes"), ## Last minute flag to indicate modification performed
                    redcap_uri   = uri,
-                   token        = token)
+                   token        = token)}
 }

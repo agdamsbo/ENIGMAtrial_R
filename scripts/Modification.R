@@ -102,7 +102,7 @@ remove_all_but(token,uri,remove_all_but)
 
 ### Modifies 3 months RBANS data
 
-renv::install("agdamsbo/cognitive.index.lookup")
+pak::pak("agdamsbo/cognitive.index.lookup")
 
 all_ids_3=FALSE
 # all_ids_3 <- TRUE
@@ -124,6 +124,7 @@ all_ids_12=FALSE
 
 source(here::here("src/redcap_upload_rbans12.R"))
 # source("https://raw.githubusercontent.com/agdamsbo/ENIGMAtrial_R/main/src/redcap_upload_rbans12.R")
+
 
 ## =============================================================================
 ## Cleans environment

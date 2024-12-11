@@ -61,7 +61,8 @@ dta <- redcap_read(
   raw_or_label = "raw",
   records      = ids,
   forms        = c("rbans","rbans_konklusion","mrs"),
-  fields       = "record_id"
+  fields       = "record_id", 
+  filter_logic = "[rbans_perf]='1' and [rbans_complete]='2'"
 )$data
 
 dta <- dta |> dplyr::mutate(rbans_age = floor(stRoke::age_calc(dob=readr::parse_date(rbans_dob,format="%d-%m-%Y"),enddate=rbans_date)))  

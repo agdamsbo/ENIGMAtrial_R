@@ -45,8 +45,10 @@ options(clustermq.scheduler = "multicore")
 
 # Run the R scripts in the R/ folder with your custom functions:
 # tar_source()
-source("R/functions.R") # Source other scripts as needed.
-source("/Users/au301842/ENIGMAtrial_R/src/status_plot.R")
+source(here::here("R/functions.R")) # Source other scripts as needed.
+source(here::here("src/status_plot.R"))
+source(here::here("scripts/REDCap dates to .ical with API.R"))
+# source(here::here("scripts/Modification.R"))
 
 # Gets the next available ID, to trigger the pipeline on new inclusions
 # I'm working to think of a better trigger to work with REDCap without just

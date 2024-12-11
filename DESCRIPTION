@@ -37,7 +37,8 @@ Imports:
     tidyr,
     usethis,
     workflows,
-    calendar
+    calendar,
+    devtools
 Suggests: 
     pak,
     prodigenr,

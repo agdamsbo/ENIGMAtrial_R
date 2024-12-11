@@ -18,13 +18,17 @@ date_api_export_prep <- function(d) {
     # Exclude EOS vars
     dplyr::select(-tidyselect::starts_with("eos"))
 
-  splitter <- gsub("^\\d.*|[A-Za-z_]", "", colnames(d_mod)) |>
-    stRoke::add_padding(pad = "0") |>
-    (\(x){
-      paste0("A", x)
-    })() |>
-    factor()
+  # splitter <- gsub("^\\d.*|[A-Za-z_]", "", colnames(d_mod)) |>
+  #   stRoke::add_padding(pad = "0") |>
+  #   (\(x){
+  #     paste0("A", x)
+  #   })() |>
+  #   factor()
 
+  # Hard coded splitter
+  splitter <- c(rep("A00",2),rep("A03",4),rep("A12",4)) |>
+    factor()
+  
   d_list <- d_mod |> split.default(f = splitter)
 
   # select(d_list[[2]],contains("_book"))
@@ -34,13 +38,16 @@ date_api_export_prep <- function(d) {
   reg_range <- data.frame(time1 = reg - 15, time2 = reg + 15)
 
   df_all <- lapply(2:3, function(i) {
+    # browser()
     dplyr::tibble(
-      id = d_list[[1]][, 1],
-      start = d_list[[i]][, 1],
-      room = ifelse(is.na(d_list[[i]][, 2]), d_list[[i]][, 3], d_list[[i]][, 2]),
+      id = d_list[[1]][, 1][[1]],
+      start = d_list[[i]][, 1][[1]],
+      assessor = d_list[[i]][, 3][[1]],
+      room = ifelse(is.na(d_list[[i]][, 2][[1]]), d_list[[i]][, 4][[1]], d_list[[i]][, 2][[1]]),
       time2visit_check = difftime(
-        start |> as.character() |> substr(1, 10) |> as.Date(),
-        as.Date(d_list[[1]][, 2], format = "%Y-%m-%d %H:%M:%S"),
+        # start |> as.character() |> substr(1, 10) |> as.Date(),
+        lubridate::as_date(start),
+        as.Date(d_list[[1]][, 2][[1]]),
         units = "days"
       ) |> round(),
       protocol_check = time2visit_check %in% seq(reg_range[i, 1], reg_range[i, 2]) &
