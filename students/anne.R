@@ -28,7 +28,8 @@ df <- REDCapCAST::easy_redcap(
 
 if (!requireNamespace("gtsummary")) install.packages("gtsummary")
 ## Example table to show how labels are kept and used in tables
-df |>
+df |> 
+  REDCapCAST::as_factor() |> 
   gtsummary::tbl_summary(
     by = kon
   ) |> 
