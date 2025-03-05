@@ -51,6 +51,20 @@ df |>
   gtsummary::add_p()
 
 
+if (!requireNamespace("freesearcheR")) pak::pak("agdamsbo/freesearcheR")
+
+################################################################################
+###########
+###########
+###########   Sankey plotting example
+###########
+###########
+################################################################################
+
+ds <- data.frame(g = sample(LETTERS[1:2], 100, TRUE), first = REDCapCAST::as_factor(sample(letters[1:4], 100, TRUE)), last = REDCapCAST::as_factor(sample(letters[1:4], 100, TRUE)))
+ds |> freesearcheR::plot_sankey_single("first", "last", numbers = "percentage")
+
+
 ################################################################################
 ###########
 ###########
