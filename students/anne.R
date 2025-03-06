@@ -1,4 +1,3 @@
-if (!requireNamespace("REDCapCAST")) install.packages("REDCapCAST")
 
 ## Go to the project codebook to look for field and event names
 ## https://redcap.au.dk/redcap_v14.5.36/Design/data_dictionary_codebook.php?pid=5397
@@ -10,6 +9,8 @@ if (!requireNamespace("REDCapCAST")) install.packages("REDCapCAST")
 ###########
 ###########
 ################################################################################
+
+if (!requireNamespace("REDCapCAST")) install.packages("REDCapCAST")
 
 library(REDCapCAST)
 df <- REDCapCAST::easy_redcap(
@@ -32,12 +33,11 @@ df <- REDCapCAST::easy_redcap(
     "pase_score"
   ),
   # Relevant arms in a longitudinal project
-  events = c("inclusion_arm_1", "3_months_arm_1", "12_months_arm_1"),
+  events = c("inclusion_arm_1", "12_months_arm_1"),
   raw_or_label = "both", data_format = "wide"
 )
 
 # Processing metadata to reflect focused dataset
-
 
 if (!requireNamespace("gtsummary")) install.packages("gtsummary")
 ## Example table to show how labels are kept and used in tables
@@ -50,9 +50,6 @@ df |>
   gtsummary::add_overall() |>
   gtsummary::add_p()
 
-
-if (!requireNamespace("freesearcheR")) pak::pak("agdamsbo/freesearcheR")
-
 ################################################################################
 ###########
 ###########
@@ -61,9 +58,10 @@ if (!requireNamespace("freesearcheR")) pak::pak("agdamsbo/freesearcheR")
 ###########
 ################################################################################
 
+if (!requireNamespace("freesearcheR")) pak::pak("agdamsbo/freesearcheR")
+
 ds <- data.frame(g = sample(LETTERS[1:2], 100, TRUE), first = REDCapCAST::as_factor(sample(letters[1:4], 100, TRUE)), last = REDCapCAST::as_factor(sample(letters[1:4], 100, TRUE)))
 ds |> freesearcheR::plot_sankey_single("first", "last", numbers = "percentage")
-
 
 ################################################################################
 ###########
@@ -72,7 +70,6 @@ ds |> freesearcheR::plot_sankey_single("first", "last", numbers = "percentage")
 ###########
 ###########
 ################################################################################
-
 
 # Get the latest REDCapCAST version
 # pak::pak("agdamsbo/REDCapCAST")
@@ -98,14 +95,13 @@ df_long <- REDCapCAST::easy_redcap(
     "pase_score"
   ),
   # Relevant arms in a longitudinal project
-  events = c("inclusion_arm_1", "3_months_arm_1", "12_months_arm_1"),
+  events = c("inclusion_arm_1", "12_months_arm_1"),
   raw_or_label = "both", data_format = "long"
 )
 
 df_mmrm <- df_long |>
   as_factor() |> # Applying REDCap metadata
   fct_drop() |> # Remove empty factor levels
-  dplyr::filter(redcap_event_name %in% c("inclusion_arm_1", "12_months_arm_1")) |>
   dplyr::mutate( # Format ID and instance as factors
     record_id = REDCapCAST::as_factor(record_id),
     redcap_event_name = REDCapCAST::as_factor(redcap_event_name),
