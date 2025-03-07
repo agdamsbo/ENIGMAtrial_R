@@ -1,4 +1,3 @@
-
 ## Go to the project codebook to look for field and event names
 ## https://redcap.au.dk/redcap_v14.5.36/Design/data_dictionary_codebook.php?pid=5397
 
@@ -30,12 +29,22 @@ df <- REDCapCAST::easy_redcap(
     "iq_score",
     "i_score",
     # PA
+    "pase_completed",
     "pase_score"
   ),
   # Relevant arms in a longitudinal project
   events = c("inclusion_arm_1", "12_months_arm_1"),
   raw_or_label = "both", data_format = "wide"
-)
+) |> REDCapCAST::as_factor()
+
+## Renaming
+names(df) <- gsub("____inclusion_arm_1", "_0",gsub("____12_months_arm_1", "_1", names(df)))
+
+## Ensuring only true PASE values are kept
+df <- df |>
+  dplyr::mutate(pase_score_0 = dplyr::if_else(is.na(pase_completed_0), NA, pase_score_0),
+                pase_score_1 = dplyr::if_else(is.na(pase_completed_1), NA, pase_score_1)) |> 
+  dplyr::select(-tidyselect::starts_with("pase_completed")) # pase_completed variables are dropped
 
 # Processing metadata to reflect focused dataset
 
@@ -49,6 +58,74 @@ df |>
   ) |>
   gtsummary::add_overall() |>
   gtsummary::add_p()
+
+################################################################################
+###########
+###########
+###########   On pivoting wide to long
+###########
+###########
+################################################################################
+
+## Give the unique suffix names to use for identifying repeated measures
+suffixes <- c("_0", "_1")
+
+## Relevant columns are determined based on suffixes
+cols <- names(df)[grepl(paste0("*(", paste(suffixes, collapse = "|"), ")$"), names(df))]
+
+## New colnames are created by removing suffixes
+new_names <- unique(gsub(paste(suffixes, collapse = "|"), "", cols))
+
+long_missings <- split(df, df$record_id) |> # Splits dataset by ID
+  # Starts data modifications for each subject
+  lapply(\(.x){
+    ## Pivots data with repeated measures as determined by the defined suffixes
+    long_ls <- split.default(
+      # Subset only repeated data
+      .x[cols],
+      # ... and split by meassure
+      gsub(paste(new_names, collapse = "|"), "", cols)
+    ) |>
+      # Sort data by order of given suffixes to ensure chronology
+      sort_by(suffixes) |>
+      # New colnames are applied
+      lapply(\(.y){
+        setNames(
+          .y,
+          gsub(paste(suffixes, collapse = "|"), "", names(.y))
+        )
+      })
+
+    # Subsets non-pivotted data (this is assumed to belong to same )
+    single <- .x[-match(cols, names(.x))]
+    
+    # Extends with empty rows to get same dimensions as long data
+    single[(nrow(single)+1):length(long_ls),] <- NA
+    
+    # Assumes first column is ID
+    single <- single |> tidyr::fill(names(single)[1])
+
+    # Everything is merged together
+    dplyr::bind_cols(
+      single,
+      # Instance names are defined as suffixes without leading non-characters
+      data.frame(instance = gsub(
+        "^[^[:alnum:]]+", "",
+        names(long_ls)
+      )),
+      dplyr::bind_rows(long_ls)
+    )
+  }) |> dplyr::bind_rows()
+
+# Optional filling of missing values by last observation carried forward
+# Needed for mmrm analyses
+long_complete <- long_missings |> 
+  dplyr::group_by(record_id) |> 
+  tidyr::fill()
+
+# Creating a time-wise summary table of repeated meassures
+long_complete[c("instance",new_names)] |> 
+  gtsummary::tbl_summary(by=instance)
 
 ################################################################################
 ###########
