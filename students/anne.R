@@ -101,9 +101,6 @@ long_missings <- split(df, seq_len(nrow(df))) |> # Splits dataset by row
     
     # Extends with empty rows to get same dimensions as long data
     single[(nrow(single)+1):length(long_ls),] <- NA
-    
-    # Assumes first column is ID
-    # single <- single |> tidyr::fill(names(single)[1])
 
     # Everything is merged together
     dplyr::bind_cols(
