@@ -76,7 +76,7 @@ cols <- names(df)[grepl(paste0("*(", paste(suffixes, collapse = "|"), ")$"), nam
 ## New colnames are created by removing suffixes
 new_names <- unique(gsub(paste(suffixes, collapse = "|"), "", cols))
 
-long_missings <- split(df, df$record_id) |> # Splits dataset by ID
+long_missings <- split(df, seq_len(nrow(df))) |> # Splits dataset by row
   # Starts data modifications for each subject
   lapply(\(.x){
     ## Pivots data with repeated measures as determined by the defined suffixes
