@@ -103,7 +103,7 @@ long_missings <- split(df, seq_len(nrow(df))) |> # Splits dataset by row
     single[(nrow(single)+1):length(long_ls),] <- NA
     
     # Assumes first column is ID
-    single <- single |> tidyr::fill(names(single)[1])
+    # single <- single |> tidyr::fill(names(single)[1])
 
     # Everything is merged together
     dplyr::bind_cols(
@@ -120,8 +120,14 @@ long_missings <- split(df, seq_len(nrow(df))) |> # Splits dataset by row
 # Optional filling of missing values by last observation carried forward
 # Needed for mmrm analyses
 long_complete <- long_missings |> 
+  # Fills record ID assuming none are missing
+  tidyr::fill(record_id) |> 
+  # Grouping by ID for the last step
   dplyr::group_by(record_id) |> 
-  tidyr::fill()
+  # Filling missing data by ID
+  tidyr::fill(names(long_missings)[!names(long_missings) %in% new_names]) |> 
+  # Remove grouping
+  dplyr::ungroup()
 
 # Creating a time-wise summary table of repeated meassures
 long_complete[c("instance",new_names)] |> 
