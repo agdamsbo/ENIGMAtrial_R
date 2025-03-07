@@ -146,10 +146,14 @@ if (!requireNamespace("freesearcheR")) pak::pak("agdamsbo/freesearcheR")
 ds <- data.frame(g = sample(LETTERS[1:2], 100, TRUE), first = REDCapCAST::as_factor(sample(letters[1:4], 100, TRUE)), last = REDCapCAST::as_factor(sample(letters[1:4], 100, TRUE)))
 ds |> freesearcheR::plot_sankey_single("first", "last", numbers = "percentage")
 
+
+
 ################################################################################
 ###########
 ###########
 ###########   Long data and MMRM analysis
+###########   
+###########   This is an example of direct long data format export
 ###########
 ###########
 ################################################################################
@@ -207,6 +211,18 @@ df_mmrm <- df_long |>
     "i_score"
   )) |>
   dplyr::ungroup() # Ungrouping
+
+################################################################################
+###########
+###########
+###########   MMRM analysis
+###########   
+###########   Basic mmrm data analysis based on long data
+###########
+###########
+################################################################################
+
+
 
 if (!requireNamespace("mmrm")) install.packages("mmrm")
 
