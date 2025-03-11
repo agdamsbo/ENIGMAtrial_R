@@ -22,3 +22,6 @@ df <- REDCapCAST::easy_redcap(
   raw_or_label = "both", 
   data_format = "wide"
 ) |> REDCapCAST::as_factor()
+
+
+# https://agdamsbo.github.io/ccRauh/doc/on-boarding.html
