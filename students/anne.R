@@ -38,26 +38,84 @@ df <- REDCapCAST::easy_redcap(
 ) |> REDCapCAST::as_factor()
 
 ## Renaming
-names(df) <- gsub("____inclusion_arm_1", "_0",gsub("____12_months_arm_1", "_1", names(df)))
+names(df) <- gsub("____inclusion_arm_1", "_0", gsub("____12_months_arm_1", "_1", names(df)))
 
 ## Ensuring only true PASE values are kept
 df <- df |>
-  dplyr::mutate(pase_score_0 = dplyr::if_else(is.na(pase_completed_0), NA, pase_score_0),
-                pase_score_1 = dplyr::if_else(is.na(pase_completed_1), NA, pase_score_1)) |> 
+  dplyr::mutate(
+    pase_score_0 = dplyr::if_else(is.na(pase_completed_0), NA, pase_score_0),
+    pase_score_1 = dplyr::if_else(is.na(pase_completed_1), NA, pase_score_1)
+  ) |>
   dplyr::select(-tidyselect::starts_with("pase_completed")) # pase_completed variables are dropped
 
 # Processing metadata to reflect focused dataset
 
+gtsummary::theme_gtsummary_journal("jama") ## <<< theming the tables
+
 if (!requireNamespace("gtsummary")) install.packages("gtsummary")
 ## Example table to show how labels are kept and used in tables
 df |>
-  REDCapCAST::as_factor() |>
   REDCapCAST::fct_drop() |>
   gtsummary::tbl_summary(
     by = kon
   ) |>
   gtsummary::add_overall() |>
   gtsummary::add_p()
+
+################################################################################
+###########
+###########
+###########   Logistic regression example
+###########
+###########
+################################################################################
+
+
+df_log <- df |>
+  dplyr::mutate(
+    moca_0_bin = ifelse(i_score_0 > 23, "normal", "impaired"),
+    pase_bin_0 = cut(pase_score_0, quantile(pase_score_0, probs = c(0, .5, 1)), labels = c("low", "high")),
+    pase_bin_1 = cut(pase_score_1, quantile(pase_score_0, probs = c(0, .5, 1)), labels = c("low", "high"))
+  )
+
+m <- glm(
+  formula = pase_bin_1 ~ pase_bin_0 * moca_0_bin + age + kon,
+  data = df_log,
+  family = "binomial"
+)
+
+## Calculating estimates and creating plot with gtsummary
+
+gtsummary::tbl_regression(
+  x = m,
+  exponentiate = TRUE
+)
+
+## Adding pairwise contrasts using emmeans package
+
+gtsummary::tbl_regression(
+  x = m,
+  add_pairwise_contrasts = TRUE,
+  pairwise_variables = c("pase_bin_0"),
+  emmeans_args = list(
+    by = "moca_0_bin"
+  ),
+  exponentiate = TRUE
+)
+
+## Calculating contrasts "by hand"
+
+emm_hyper_probs <- emmeans::emmeans(
+  m,
+  by = "moca_0_bin",
+  specs = c("pase_bin_0"),
+  type = "response"
+)
+
+## Contrasts are log(OR) estimates and should be exponentiated
+
+emmeans::contrast(emm_hyper_probs, method = "pairwise", ratios = FALSE)
+
 
 ################################################################################
 ###########
@@ -98,9 +156,9 @@ long_missings <- split(df, seq_len(nrow(df))) |> # Splits dataset by row
 
     # Subsets non-pivotted data (this is assumed to belong to same )
     single <- .x[-match(cols, names(.x))]
-    
+
     # Extends with empty rows to get same dimensions as long data
-    single[(nrow(single)+1):length(long_ls),] <- NA
+    single[(nrow(single) + 1):length(long_ls), ] <- NA
 
     # Everything is merged together
     dplyr::bind_cols(
@@ -116,19 +174,19 @@ long_missings <- split(df, seq_len(nrow(df))) |> # Splits dataset by row
 
 # Optional filling of missing values by last observation carried forward
 # Needed for mmrm analyses
-long_complete <- long_missings |> 
+long_complete <- long_missings |>
   # Fills record ID assuming none are missing
-  tidyr::fill(record_id) |> 
+  tidyr::fill(record_id) |>
   # Grouping by ID for the last step
-  dplyr::group_by(record_id) |> 
+  dplyr::group_by(record_id) |>
   # Filling missing data by ID
-  tidyr::fill(names(long_missings)[!names(long_missings) %in% new_names]) |> 
+  tidyr::fill(names(long_missings)[!names(long_missings) %in% new_names]) |>
   # Remove grouping
   dplyr::ungroup()
 
 # Creating a time-wise summary table of repeated meassures
-long_complete[c("instance",new_names)] |> 
-  gtsummary::tbl_summary(by=instance)
+long_complete[c("instance", new_names)] |>
+  gtsummary::tbl_summary(by = instance)
 
 ################################################################################
 ###########
@@ -149,7 +207,7 @@ ds |> freesearcheR::plot_sankey_single("first", "last", numbers = "percentage")
 ###########
 ###########
 ###########   Long data and MMRM analysis
-###########   
+###########
 ###########   This is an example of direct long data format export
 ###########
 ###########
@@ -213,7 +271,7 @@ df_mmrm <- df_long |>
 ###########
 ###########
 ###########   MMRM analysis
-###########   
+###########
 ###########   Basic mmrm data analysis based on long data
 ###########
 ###########
